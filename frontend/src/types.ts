@@ -26,6 +26,9 @@ export interface Attribute {
   points?: number;
   threshold?: Threshold;
   prefix?: string;
+  // P1 time-frame model: opt an attribute into per-frame evolution (absent ⇒ frame-invariant).
+  evolves?: boolean;
+  drift?: number;
 }
 
 export interface Entity {
@@ -51,6 +54,13 @@ export interface View {
   layout: "cards" | "table";
 }
 
+// The replay axis for a domain (from /api/timeline). frames=1 ⇒ no time axis, no slider.
+export interface Temporal {
+  frames: number;
+  now: number;
+  step: string;
+}
+
 export interface Spec {
   id: string;
   title: string;
@@ -58,6 +68,7 @@ export interface Spec {
   version: string;
   accent?: string;
   description?: string;
+  temporal?: Temporal;
   entities: Entity[];
   relations: Relation[];
   views: View[];

@@ -12,11 +12,26 @@
   "version": "0.1.0",
   "accent": "#2f7d9a",               // 该领域的主题色(前端整体 accent)
   "description": "…",                // 一句话说明(显示在 banner)
+  "temporal": { "frames": 48, "now": 36, "step": "hour" },  // 可选;时间帧轴(P1,下文)
   "entities": [ … ],                 // 实体(下文)
   "relations": [ … ],                // 实体间关系(v0 仅声明,下钻为 TODO)
   "views":    [ … ]                  // 视图 → 顶部 tab
 }
 ```
+
+## temporal —— 时间帧轴(P1,可选)
+
+声明这份 spec 的**回放时间轴**。前端据此画顶部的 replay slider;后端 `GET /api/data/...?frame=N`
+按帧确定性合成,`GET /api/timeline/{id}` 回这三个字段。
+
+```jsonc
+{ "frames": 48, "now": 36, "step": "hour" }
+```
+- `frames`:总帧数(slider 范围 `0 … frames-1`)。
+- `now`:默认停靠帧(不带 `?frame=` 时返回这一帧;slider 上标一个「现在」刻度)。
+- `step`:每帧的时间粒度(`hour`/`day`/`minute`/`week`/…),只用于**通用**时间标签格式化,不含领域语义。
+
+**不写 `temporal`** ⇒ 该领域只有单帧(`frames:1`),前端不显示 slider。演化由属性的 `evolves` 决定(下文)。
 
 ## entities[]
 
@@ -44,6 +59,22 @@
 | `gauge` | 带阈值的量 | `unit`, `range`, `threshold{warn,limit}` | range 内取值 | 进度条 + 阈值刻度(**阈值为上界**,达到=更差) |
 | `timeseries` | 时间序列 | `unit`, `range`, `points`(默认24), `threshold{limit}` | 确定性正弦+抖动序列 | 内联 SVG 折线(超 limit 标红 + 虚线) |
 | `text` | 自由文本 | — | 从内置短语取一个 | 灰字 |
+
+### evolves / drift —— 属性怎样随帧演化(P1,领域无关)
+
+任何属性都可加这两个字段,声明它在时间轴上**怎么变**:
+
+| 字段 | 含义 | 默认 |
+| --- | --- | --- |
+| `evolves` | `true` ⇒ 该属性随 `frame` 演化;**不写 ⇒ 逐帧不变**(身份/分类常这样) | `false` |
+| `drift` | 漂移幅度 ∈ [0,1],占该值"跨度"的比例(数值=range 跨度;离散=值表长度)。越大摆动越猛 | 数值类 `0.3`;`status`/`category` `0.8`;`text` `1.0` |
+
+- 演化是**确定性**的:值绕它的 frame-0 基线,被一条 `(seed, frame)` 哈希出来的平滑信号 `_wiggle` 拉动 —— 无随机、无时钟,同 `frame` 同值,可逐字节复现。
+- `identifier` **永不演化**(行的名字跨帧恒定),即使写了 `evolves` 也忽略。
+- `timeseries` 把 `evolves` 当作"**窗口随帧滑动**"(展示截至当前帧的 `points` 点窗口);不演化则停在 v0 的 `[0…points-1]` 窗口。
+- **未声明 `evolves` 的属性 = v0 的值,逐帧字节一致** —— 这是回放一致性的命门。
+
+> 演化规则只活在 spec(`evolves`/`drift`)+ `data_synth.py`,**绝不针对任何领域**。
 
 ### status 上色约定(领域无关)
 值名(小写)落入约定集合即上色,否则中性:

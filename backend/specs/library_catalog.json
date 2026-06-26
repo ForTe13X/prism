@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "accent": "#8a5a2f",
   "description": "示例领域 B:图书馆藏 —— 与领域 A 零代码差异,只换一份 spec。证明界面是 spec 的纯函数。",
+  "temporal": { "frames": 30, "now": 22, "step": "day" },
   "entities": [
     {
       "type": "book",
@@ -15,9 +16,9 @@
       "attributes": [
         { "name": "title", "label": "书名", "semantic_type": "identifier", "prefix": "BK" },
         { "name": "genre", "label": "类别", "semantic_type": "category", "values": ["文学", "科技", "历史", "艺术", "少儿"] },
-        { "name": "rating", "label": "评分", "semantic_type": "gauge", "unit": "★", "range": [0, 5] },
-        { "name": "availability", "label": "在馆状态", "semantic_type": "status", "values": ["available", "on_loan", "overdue"] },
-        { "name": "loans", "label": "近 24 期借阅", "semantic_type": "timeseries", "unit": "次", "range": [0, 30], "points": 24 }
+        { "name": "rating", "label": "评分", "semantic_type": "gauge", "unit": "★", "range": [0, 5], "evolves": true, "drift": 0.15 },
+        { "name": "availability", "label": "在馆状态", "semantic_type": "status", "values": ["available", "on_loan", "overdue"], "evolves": true },
+        { "name": "loans", "label": "近 24 期借阅", "semantic_type": "timeseries", "unit": "次", "range": [0, 30], "points": 24, "evolves": true }
       ]
     },
     {
@@ -29,9 +30,9 @@
       "attributes": [
         { "name": "name", "label": "分馆", "semantic_type": "identifier", "prefix": "BR" },
         { "name": "district", "label": "城区", "semantic_type": "category", "values": ["城东", "城西", "城南", "城北"] },
-        { "name": "collection_size", "label": "馆藏量", "semantic_type": "metric", "unit": "册", "range": [5000, 80000] },
-        { "name": "occupancy", "label": "上座率", "semantic_type": "gauge", "unit": "%", "range": [0, 100], "threshold": { "warn": 85, "limit": 95 } },
-        { "name": "status", "label": "状态", "semantic_type": "status", "values": ["open", "busy", "closed"] }
+        { "name": "collection_size", "label": "馆藏量", "semantic_type": "metric", "unit": "册", "range": [5000, 80000], "evolves": true, "drift": 0.1 },
+        { "name": "occupancy", "label": "上座率", "semantic_type": "gauge", "unit": "%", "range": [0, 100], "threshold": { "warn": 85, "limit": 95 }, "evolves": true, "drift": 0.4 },
+        { "name": "status", "label": "状态", "semantic_type": "status", "values": ["open", "busy", "closed"], "evolves": true }
       ]
     }
   ],

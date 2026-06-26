@@ -1,0 +1,13 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`renderWidget snapshots > category 1`] = `"<span class="pr-pill">华北</span>"`;
+
+exports[`renderWidget snapshots > gauge with threshold 1`] = `"<div class="pr-gauge-wrap"><div class="pr-gauge"><div class="pr-gauge-track"><div class="pr-gauge-fill tone-warn" style="width:79.16666666666666%"></div><span class="pr-gauge-mark warn" style="left:75%"></span><span class="pr-gauge-mark limit" style="left:83.33333333333334%"></span></div></div><span class="pr-gauge-val">9.5<i class="pr-unit"> MPa</i></span></div>"`;
+
+exports[`renderWidget snapshots > identifier 1`] = `"<span class="pr-id">STN-001</span>"`;
+
+exports[`renderWidget snapshots > metric with unit 1`] = `"<span class="pr-metric"><b>42.5</b><i class="pr-unit"> MPa</i></span>"`;
+
+exports[`renderWidget snapshots > text 1`] = `"<span class="pr-muted">巡检正常</span>"`;
+
+exports[`renderWidget snapshots > timeseries 1`] = `"<svg class="pr-spark" viewBox="0 0 140 36" preserveAspectRatio="none" role="img"><line class="pr-spark-limit" x1="3" x2="137" y1="15.5" y2="15.5"></line><polyline class="pr-spark-line is-breach" points="3.0,30.5 47.7,20.5 92.3,13.0 137.0,25.5"></polyline></svg>"`;

@@ -10,7 +10,7 @@ from __future__ import annotations
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from .data_synth import synth_entity_rows
+from .data_synth import resolve_frame, resolve_temporal, synth_entity_rows
 from .specs_loader import list_specs, load_spec
 
 app = FastAPI(title="Prism", description="Semantic-foundation-driven cockpit", version="0.1.0")
@@ -45,13 +45,36 @@ def spec(spec_id: str) -> dict:
     return doc
 
 
+@app.get("/api/timeline/{spec_id}")
+def timeline(spec_id: str) -> dict:
+    """The replay axis for one spec: {frames, now, step}. Drives the cockpit's replay slider.
+
+    A spec with no ``temporal`` block collapses to a single frame (frames=1) — no replay axis.
+    """
+    doc = load_spec(spec_id)
+    if doc is None:
+        raise HTTPException(status_code=404, detail=f"spec not found: {spec_id}")
+    return {"spec_id": spec_id, **resolve_temporal(doc)}
+
+
 @app.get("/api/data/{spec_id}/{entity_type}")
-def data(spec_id: str, entity_type: str) -> dict:
-    """Deterministically synthesized rows for one entity type of one spec."""
+def data(spec_id: str, entity_type: str, frame: int | None = None) -> dict:
+    """Deterministically synthesized rows for one entity type of one spec, at ``frame``.
+
+    ``frame`` is clamped into the spec's valid range and defaults to ``now`` (the resolved value is
+    echoed back). Same (spec, entity, frame) ⇒ byte-identical rows; non-evolving attributes are
+    identical across all frames.
+    """
     doc = load_spec(spec_id)
     if doc is None:
         raise HTTPException(status_code=404, detail=f"spec not found: {spec_id}")
     entity = next((e for e in doc.get("entities", []) if e.get("type") == entity_type), None)
     if entity is None:
         raise HTTPException(status_code=404, detail=f"entity '{entity_type}' not in spec '{spec_id}'")
-    return {"spec_id": spec_id, "entity_type": entity_type, "rows": synth_entity_rows(entity, spec_id)}
+    resolved = resolve_frame(doc, frame)
+    return {
+        "spec_id": spec_id,
+        "entity_type": entity_type,
+        "frame": resolved,
+        "rows": synth_entity_rows(entity, spec_id, resolved),
+    }

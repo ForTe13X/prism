@@ -1,4 +1,4 @@
-import type { Row, Spec, SpecSummary } from "./types";
+import type { Row, Spec, SpecSummary, Temporal } from "./types";
 
 // The Vite dev server talks to the Prism backend. Override with VITE_API_BASE if you change the port.
 const API_BASE = (import.meta.env.VITE_API_BASE as string | undefined) ?? "http://127.0.0.1:8200";
@@ -13,5 +13,11 @@ export const fetchSpecs = () => getJSON<{ specs: SpecSummary[] }>("/api/specs").
 
 export const fetchSpec = (specId: string) => getJSON<Spec>(`/api/spec/${specId}`);
 
-export const fetchData = (specId: string, entityType: string) =>
-  getJSON<{ rows: Row[] }>(`/api/data/${specId}/${entityType}`).then((d) => d.rows);
+export const fetchTimeline = (specId: string) =>
+  getJSON<Temporal & { spec_id: string }>(`/api/timeline/${specId}`);
+
+// Rows for one entity at a frame. Omit `frame` to let the backend default to the spec's `now`.
+export const fetchData = (specId: string, entityType: string, frame?: number) =>
+  getJSON<{ rows: Row[] }>(
+    `/api/data/${specId}/${entityType}${frame == null ? "" : `?frame=${frame}`}`,
+  ).then((d) => d.rows);

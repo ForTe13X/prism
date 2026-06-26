@@ -29,7 +29,7 @@ views + relations        选控件(仪表/趋势/徽章/…)        (UI = f(spec
 
 | 层 | 技术 | 职责 |
 | --- | --- | --- |
-| 后端 | **FastAPI (Python)** | 读 spec(`specs_loader`)+ 按 `semantic_type` **确定性合成**数据(`data_synth`,哈希种子、无随机);暴露 `/api/specs` `/api/spec/{id}` `/api/data/{id}/{entity}` |
+| 后端 | **FastAPI (Python)** | 读 spec(`specs_loader`)+ 按 `semantic_type` **确定性合成**数据(`data_synth`,哈希种子、无随机);暴露 `/api/specs` `/api/spec/{id}` `/api/data/{id}/{entity}?frame=N` `/api/timeline/{id}` |
 | 前端 | **Vite + React + TypeScript** | 取 spec → 由 `views` 生成 tab、由实体 `attributes` 生成面板、由 **widget resolver**(`widgets.tsx`)按 `semantic_type` 选控件 |
 
 > 后端不认识"管道"或"图书";`data_synth.py` 只认 `semantic_type`。把合成数据换成真实数据源,只需替换
@@ -57,6 +57,13 @@ npm run dev            # http://127.0.0.1:5173
 `identifier · category · status · metric · gauge · timeseries · text` —— 详见 [`docs/SPEC_FORMAT.md`](docs/SPEC_FORMAT.md)。
 **加一个新 semantic_type** = 在 `widgets.tsx` 的 resolver 里加一个分支 + 在 `data_synth.py` 里加合成规则,**仅此两处**。
 
+## 时间帧与回放(P1)
+
+数据不再是单一快照:spec 顶层声明 `temporal: {frames, now, step}`,属性加 `evolves: true`(可选 `drift`)即随帧演化。
+- 后端:`GET /api/data/{id}/{entity}?frame=N` 按帧**确定性**合成(哈希种子并入 `frame`,无随机/时钟,逐帧可复现);`GET /api/timeline/{id}` 回放轴。**未声明 `evolves` 的属性逐帧字节不变**(身份/分类不动)。
+- 前端:驾驶舱顶部一条 **replay slider**(拖动选帧 + 播放/暂停),所有控件按当前帧取数,timeseries 显示"截至该帧"的滑动窗口。
+- 领域无关:演化规则只在 spec(`evolves`/`drift`)+ `data_synth.py`,绝不针对任何领域。详见 [`docs/SPEC_FORMAT.md`](docs/SPEC_FORMAT.md) 的 `temporal` / `evolves` 两节与 [`docs/ROADMAP.md`](docs/ROADMAP.md) P1。
+
 ## 预留 TODO(v0 之后)
 
 - [ ] 更多控件/语义类型:`relation`(画实体关系图)、`geo`(地图)、`money`、`duration`、`enum-distribution`(饼图)。
@@ -66,5 +73,5 @@ npm run dev            # http://127.0.0.1:5173
 - [ ] 视图级聚合/指标卡(KPI header)与过滤/排序。
 - [ ] 多语言(spec 里已留 `label_en`/`title_en`,接一个 locale 切换)。
 - [ ] 主题:深色模式 + 每领域 accent 已通;再加密度/字号档。
-- [ ] 测试:后端合成的确定性/边界 + 前端 resolver 的快照测试;e2e。
+- [x] 测试:后端合成的确定性/边界/空安全(`backend/tests/`)+ 前端 resolver 快照与时间标签(`vitest`)。 e2e 待补。
 - [ ] 鉴权 + 多租户(每租户一组 spec)。
