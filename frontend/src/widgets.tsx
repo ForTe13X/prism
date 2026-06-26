@@ -7,7 +7,7 @@ const GOOD = new Set(["normal", "ok", "available", "open", "healthy", "online", 
 const WARN = new Set(["warning", "warn", "degraded", "busy", "on_loan", "pending", "elevated"]);
 const BAD = new Set(["critical", "fault", "overdue", "closed", "error", "offline", "down"]);
 
-function statusTone(value: string): "good" | "warn" | "bad" | "neutral" {
+export function statusTone(value: string): "good" | "warn" | "bad" | "neutral" {
   const v = String(value).toLowerCase();
   if (GOOD.has(v)) return "good";
   if (WARN.has(v)) return "warn";

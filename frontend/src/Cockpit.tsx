@@ -1,8 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { fetchData, fetchTimeline } from "./api";
+import OntologyGraph from "./OntologyGraph";
 import { frameLabel, stepUnit } from "./time";
 import type { Entity, Row, Spec, Temporal, View } from "./types";
 import { renderWidget } from "./widgets";
+
+// A synthetic tab id for the built-in ontology graph view (P2). Never collides with a spec view id
+// (those are plain slugs), so it lives alongside the spec's own views.
+const GRAPH_TAB = "__prism_graph__";
 
 function EntityCard({ entity, row }: { entity: Entity; row: Row }) {
   const idAttr = entity.attributes.find((a) => a.semantic_type === "identifier");
@@ -186,8 +191,10 @@ export default function Cockpit({ spec }: { spec: Spec }) {
     return () => clearInterval(id);
   }, [playing, frames]);
 
-  const view = spec.views.find((v) => v.id === activeId) ?? spec.views[0];
+  const isGraph = activeId === GRAPH_TAB;
+  const view = isGraph ? undefined : spec.views.find((v) => v.id === activeId) ?? spec.views[0];
   const hasAxis = !!timeline && timeline.frames > 1;
+  const showGraphTab = spec.entities.length > 0;
 
   return (
     <section className="pr-cockpit">
@@ -213,8 +220,19 @@ export default function Cockpit({ spec }: { spec: Spec }) {
             {v.title}
           </button>
         ))}
+        {showGraphTab && (
+          <button
+            key={GRAPH_TAB}
+            className={isGraph ? "pr-tab is-active" : "pr-tab"}
+            onClick={() => setActiveId(GRAPH_TAB)}
+          >
+            🕸 本体图谱
+          </button>
+        )}
       </nav>
-      {view ? (
+      {isGraph && showGraphTab ? (
+        <OntologyGraph spec={spec} frame={hasAxis ? frame : undefined} />
+      ) : view ? (
         <ViewPanel spec={spec} view={view} frame={hasAxis ? frame : undefined} />
       ) : (
         <p className="pr-muted">该 spec 未定义视图。</p>

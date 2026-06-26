@@ -10,7 +10,7 @@ from __future__ import annotations
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from .data_synth import resolve_frame, resolve_temporal, synth_entity_rows
+from .data_synth import resolve_frame, resolve_temporal, synth_entity_rows, synth_graph
 from .specs_loader import list_specs, load_spec
 
 app = FastAPI(title="Prism", description="Semantic-foundation-driven cockpit", version="0.1.0")
@@ -78,3 +78,17 @@ def data(spec_id: str, entity_type: str, frame: int | None = None) -> dict:
         "frame": resolved,
         "rows": synth_entity_rows(entity, spec_id, resolved),
     }
+
+
+@app.get("/api/graph/{spec_id}")
+def graph(spec_id: str, frame: int | None = None) -> dict:
+    """The instance graph at ``frame``: nodes = entity rows, edges = deterministic relation mappings.
+
+    Built purely from the spec (domain-agnostic). Topology is identity-stable across frames; only node
+    state evolves — so the ontology canvas can replay the network by recolouring nodes via the slider.
+    """
+    doc = load_spec(spec_id)
+    if doc is None:
+        raise HTTPException(status_code=404, detail=f"spec not found: {spec_id}")
+    resolved = resolve_frame(doc, frame)
+    return {"spec_id": spec_id, "frame": resolved, **synth_graph(doc, spec_id, resolved)}

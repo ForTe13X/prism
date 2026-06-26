@@ -1,4 +1,4 @@
-import type { Row, Spec, SpecSummary, Temporal } from "./types";
+import type { Graph, Row, Spec, SpecSummary, Temporal } from "./types";
 
 // The Vite dev server talks to the Prism backend. Override with VITE_API_BASE if you change the port.
 const API_BASE = (import.meta.env.VITE_API_BASE as string | undefined) ?? "http://127.0.0.1:8200";
@@ -21,3 +21,7 @@ export const fetchData = (specId: string, entityType: string, frame?: number) =>
   getJSON<{ rows: Row[] }>(
     `/api/data/${specId}/${entityType}${frame == null ? "" : `?frame=${frame}`}`,
   ).then((d) => d.rows);
+
+// The instance graph at a frame (nodes + edges). Omit `frame` to default to the spec's `now`.
+export const fetchGraph = (specId: string, frame?: number) =>
+  getJSON<Graph>(`/api/graph/${specId}${frame == null ? "" : `?frame=${frame}`}`);

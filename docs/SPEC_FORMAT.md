@@ -89,7 +89,7 @@
 ```jsonc
 { "from": "sensor", "predicate": "installed_at", "to": "station" }
 ```
-v0 仅声明(用于将来下钻/关系图,见 README 的 TODO)。
+**P2 起,relations 驱动本体图谱**:每条关系生成确定性的**实例边** —— 每个 `from` 实例按 `hash(spec, predicate, from_id)` 连到一个 `to` 实例。节点=实体实例(按该帧 `status` 上色),边=这些实例映射。拓扑跨帧稳定(`installed_at` 属身份),拖 slider 只重上色。见 `GET /api/graph/{id}?frame=N` 与 [`docs/ROADMAP.md`](ROADMAP.md) P2。
 
 ## views[] —— 决定顶部有哪些 tab
 

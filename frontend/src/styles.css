@@ -137,5 +137,44 @@ body {
 .pr-spark-line.is-breach { stroke: var(--bad); }
 .pr-spark-limit { stroke: var(--bad); stroke-width: 1; stroke-dasharray: 3 3; opacity: 0.6; vector-effect: non-scaling-stroke; }
 
+/* ---- ontology graph (P2) ---- */
+.pr-graph { display: grid; grid-template-columns: 1fr 248px; gap: 14px; align-items: start; }
+.pr-graph-canvas {
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 6px; overflow: hidden;
+}
+.pr-graph-svg { width: 100%; height: auto; display: block; }
+
+.pr-edge { fill: none; stroke: var(--line); stroke-width: 1.4; vector-effect: non-scaling-stroke; transition: stroke 0.2s; }
+.pr-edge.is-alert { stroke: color-mix(in srgb, var(--bad) 55%, var(--line)); }
+.pr-edge.is-sel { stroke: var(--accent); stroke-width: 2; }
+.pr-edge.is-dim { opacity: 0.18; }
+.pr-arrow-head { fill: var(--muted); }
+
+.pr-node { cursor: pointer; }
+.pr-node .pr-node-dot { stroke: var(--panel); stroke-width: 2; transition: r 0.12s; }
+.pr-node.tone-good .pr-node-dot { fill: var(--good); }
+.pr-node.tone-warn .pr-node-dot { fill: var(--warn); }
+.pr-node.tone-bad .pr-node-dot { fill: var(--bad); }
+.pr-node.tone-neutral .pr-node-dot { fill: var(--accent); }
+.pr-node.is-sel .pr-node-dot { stroke: var(--accent); stroke-width: 3; }
+.pr-node.is-dim { opacity: 0.28; }
+.pr-node-label { font-size: 11px; fill: var(--ink); dominant-baseline: middle; font-variant-numeric: tabular-nums; pointer-events: none; }
+.pr-node:hover .pr-node-dot { r: 10; }
+.pr-node:focus-visible { outline: none; }
+.pr-node:focus-visible .pr-node-dot { stroke: var(--accent); stroke-width: 3; }
+
+.pr-graph-side {
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 14px 16px; position: sticky; top: 12px;
+}
+.pr-graph-detail-type { font-size: 12px; margin: -4px 0 10px; }
+.pr-graph-hint { font-size: 13px; }
+.pr-graph-legend { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 7px; }
+.pr-graph-legend li { display: flex; align-items: center; gap: 8px; color: var(--ink); font-size: 13px; }
+.pr-legend-icon { font-size: 16px; }
+
+@media (max-width: 720px) { .pr-graph { grid-template-columns: 1fr; } }
+
 /* ---- footer ---- */
 .pr-footer { margin-top: 26px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }

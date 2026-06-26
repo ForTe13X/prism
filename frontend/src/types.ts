@@ -84,3 +84,25 @@ export interface SpecSummary {
 }
 
 export type Row = Record<string, unknown>;
+
+// P2 ontology graph (from /api/graph). Nodes are entity instances at a frame; edges are deterministic
+// relation mappings. Topology is identity-stable across frames; only node `row` state evolves.
+export interface GraphNode {
+  id: string;
+  entity_type: string;
+  row: Row;
+}
+
+export interface GraphEdge {
+  id: string;
+  from: string;
+  to: string;
+  predicate: string;
+}
+
+export interface Graph {
+  spec_id: string;
+  frame: number;
+  nodes: GraphNode[];
+  edges: GraphEdge[];
+}

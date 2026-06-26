@@ -166,3 +166,40 @@ def synth_entity_rows(entity: dict, spec_id: str, frame: int = 0) -> list[dict]:
             row[attr["name"]] = synth_value(attr, spec_id, etype, idx, frame)
         rows.append(row)
     return rows
+
+
+def synth_graph(spec: dict, spec_id: str, frame: int = 0) -> dict:
+    """Assemble the instance graph at ``frame`` — built purely from the spec, domain-agnostically.
+
+    * nodes  = every entity row at this frame (so node state, used for colouring, evolves per frame);
+    * edges  = a deterministic instance mapping of each ``relation``: each ``from`` row is wired to one
+      ``to`` row picked by a hash of (spec, predicate, from-id). Row ids are frame-independent, so the
+      TOPOLOGY is identity-stable across frames — replay recolours nodes, it doesn't reshuffle the net.
+
+    The renderer turns node rows into labels/tones via the same widget resolver it uses everywhere; no
+    domain knowledge lives here. A relation pointing at an absent/empty entity is skipped, not fatal.
+    """
+    rows_by_type: dict[str, list[dict]] = {}
+    nodes: list[dict] = []
+    for entity in spec.get("entities", []):
+        etype = entity.get("type")
+        if not etype:  # a typeless entity can't be addressed by relations — skip, don't crash
+            continue
+        rows = synth_entity_rows(entity, spec_id, frame)
+        rows_by_type[etype] = rows
+        nodes.extend({"id": r["_id"], "entity_type": etype, "row": r} for r in rows)
+
+    edges: list[dict] = []
+    for rel in spec.get("relations", []):
+        frm, to = rel.get("from"), rel.get("to")
+        pred = rel.get("predicate", "related_to")
+        from_rows = rows_by_type.get(frm) or []
+        to_rows = rows_by_type.get(to) or []
+        if not from_rows or not to_rows:
+            continue
+        for fr in from_rows:
+            j = int(_unit(spec_id, "edge", pred, fr["_id"]) * len(to_rows)) % len(to_rows)
+            tid = to_rows[j]["_id"]
+            edges.append({"id": f"{fr['_id']}|{pred}|{tid}", "from": fr["_id"], "to": tid, "predicate": pred})
+
+    return {"nodes": nodes, "edges": edges}

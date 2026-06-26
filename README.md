@@ -29,7 +29,7 @@ views + relations        选控件(仪表/趋势/徽章/…)        (UI = f(spec
 
 | 层 | 技术 | 职责 |
 | --- | --- | --- |
-| 后端 | **FastAPI (Python)** | 读 spec(`specs_loader`)+ 按 `semantic_type` **确定性合成**数据(`data_synth`,哈希种子、无随机);暴露 `/api/specs` `/api/spec/{id}` `/api/data/{id}/{entity}?frame=N` `/api/timeline/{id}` |
+| 后端 | **FastAPI (Python)** | 读 spec(`specs_loader`)+ 按 `semantic_type` **确定性合成**数据(`data_synth`,哈希种子、无随机);暴露 `/api/specs` `/api/spec/{id}` `/api/data/{id}/{entity}?frame=N` `/api/timeline/{id}` `/api/graph/{id}?frame=N` |
 | 前端 | **Vite + React + TypeScript** | 取 spec → 由 `views` 生成 tab、由实体 `attributes` 生成面板、由 **widget resolver**(`widgets.tsx`)按 `semantic_type` 选控件 |
 
 > 后端不认识"管道"或"图书";`data_synth.py` 只认 `semantic_type`。把合成数据换成真实数据源,只需替换
@@ -63,6 +63,13 @@ npm run dev            # http://127.0.0.1:5173
 - 后端:`GET /api/data/{id}/{entity}?frame=N` 按帧**确定性**合成(哈希种子并入 `frame`,无随机/时钟,逐帧可复现);`GET /api/timeline/{id}` 回放轴。**未声明 `evolves` 的属性逐帧字节不变**(身份/分类不动)。
 - 前端:驾驶舱顶部一条 **replay slider**(拖动选帧 + 播放/暂停),所有控件按当前帧取数,timeseries 显示"截至该帧"的滑动窗口。
 - 领域无关:演化规则只在 spec(`evolves`/`drift`)+ `data_synth.py`,绝不针对任何领域。详见 [`docs/SPEC_FORMAT.md`](docs/SPEC_FORMAT.md) 的 `temporal` / `evolves` 两节与 [`docs/ROADMAP.md`](docs/ROADMAP.md) P1。
+
+## 本体图谱画布(P2)
+
+驾驶舱多了一个 **🕸 本体图谱** tab:把 spec 的实体/关系画成实例图谱。
+- 后端 `GET /api/graph/{id}?frame=N`:节点=各实体在该帧的实例(行),边=由 `relations` 生成的**确定性实例映射**(每个 `from` 实例连到一个 `to` 实例)。
+- 前端:SVG 分层布局(每个实体类型一列),节点按该帧 `status` 上色,**复用 P1 的 slider 逐帧重放**(拖动只重上色、不重排——拓扑跨帧稳定);点节点 → 右侧详情**复用同一套 widget resolver**。
+- 领域无关:图纯由 spec 的 `entities`/`relations` 生成,布局通用,零领域假设。详见 [`docs/ROADMAP.md`](docs/ROADMAP.md) P2。
 
 ## 预留 TODO(v0 之后)
 
