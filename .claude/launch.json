@@ -1,0 +1,19 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "prism-backend",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "E:\\Documents\\Dev\\June\\10th\\SPI\\.venv\\Scripts\\python.exe -m uvicorn backend.app.main:app --port 8200"],
+      "autoPort": false,
+      "port": 8200
+    },
+    {
+      "name": "prism-frontend",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "cd /d E:\\Documents\\Dev\\prism\\frontend && npm run dev"],
+      "autoPort": false,
+      "port": 5173
+    }
+  ]
+}

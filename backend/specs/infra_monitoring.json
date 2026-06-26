@@ -1,0 +1,46 @@
+{
+  "id": "infra_monitoring",
+  "title": "管网监控驾驶舱",
+  "title_en": "Pipeline Monitoring Cockpit",
+  "version": "0.1.0",
+  "accent": "#2f7d9a",
+  "description": "示例领域 A:工业管网监控。实体=站点/传感器,语义类型驱动出仪表、趋势、状态徽章。",
+  "entities": [
+    {
+      "type": "station",
+      "label": "站点",
+      "label_en": "Station",
+      "icon": "🏭",
+      "count": 8,
+      "attributes": [
+        { "name": "name", "label": "站点", "label_en": "Station", "semantic_type": "identifier", "prefix": "STN" },
+        { "name": "region", "label": "区域", "semantic_type": "category", "values": ["华北", "华东", "西北", "西南"] },
+        { "name": "throughput", "label": "吞吐量", "semantic_type": "metric", "unit": "10⁴m³/h", "range": [120, 980] },
+        { "name": "pressure", "label": "进站压力", "semantic_type": "gauge", "unit": "MPa", "range": [0, 12], "threshold": { "warn": 9, "limit": 10 } },
+        { "name": "status", "label": "运行状态", "semantic_type": "status", "values": ["normal", "warning", "critical"] },
+        { "name": "h2s", "label": "H₂S 趋势", "semantic_type": "timeseries", "unit": "mg/m³", "range": [0, 12], "points": 24, "threshold": { "limit": 7 } }
+      ]
+    },
+    {
+      "type": "sensor",
+      "label": "传感器",
+      "label_en": "Sensor",
+      "icon": "📡",
+      "count": 14,
+      "attributes": [
+        { "name": "tag", "label": "位号", "semantic_type": "identifier", "prefix": "SEN" },
+        { "name": "kind", "label": "类型", "semantic_type": "category", "values": ["压力", "流量", "H₂S", "温度"] },
+        { "name": "health", "label": "健康度", "semantic_type": "status", "values": ["ok", "degraded", "fault"] },
+        { "name": "reading", "label": "瞬时读数", "semantic_type": "metric", "unit": "—", "range": [0, 100] },
+        { "name": "note", "label": "备注", "semantic_type": "text" }
+      ]
+    }
+  ],
+  "relations": [
+    { "from": "sensor", "predicate": "installed_at", "to": "station" }
+  ],
+  "views": [
+    { "id": "stations", "title": "站点总览", "title_en": "Stations", "entity": "station", "layout": "cards" },
+    { "id": "sensors", "title": "传感器", "title_en": "Sensors", "entity": "sensor", "layout": "table" }
+  ]
+}

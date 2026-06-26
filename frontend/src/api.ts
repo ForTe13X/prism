@@ -1,0 +1,17 @@
+import type { Row, Spec, SpecSummary } from "./types";
+
+// The Vite dev server talks to the Prism backend. Override with VITE_API_BASE if you change the port.
+const API_BASE = (import.meta.env.VITE_API_BASE as string | undefined) ?? "http://127.0.0.1:8200";
+
+async function getJSON<T>(path: string): Promise<T> {
+  const res = await fetch(`${API_BASE}${path}`);
+  if (!res.ok) throw new Error(`${res.status} ${res.statusText} for ${path}`);
+  return (await res.json()) as T;
+}
+
+export const fetchSpecs = () => getJSON<{ specs: SpecSummary[] }>("/api/specs").then((d) => d.specs);
+
+export const fetchSpec = (specId: string) => getJSON<Spec>(`/api/spec/${specId}`);
+
+export const fetchData = (specId: string, entityType: string) =>
+  getJSON<{ rows: Row[] }>(`/api/data/${specId}/${entityType}`).then((d) => d.rows);
