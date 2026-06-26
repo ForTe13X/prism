@@ -29,7 +29,7 @@ views + relations        选控件(仪表/趋势/徽章/…)        (UI = f(spec
 
 | 层 | 技术 | 职责 |
 | --- | --- | --- |
-| 后端 | **FastAPI (Python)** | 读 spec(`specs_loader`)+ 按 `semantic_type` **确定性合成**数据(`data_synth`,哈希种子、无随机);暴露 `/api/specs` `/api/spec/{id}` `/api/data/{id}/{entity}?frame=N` `/api/timeline/{id}` `/api/graph/{id}?frame=N` · `POST /api/sim/{id}`(轨迹仿真,`simulation`)· `POST /api/policy/{id}`(策略对比,`policy`)· `POST /api/compile/{id}` + `GET /api/llm/health`(LLM 编译,`llm_client`) |
+| 后端 | **FastAPI (Python)** | 读 spec(`specs_loader`)+ 按 `semantic_type` **确定性合成**数据(`data_synth`,哈希种子、无随机);暴露 `/api/specs` `/api/spec/{id}` `/api/data/{id}/{entity}?frame=N` `/api/timeline/{id}` `/api/graph/{id}?frame=N` · `POST /api/sim/{id}`(轨迹仿真,`simulation`)· `POST /api/policy/{id}`(策略对比,`policy`)· `POST /api/compile/{id}` + `GET /api/llm/health`(LLM 编译,`llm_client`)· `GET /api/datapackage[/{id}[/discriminability]]`(跨源数据包,`data_package`) |
 | 前端 | **Vite + React + TypeScript** | 取 spec → 由 `views` 生成 tab、由实体 `attributes` 生成面板、由 **widget resolver**(`widgets.tsx`)按 `semantic_type` 选控件 |
 
 > 后端不认识"管道"或"图书";`data_synth.py` 只认 `semantic_type`。把合成数据换成真实数据源,只需替换
@@ -92,6 +92,13 @@ npm run dev            # http://127.0.0.1:5173
 - **人确认闸**:编译出的 IR 落进策略编辑器成一张**可改的候选策略卡**——你审/改/删后,再交**确定性引擎**跑对比。**绝不自动执行**。
 - **诚实**:失败**可观测**(`GET /api/llm/health` 出可达性 + 失败计数 + 原因),**绝不静默用模板假装真实输出**;LLM 不可达时退回手填规则。
 - **小模型可用**正因为 IR 是**窄 schema**:`qwen3-8b` / `gemma-12b-qat` 配结构化输出即可稳定填表。详见 [`docs/DESIGN_what_if_sequential.md`](docs/DESIGN_what_if_sequential.md) §1/§3/§6。
+
+## 跨源数据包 · axiom-gain 基底(DP1)
+
+一条新主线的地基:一份**确定性、clean-room、spec 驱动**的异构数据包生成器,为"语义/公理层是否真比裸 RAG 强"的基准([`docs/RESEARCH_axiom_gain.md`](docs/RESEARCH_axiom_gain.md))供题。
+- 后端 `backend/app/data_package.py` + `GET /api/datapackage[/{id}[/discriminability]]`:读一份 `data_source` spec(`backend/data_sources/logistics_demo.json`),**先建 ground-truth『新闻事件 → 吞吐量异常 → 运单延误』,再让 SQL(运单/承运商/仓库)+ 时序(吞吐量)+ 新闻三源与真值一致**;SQL 可落成真 SQLite。
+- **两个旋钮(只动观测、留真值)**:`link_explicitness`(1 字面 id → 5 纯语义)与 `dirtiness`(别名/单位/缺失/时移/数值/乱码,记 `corruption_map`)。
+- **判别力骨架**:`naive`(字面单源)/ `linked`(跨源时空+实体联结)/ `oracle`(知真值)三解题器——link≥2 时 naive 失效、linked 仍可复原(任务确需跨源);脏度↑ linked 退化(鲁棒性曲线)。这是 axiom-gain ablation 的**确定性骨架**;LLM 版(naive-RAG vs axiom-RAG)是下一块。详见 [`docs/DESIGN_data_package.md`](docs/DESIGN_data_package.md)。
 
 ## 预留 TODO(v0 之后)
 

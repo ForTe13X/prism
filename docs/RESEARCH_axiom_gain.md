@@ -62,8 +62,10 @@ LLM 调用口(`backend/app/llm_client.py`)每次记 `{model, in_tok, out_tok, ca
 - **实时**:同一份记录喂 `DEMANDS.md` 的"learning metrics / cost 监控看板"。**一件事的两个时态。**
 
 ## 9. 数据基底(硬依赖)
-本基准要一份**异构、够扎实**的多源数据包(时序 / SQL / NoSQL / 文档 / 新闻),且任务要**跨源**——**跨源正是 axiom-net 该赢裸 RAG 的地方**。见待写的 `DESIGN_data_package.md`。
+本基准要一份**异构、够扎实**的多源数据包(时序 / SQL / NoSQL / 文档 / 新闻),且任务要**跨源**——**跨源正是 axiom-net 该赢裸 RAG 的地方**。见 [`DESIGN_data_package.md`](DESIGN_data_package.md)。
 > **held-out 的诚实性,取决于数据基底的诚实性**(来源合规 + 不泄漏 + 可复现)。
+>
+> **状态:数据基底的确定性 substrate 已落地(DP1)** —— `logistics_demo` 一场景(SQL+时序+新闻)、预埋跨源真值、脏度/link 旋钮、以及**确定性的判别力骨架**(naive vs linked vs oracle,见 `DESIGN_data_package` §10)。本节的 with/without **LLM-ablation**(naive-RAG vs axiom-RAG + §3–§8 的成本/质量/摊销/跨模型)即建在其上,是下一块。
 
 ## 10. 不要做(废数陷阱)
 - ❌ 稻草人 baseline(没人真用的"全塞 context");❌ 在 axiom 训练过的任务上测;❌ 忽略 build 成本只报每查询节省;❌ 降质量换成本却当 gain;❌ 单次跑、gain 落在噪声里;❌ 只报 token 不报 $/calls/quality。

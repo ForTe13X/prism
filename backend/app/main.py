@@ -12,6 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .compile_routes import compile_router
 from .data_synth import resolve_frame, resolve_temporal, synth_entity_rows, synth_graph
+from .datapackage_routes import datapackage_router
 from .policy_routes import policy_router
 from .sim_routes import sim_router
 from .specs_loader import list_specs, load_spec
@@ -38,6 +39,10 @@ app.include_router(policy_router)
 # LLM compile (P6 generate→confirm): POST /api/compile/{spec} turns NL → typed policy IR (a
 # suggestion to confirm, never executed) + GET /api/llm/health. The LLM never produces numbers.
 app.include_router(compile_router)
+
+# Cross-source data package (DP1): GET /api/datapackage[/...] — a deterministic, clean-room generator
+# of a heterogeneous multi-store dataset with pre-embedded ground-truth, for the axiom-gain benchmark.
+app.include_router(datapackage_router)
 
 
 @app.get("/api/health")
