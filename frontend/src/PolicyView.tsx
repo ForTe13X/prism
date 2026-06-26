@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { runPolicies } from "./api";
+import { compilePolicy, fetchLlmHealth, runPolicies } from "./api";
 import { bestStillBreaches, pctSpan } from "./policy";
 import { bandPath, type ChartDims, linePath, trajectoryColor, xOf, yOf } from "./sim";
 import { stepUnit } from "./time";
-import type { Attribute, PolicyResult, Spec } from "./types";
+import type { Attribute, LlmHealth, PolicyResult, Spec } from "./types";
 
 const NUMERIC = new Set(["metric", "gauge", "timeseries"]);
 const isNumeric = (a: Attribute) => NUMERIC.has(a.semantic_type);
@@ -11,7 +11,7 @@ const DIMS: ChartDims = { width: 760, height: 300, padL: 46, padR: 18, padT: 16,
 const OPS = [">=", "<=", ">", "<"];
 
 type EditRule = { id: number; op: string; value: number; action: "shift" | "pulse"; by: number };
-type EditPolicy = { id: number; label: string; rules: EditRule[] };
+type EditPolicy = { id: number; label: string; rules: EditRule[]; llm?: boolean };
 
 function defaultTarget(spec: Spec): { entityType: string; attribute: string } | null {
   for (const e of spec.entities) {
@@ -37,6 +37,7 @@ export default function PolicyView({ spec }: { spec: Spec }) {
   const polId = useRef(1);
   const ruleId = useRef(1);
   const labelSeq = useRef(1); // monotonic → unique labels even after remove+add (A, B, C, …)
+  const compileSeq = useRef(0); // invalidates an in-flight compile when the target changes
   const nextLabel = () => `策略 ${String.fromCharCode(64 + labelSeq.current++)}`;
   const newRule = (attr?: Attribute): EditRule => ({
     id: ruleId.current++,
@@ -58,6 +59,16 @@ export default function PolicyView({ spec }: { spec: Spec }) {
   const [result, setResult] = useState<PolicyResult | null>(null);
   const [error, setError] = useState("");
   const [focus, setFocus] = useState(0); // trajectory index (0 = baseline)
+  const [nl, setNl] = useState(""); // natural-language policy for the LLM to compile
+  const [compiling, setCompiling] = useState(false);
+  const [compileError, setCompileError] = useState("");
+  const [llm, setLlm] = useState<LlmHealth | null>(null);
+
+  useEffect(() => {
+    fetchLlmHealth()
+      .then(setLlm)
+      .catch(() => setLlm(null));
+  }, []);
 
   useEffect(() => {
     const t = defaultTarget(spec);
@@ -65,6 +76,7 @@ export default function PolicyView({ spec }: { spec: Spec }) {
     const a = e?.attributes.find((x) => x.name === t?.attribute);
     polId.current = 1;
     ruleId.current = 1;
+    compileSeq.current++; // a spec switch invalidates any in-flight compile
     setEntityType(t?.entityType ?? "");
     setAttribute(t?.attribute ?? "");
     setRowIndex(null);
@@ -72,6 +84,9 @@ export default function PolicyView({ spec }: { spec: Spec }) {
     setResult(null);
     setError("");
     setFocus(0);
+    setNl("");
+    setCompiling(false);
+    setCompileError("");
   }, [spec]);
 
   const entity = spec.entities.find((e) => e.type === entityType);
@@ -108,6 +123,7 @@ export default function PolicyView({ spec }: { spec: Spec }) {
   }, [spec.id, entityType, attribute, rowIndex, horizon, wireKey]);
 
   function changeEntity(t: string) {
+    compileSeq.current++; // target changed → drop any in-flight compile result
     setEntityType(t);
     const e = spec.entities.find((x) => x.type === t);
     const a = e?.attributes.find(isNumeric);
@@ -115,15 +131,52 @@ export default function PolicyView({ spec }: { spec: Spec }) {
     setRowIndex(null);
     setPolicies(defaultPolicies(a));
     setFocus(0);
+    setCompileError("");
   }
   function changeAttribute(name: string) {
+    compileSeq.current++;
     setAttribute(name);
     setPolicies(defaultPolicies(entity?.attributes.find((a) => a.name === name)));
     setFocus(0);
+    setCompileError("");
   }
   function addPolicy() {
     if (policies.length >= 4) return;
     setPolicies((s) => [...s, { id: polId.current++, label: nextLabel(), rules: [newRule(attr)] }]);
+  }
+
+  // The human-confirm gate: the LLM-compiled IR lands as a NORMAL, fully-editable policy card marked
+  // with its LLM provenance — the user reads/edits/removes it. The only thing that "runs" is the
+  // reversible, side-effect-free deterministic comparison (same live-recompute as any manual edit),
+  // and the NUMBERS come from the engine, never the LLM. An in-flight compile is dropped if the user
+  // changes target meanwhile (request-id guard), so a card never lands on the wrong attribute.
+  function doCompile() {
+    if (!nl.trim() || !entityType || !attribute || policies.length >= 4) return;
+    const myId = ++compileSeq.current;
+    setCompiling(true);
+    setCompileError("");
+    compilePolicy(spec.id, { entity_type: entityType, attribute, nl })
+      .then((res) => {
+        if (compileSeq.current !== myId) return; // target changed / superseded → discard stale result
+        const editRules: EditRule[] = res.rules.map((r) => ({
+          id: ruleId.current++,
+          op: r.when.op,
+          value: r.when.value,
+          action: r.do.action,
+          by: r.do.by,
+        }));
+        if (editRules.length === 0) {
+          setCompileError("LLM 没产出可用规则,请改写或手填。");
+          return;
+        }
+        // atomic hard cap (the compile button is already disabled at 4; this guards the rare case of
+        // adding policies while a compile was in flight). The updater runs async, so don't read a flag
+        // back out of it — just clear the NL on a successful compile.
+        setPolicies((s) => (s.length >= 4 ? s : [...s, { id: polId.current++, label: `${nextLabel()} · LLM`, rules: editRules, llm: true }]));
+        setNl("");
+      })
+      .catch((e) => compileSeq.current === myId && setCompileError(String(e.message ?? e)))
+      .finally(() => compileSeq.current === myId && setCompiling(false));
   }
   function removePolicy(i: number) {
     setPolicies((s) => s.filter((_, j) => j !== i));
@@ -207,12 +260,46 @@ export default function PolicyView({ spec }: { spec: Spec }) {
           </button>
         </div>
 
+        <div className="pr-compile">
+          <div className="pr-compile-head">
+            <span>🗣️ 用人话写打法 → LLM 编译成可确认的规则(P6)</span>
+            <span className={`pr-compile-llm ${llm && !llm.reachable ? "is-down" : ""}`}>
+              {llm == null ? "LLM 状态…" : llm.reachable ? `LLM:${llm.model} · 可用` : `LLM 不可用(${llm.base_url})`}
+            </span>
+          </div>
+          <div className="pr-compile-row">
+            <textarea
+              className="pr-compile-nl"
+              value={nl}
+              onChange={(e) => setNl(e.target.value)}
+              rows={2}
+              placeholder={`例:当${attr?.label ?? "目标量"}接近上限就把设定点下调 15%,再冲高就多砍 20%`}
+            />
+            <button
+              className="pr-sim-add"
+              onClick={doCompile}
+              disabled={compiling || !nl.trim() || policies.length >= 4 || (llm != null && !llm.reachable)}
+            >
+              {compiling ? "编译中…" : "用 LLM 编译"}
+            </button>
+          </div>
+          {compileError && <p className="pr-error pr-compile-err">编译失败:{compileError}(可手填规则)</p>}
+          <p className="pr-compile-note pr-muted">
+            LLM 只把人话翻成规则(IR),<b>不产生任何数字</b>;编译结果是<b>建议,需你确认 / 改</b>;轨迹与判定仍来自确定性引擎。
+          </p>
+        </div>
+
         <div className="pr-policy-editor">
           {policies.map((p, i) => (
             <div className="pr-policy-card" key={p.id} style={{ ["--sc" as string]: trajectoryColor(i + 1) }}>
               <div className="pr-policy-head">
                 <span className="pr-sim-swatch" />
                 <input className="pr-sim-label" value={p.label} onChange={(e) => patchPolicy(i, { label: e.target.value })} aria-label="策略名" />
+                {p.llm && (
+                  <span className="pr-policy-llm" title="LLM 把人话编译成的规则 —— 请核对 / 改;轨迹与数字来自确定性引擎">
+                    🤖 LLM 译
+                  </span>
+                )}
                 <button className="pr-sim-del" onClick={() => removePolicy(i)} aria-label="删除策略">
                   ✕
                 </button>

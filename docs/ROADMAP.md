@@ -65,6 +65,8 @@
 
 ### P6 — 语义地基构建工作流(生成 + 用户逐步确认)
 把"建 spec"本身变成 Prism 的一等功能 —— 呼应 SPI 的 register→review→approve,但泛化、人在环。
+
+> **进度:P6 的「生成→确认」模式已先在 policy 面落地**(`POST /api/compile/{id}` + `backend/app/llm_client.py`):本地 LLM(LM Studio)用**结构化输出**把人话编译成 typed IR,落进编辑器成可改的候选卡,**人确认后**才交确定性引擎执行;失败可观测(`/api/llm/health`),绝不静默假装。**剩下的是把同一套(LLM 客户端 + 结构化输出 + 人确认闸)用到"从样本生成整份 spec"上**(下面的 `/api/build/plan|apply`)。见 `docs/DESIGN_what_if_sequential.md` §1/§3/§6。
 - **后端**:`POST /api/build/plan` body=样本数据/自然语言描述 → **生成一份构建方案**(有序步骤:建实体 / 推断每列 `semantic_type` / 设 range&threshold / 加关系 / 配视图),每步带理由 + 置信。`POST /api/build/apply` 只应用**已确认**的步骤,产出/更新一份 spec。
 - **前端**:工作流视图 —— 逐步展示生成的方案,每步**用户确认/改/拒**(human-in-the-loop),确认后即时预览该步对驾驶舱的影响;全确认 → 落一份新 spec,领域下拉立刻出现。
 - **领域无关性**:这是**元层**——它生产 spec,本身对领域零假设;`semantic_type` 推断是通用启发式。

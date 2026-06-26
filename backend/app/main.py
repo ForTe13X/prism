@@ -10,6 +10,7 @@ from __future__ import annotations
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
+from .compile_routes import compile_router
 from .data_synth import resolve_frame, resolve_temporal, synth_entity_rows, synth_graph
 from .policy_routes import policy_router
 from .sim_routes import sim_router
@@ -33,6 +34,10 @@ app.include_router(sim_router)
 # Policy comparison (sequential what-if): POST /api/policy/{spec}. Typed-IR contract + deterministic
 # rollout engine; see backend/app/policy.py and docs/DESIGN_what_if_sequential.md.
 app.include_router(policy_router)
+
+# LLM compile (P6 generate→confirm): POST /api/compile/{spec} turns NL → typed policy IR (a
+# suggestion to confirm, never executed) + GET /api/llm/health. The LLM never produces numbers.
+app.include_router(compile_router)
 
 
 @app.get("/api/health")

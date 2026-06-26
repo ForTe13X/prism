@@ -235,3 +235,31 @@ export interface PolicyRequest {
   policies: PolicyIR[];
   assumptions?: { rate?: number | null; trend?: number | null; volatility?: number | null };
 }
+
+// P6 LLM compile (POST /api/compile). The LLM turns NL → a policy IR (rules only, NO numbers); the
+// result is a suggestion for the human to confirm/edit before the deterministic engine runs it.
+export interface CompileRequest {
+  entity_type: string;
+  attribute: string;
+  nl: string;
+}
+
+export interface CompileResult {
+  ok: boolean;
+  spec_id: string;
+  entity_type: string;
+  attribute: string;
+  rules: PolicyRule[];
+  model: string;
+  source: string;
+}
+
+export interface LlmHealth {
+  reachable: boolean;
+  base_url: string;
+  model: string;
+  models: string[];
+  compile_calls: number;
+  compile_failures: number;
+  last_error?: string | null;
+}

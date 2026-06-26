@@ -1,5 +1,8 @@
 import type {
+  CompileRequest,
+  CompileResult,
   Graph,
+  LlmHealth,
   PolicyRequest,
   PolicyResult,
   Row,
@@ -61,3 +64,10 @@ export const runSimulation = (specId: string, body: SimRequest) =>
 // Compare candidate policies (sequential what-if rules) for one numeric attribute.
 export const runPolicies = (specId: string, body: PolicyRequest) =>
   postJSON<PolicyResult>(`/api/policy/${specId}`, body);
+
+// Compile a natural-language policy into a typed IR (a suggestion to confirm; never executed here).
+export const compilePolicy = (specId: string, body: CompileRequest) =>
+  postJSON<CompileResult>(`/api/compile/${specId}`, body);
+
+// Local-LLM health: reachability + which model + honest compile counters.
+export const fetchLlmHealth = () => getJSON<LlmHealth>("/api/llm/health");

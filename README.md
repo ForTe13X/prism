@@ -29,7 +29,7 @@ views + relations        选控件(仪表/趋势/徽章/…)        (UI = f(spec
 
 | 层 | 技术 | 职责 |
 | --- | --- | --- |
-| 后端 | **FastAPI (Python)** | 读 spec(`specs_loader`)+ 按 `semantic_type` **确定性合成**数据(`data_synth`,哈希种子、无随机);暴露 `/api/specs` `/api/spec/{id}` `/api/data/{id}/{entity}?frame=N` `/api/timeline/{id}` `/api/graph/{id}?frame=N` · `POST /api/sim/{id}`(轨迹仿真,`simulation`)· `POST /api/policy/{id}`(策略对比,`policy`) |
+| 后端 | **FastAPI (Python)** | 读 spec(`specs_loader`)+ 按 `semantic_type` **确定性合成**数据(`data_synth`,哈希种子、无随机);暴露 `/api/specs` `/api/spec/{id}` `/api/data/{id}/{entity}?frame=N` `/api/timeline/{id}` `/api/graph/{id}?frame=N` · `POST /api/sim/{id}`(轨迹仿真,`simulation`)· `POST /api/policy/{id}`(策略对比,`policy`)· `POST /api/compile/{id}` + `GET /api/llm/health`(LLM 编译,`llm_client`) |
 | 前端 | **Vite + React + TypeScript** | 取 spec → 由 `views` 生成 tab、由实体 `attributes` 生成面板、由 **widget resolver**(`widgets.tsx`)按 `semantic_type` 选控件 |
 
 > 后端不认识"管道"或"图书";`data_synth.py` 只认 `semantic_type`。把合成数据换成真实数据源,只需替换
@@ -83,7 +83,15 @@ npm run dev            # http://127.0.0.1:5173
 再多一个 **🧭 策略对比** tab:把"单发 what-if"升级成"**比几条候选打法**"——这是决策支持的核心(参考,不替你拍板)。
 - 后端 `POST /api/policy/{id}`(`backend/app/policy.py`):每条**策略 = 一份有类型的 IR**(`当 目标量 op 阈值 → 调设定点 shift / 脉冲 pulse`)。引擎做**闭环序贯 rollout**(规则观察当前值、命中即 latch),各策略**共用同一扰动序列(公共随机数)**公平对比,按**鲁棒性**(越限率 / 最坏终值)排名;再跑一遍**敏感性**(更严苛假设下排名是否翻)。
 - 前端:候选策略编辑器(规则:when→do)+ 对比图(基线 vs 各策略带)+ 鲁棒性表 + 判定 + **敏感性横幅**(承重诚实:结论吊在假设上)。
-- **诚实纪律**:数字只来自确定性引擎(**LLM 不编数**);全程标"确定性合成示意 · 非实测"。typed IR 是为将来 P6 的"人话→IR 编译 + 人确认"预留的契约。详见 [`docs/DESIGN_what_if_sequential.md`](docs/DESIGN_what_if_sequential.md)。
+- **诚实纪律**:数字只来自确定性引擎(**LLM 不编数**);全程标"确定性合成示意 · 非实测"。typed IR 是为 P6 的"人话→IR 编译 + 人确认"预留的契约。详见 [`docs/DESIGN_what_if_sequential.md`](docs/DESIGN_what_if_sequential.md)。
+
+## 人话→策略 · LLM 编译 + 人确认(P6 模式)
+
+把"人话打法"用**本地 LLM**编译成上面的 typed IR —— 这是 roadmap P6"生成 + 用户确认"模式的落地。
+- 后端 `POST /api/compile/{id}`(`backend/app/llm_client.py`):对 **OpenAI 兼容端点**(默认 LM Studio `127.0.0.1:1234`,`PRISM_LLM_BASE`/`PRISM_LLM_MODEL` 可配)发**结构化输出**(`json_schema`)请求,把自然语言编译成规则 IR。**LLM 只翻译,绝不产生数字**;返回的 IR 经严格校验(非法 op/动作丢弃、`by` 钳位)。
+- **人确认闸**:编译出的 IR 落进策略编辑器成一张**可改的候选策略卡**——你审/改/删后,再交**确定性引擎**跑对比。**绝不自动执行**。
+- **诚实**:失败**可观测**(`GET /api/llm/health` 出可达性 + 失败计数 + 原因),**绝不静默用模板假装真实输出**;LLM 不可达时退回手填规则。
+- **小模型可用**正因为 IR 是**窄 schema**:`qwen3-8b` / `gemma-12b-qat` 配结构化输出即可稳定填表。详见 [`docs/DESIGN_what_if_sequential.md`](docs/DESIGN_what_if_sequential.md) §1/§3/§6。
 
 ## 预留 TODO(v0 之后)
 
