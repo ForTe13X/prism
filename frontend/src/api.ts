@@ -1,4 +1,14 @@
-import type { Graph, Row, SimRequest, SimResult, Spec, SpecSummary, Temporal } from "./types";
+import type {
+  Graph,
+  PolicyRequest,
+  PolicyResult,
+  Row,
+  SimRequest,
+  SimResult,
+  Spec,
+  SpecSummary,
+  Temporal,
+} from "./types";
 
 // The Vite dev server talks to the Prism backend. Override with VITE_API_BASE if you change the port.
 const API_BASE = (import.meta.env.VITE_API_BASE as string | undefined) ?? "http://127.0.0.1:8200";
@@ -26,9 +36,8 @@ export const fetchData = (specId: string, entityType: string, frame?: number) =>
 export const fetchGraph = (specId: string, frame?: number) =>
   getJSON<Graph>(`/api/graph/${specId}${frame == null ? "" : `?frame=${frame}`}`);
 
-// Run a trajectory simulation (baseline + what-if scenarios) for one numeric attribute.
-export async function runSimulation(specId: string, body: SimRequest): Promise<SimResult> {
-  const res = await fetch(`${API_BASE}/api/sim/${specId}`, {
+async function postJSON<T>(path: string, body: unknown): Promise<T> {
+  const res = await fetch(`${API_BASE}${path}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -42,5 +51,13 @@ export async function runSimulation(specId: string, body: SimRequest): Promise<S
     }
     throw new Error(detail);
   }
-  return (await res.json()) as SimResult;
+  return (await res.json()) as T;
 }
+
+// Run a trajectory simulation (baseline + what-if scenarios) for one numeric attribute.
+export const runSimulation = (specId: string, body: SimRequest) =>
+  postJSON<SimResult>(`/api/sim/${specId}`, body);
+
+// Compare candidate policies (sequential what-if rules) for one numeric attribute.
+export const runPolicies = (specId: string, body: PolicyRequest) =>
+  postJSON<PolicyResult>(`/api/policy/${specId}`, body);

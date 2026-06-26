@@ -20,6 +20,7 @@ Scenario (intervention) shape: {label, at, delta, mode} where mode="shift" moves
 from __future__ import annotations
 
 import hashlib
+import math
 from statistics import median
 
 from .specs_loader import load_spec
@@ -143,6 +144,8 @@ def simulate(spec_id: str, entity_type: str, attribute: str, *, horizon: int = 1
         row_index = max(range(count), key=lambda i: _baseline_value(spec_id, entity_type, attr, i))
     row_index = max(0, min(count - 1, int(row_index)))
     base = float(baseline) if baseline is not None else _baseline_value(spec_id, entity_type, attr, row_index)
+    if not math.isfinite(base):
+        return {"ok": False, "error": "baseline must be finite"}
 
     dyn = _dynamics(attr)
     threshold = attr.get("threshold")

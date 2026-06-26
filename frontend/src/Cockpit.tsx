@@ -1,15 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { fetchData, fetchTimeline } from "./api";
 import OntologyGraph from "./OntologyGraph";
+import PolicyView from "./PolicyView";
 import SimView from "./SimView";
 import { frameLabel, stepUnit } from "./time";
 import type { Entity, Row, Spec, Temporal, View } from "./types";
 import { renderWidget } from "./widgets";
 
-// Synthetic tab ids for the built-in graph (P2) and simulation (P3) views. Never collide with a spec
-// view id (those are plain slugs), so they live alongside the spec's own views.
+// Synthetic tab ids for the built-in graph (P2), simulation (P3) and policy-comparison (P3.5) views.
+// Never collide with a spec view id (those are plain slugs), so they live alongside the spec's views.
 const GRAPH_TAB = "__prism_graph__";
 const SIM_TAB = "__prism_sim__";
+const POLICY_TAB = "__prism_policy__";
 
 function EntityCard({ entity, row }: { entity: Entity; row: Row }) {
   const idAttr = entity.attributes.find((a) => a.semantic_type === "identifier");
@@ -195,7 +197,8 @@ export default function Cockpit({ spec }: { spec: Spec }) {
 
   const isGraph = activeId === GRAPH_TAB;
   const isSim = activeId === SIM_TAB;
-  const view = isGraph || isSim ? undefined : spec.views.find((v) => v.id === activeId) ?? spec.views[0];
+  const isPolicy = activeId === POLICY_TAB;
+  const view = isGraph || isSim || isPolicy ? undefined : spec.views.find((v) => v.id === activeId) ?? spec.views[0];
   const hasAxis = !!timeline && timeline.frames > 1;
   const showGraphTab = spec.entities.length > 0;
   const showSimTab = spec.entities.some((e) =>
@@ -204,8 +207,8 @@ export default function Cockpit({ spec }: { spec: Spec }) {
 
   return (
     <section className="pr-cockpit">
-      {/* the replay slider scrubs the PAST; the sim view is about the FUTURE, so hide it there */}
-      {hasAxis && !isSim && (
+      {/* the replay slider scrubs the PAST; the sim/policy views are about the FUTURE, so hide it there */}
+      {hasAxis && !isSim && !isPolicy && (
         <ReplaySlider
           timeline={timeline}
           frame={frame}
@@ -237,8 +240,15 @@ export default function Cockpit({ spec }: { spec: Spec }) {
             🔮 预测·仿真
           </button>
         )}
+        {showSimTab && (
+          <button key={POLICY_TAB} className={isPolicy ? "pr-tab is-active" : "pr-tab"} onClick={() => setActiveId(POLICY_TAB)}>
+            🧭 策略对比
+          </button>
+        )}
       </nav>
-      {isSim && showSimTab ? (
+      {isPolicy && showSimTab ? (
+        <PolicyView spec={spec} />
+      ) : isSim && showSimTab ? (
         <SimView spec={spec} />
       ) : isGraph && showGraphTab ? (
         <OntologyGraph spec={spec} frame={hasAxis ? frame : undefined} />

@@ -64,6 +64,8 @@ LLM 把编译出的 IR **明着摆出来、可编辑、要用户确认,再执行
 
 ## 8. 与现状的接缝
 - 建在已落地的 **P3 仿真 + spec `dynamics`** 之上:单发 what-if → 多规则序贯 rollout 是**扩展**,非重写;`verdict` 是 policy 评估的种子。
+
+> **实现状态(P3.5,已落地确定性内核)**:`backend/app/policy.py`(闭环 rollout + 公共随机数对比 + 敏感性)+ `backend/app/policy_routes.py`(**有类型的 policy IR** = Pydantic `When/Do/Rule/Policy`,即本文 §2 的契约)+ `POST /api/policy/{id}`;前端 `frontend/src/PolicyView.tsx`「🧭 策略对比」tab(规则编辑器 + 对比图 + 鲁棒性表 + 敏感性横幅)。**§1 的 LLM 编译器 + §3 人确认闸尚未做**——typed IR 已为其备好契约(留给 P6)。
 - 与 **P6** 共用"生成式 + 人确认"模式与 UI。
 - 学习密度:DSL/IR 设计、structured-output、human-in-the-loop、序贯决策/rollout/鲁棒规划 —— 对 for-fun/学习目的汁水极足。
 

@@ -11,6 +11,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from .data_synth import resolve_frame, resolve_temporal, synth_entity_rows, synth_graph
+from .policy_routes import policy_router
 from .sim_routes import sim_router
 from .specs_loader import list_specs, load_spec
 
@@ -28,6 +29,10 @@ app.add_middleware(
 # Trajectory simulation (decision-support): POST /api/sim/{spec}. Self-contained engine; see
 # backend/app/simulation.py. Wiring is a one-liner by design (the engine has no main.py coupling).
 app.include_router(sim_router)
+
+# Policy comparison (sequential what-if): POST /api/policy/{spec}. Typed-IR contract + deterministic
+# rollout engine; see backend/app/policy.py and docs/DESIGN_what_if_sequential.md.
+app.include_router(policy_router)
 
 
 @app.get("/api/health")

@@ -163,3 +163,75 @@ export interface SimRequest {
   row_index?: number | null;
   scenarios: SimScenario[];
 }
+
+// P3.5 sequential policy comparison (POST /api/policy). A policy is a typed IR of conditional rules
+// (when the target crosses a trigger → nudge its setpoint); the engine compares candidate policies by
+// robustness and runs a sensitivity pass. See docs/DESIGN_what_if_sequential.md.
+export interface PolicyRule {
+  when: { op: string; value: number };
+  do: { action: "shift" | "pulse"; by: number };
+  note?: string;
+}
+
+export interface PolicyIR {
+  label: string;
+  rules: PolicyRule[];
+}
+
+export interface PolicyTrajectory {
+  label: string;
+  frames: SimFrame[];
+  breach_frame: number | null;
+  breach_rate: number;
+  terminal_mid: number;
+  worst_terminal: number;
+  rule_count: number;
+}
+
+export interface PolicyMetric {
+  breach_rate: number;
+  worst_terminal: number;
+  terminal_mid: number;
+}
+
+export interface PolicyVerdict {
+  objective: "avoid_breach" | "min_terminal";
+  best_label: string;
+  reason: string;
+  metrics: Record<string, PolicyMetric>;
+}
+
+export interface PolicySensitivity {
+  perturbed: { rate: number; volatility: number };
+  best_label_perturbed: string;
+  stable: boolean;
+  note: string;
+}
+
+export interface PolicyResult {
+  ok: boolean;
+  spec_id: string;
+  entity_type: string;
+  attribute: string;
+  row_index: number;
+  baseline: number;
+  now: number;
+  horizon: number;
+  range?: [number, number];
+  unit?: string;
+  threshold?: Threshold;
+  dynamics: { model: string; rate: number; trend: number; volatility: number };
+  policies: PolicyTrajectory[];
+  verdict: PolicyVerdict;
+  sensitivity: PolicySensitivity;
+  confidence: { rolls: number; note: string };
+}
+
+export interface PolicyRequest {
+  entity_type: string;
+  attribute: string;
+  horizon: number;
+  row_index?: number | null;
+  policies: PolicyIR[];
+  assumptions?: { rate?: number | null; trend?: number | null; volatility?: number | null };
+}
