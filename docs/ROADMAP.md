@@ -44,11 +44,12 @@
 - **领域无关性**:图纯由 spec 的实体/关系生成;布局通用。
 - **验收**:两个领域都能画出图;拖 slider 看网络演化;点节点出详情。
 
-### P3 — 预测 + 仿真
-- **后端**:`GET /api/forecast/{spec}/{entity}/{attr}?from=now&horizon=H` —— 对 `metric/gauge/timeseries` 外推未来帧(确定性简单模型:趋势+季节+带);`POST /api/simulate/{spec}` body=干预(某实体某属性设值/调整)→返回**分支的另一条未来帧序列**。
-- **前端**:时间轴延伸到"未来"区(虚线/带);what-if 面板设干预 → 基线 vs 仿真双线对比。
+### P3 — 预测 + 仿真  ✅ 已交付(复用旁观者的 `simulation` 引擎并接线;轨迹仿真统一了 forecast+simulate,见 `OBSERVER_NOTES.md` §7)
+- **后端(已交付,统一为一个端点)**:`POST /api/sim/{spec}` body=`{entity, attribute, horizon, row_index?, scenarios[]}` —— 对 `metric/gauge/timeseries` 外推未来帧。**基线轨迹 = forecast**(无干预的那条);**scenarios = simulation**(`shift` 设定点 / `pulse` 脉冲)。每条带不确定带(多次确定性 roll 的 min/中位/max)、越限帧、`verdict`。动力学(`mean_revert` `rate`/`trend`/`volatility`)取自 spec `dynamics`。引擎自包含、确定性,见 `backend/app/simulation.py`。
+  > 原计划的 `/api/forecast` + `/api/simulate` 两个端点被这一个统一端点取代(forecast 即 baseline-only run)。
+- **前端**:时间轴延伸到"未来"区(扇形带);what-if 面板设干预 → 基线 vs 情景多线对比 + verdict;诚实标注合成/不确定。
 - **领域无关性**:预测/仿真作用于 `semantic_type`(数值类),不认领域语义。
-- **验收**:任一数值属性可外推 + 出带;干预后仿真线与基线分叉。
+- **验收**:任一数值属性可外推 + 出带;干预后情景线与基线分叉。✅
 
 ### P4 — 作业引擎 + 监控 + 主动 run
 - **后端**:轻量 job 模型(入队/运行/完成,确定性 mock 执行)。`POST /api/jobs`(type=analysis|forecast|simulate|build)、`GET /api/jobs`(列表+状态)、`GET /api/jobs/{id}`。"主动 run"=按 spec 声明的触发器/间隔自动入队(default off)。

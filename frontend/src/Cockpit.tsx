@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { fetchData, fetchTimeline } from "./api";
 import OntologyGraph from "./OntologyGraph";
+import SimView from "./SimView";
 import { frameLabel, stepUnit } from "./time";
 import type { Entity, Row, Spec, Temporal, View } from "./types";
 import { renderWidget } from "./widgets";
 
-// A synthetic tab id for the built-in ontology graph view (P2). Never collides with a spec view id
-// (those are plain slugs), so it lives alongside the spec's own views.
+// Synthetic tab ids for the built-in graph (P2) and simulation (P3) views. Never collide with a spec
+// view id (those are plain slugs), so they live alongside the spec's own views.
 const GRAPH_TAB = "__prism_graph__";
+const SIM_TAB = "__prism_sim__";
 
 function EntityCard({ entity, row }: { entity: Entity; row: Row }) {
   const idAttr = entity.attributes.find((a) => a.semantic_type === "identifier");
@@ -192,13 +194,18 @@ export default function Cockpit({ spec }: { spec: Spec }) {
   }, [playing, frames]);
 
   const isGraph = activeId === GRAPH_TAB;
-  const view = isGraph ? undefined : spec.views.find((v) => v.id === activeId) ?? spec.views[0];
+  const isSim = activeId === SIM_TAB;
+  const view = isGraph || isSim ? undefined : spec.views.find((v) => v.id === activeId) ?? spec.views[0];
   const hasAxis = !!timeline && timeline.frames > 1;
   const showGraphTab = spec.entities.length > 0;
+  const showSimTab = spec.entities.some((e) =>
+    e.attributes.some((a) => a.semantic_type === "metric" || a.semantic_type === "gauge" || a.semantic_type === "timeseries"),
+  );
 
   return (
     <section className="pr-cockpit">
-      {hasAxis && (
+      {/* the replay slider scrubs the PAST; the sim view is about the FUTURE, so hide it there */}
+      {hasAxis && !isSim && (
         <ReplaySlider
           timeline={timeline}
           frame={frame}
@@ -221,16 +228,19 @@ export default function Cockpit({ spec }: { spec: Spec }) {
           </button>
         ))}
         {showGraphTab && (
-          <button
-            key={GRAPH_TAB}
-            className={isGraph ? "pr-tab is-active" : "pr-tab"}
-            onClick={() => setActiveId(GRAPH_TAB)}
-          >
+          <button key={GRAPH_TAB} className={isGraph ? "pr-tab is-active" : "pr-tab"} onClick={() => setActiveId(GRAPH_TAB)}>
             🕸 本体图谱
           </button>
         )}
+        {showSimTab && (
+          <button key={SIM_TAB} className={isSim ? "pr-tab is-active" : "pr-tab"} onClick={() => setActiveId(SIM_TAB)}>
+            🔮 预测·仿真
+          </button>
+        )}
       </nav>
-      {isGraph && showGraphTab ? (
+      {isSim && showSimTab ? (
+        <SimView spec={spec} />
+      ) : isGraph && showGraphTab ? (
         <OntologyGraph spec={spec} frame={hasAxis ? frame : undefined} />
       ) : view ? (
         <ViewPanel spec={spec} view={view} frame={hasAxis ? frame : undefined} />

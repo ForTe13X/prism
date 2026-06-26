@@ -29,7 +29,7 @@ views + relations        选控件(仪表/趋势/徽章/…)        (UI = f(spec
 
 | 层 | 技术 | 职责 |
 | --- | --- | --- |
-| 后端 | **FastAPI (Python)** | 读 spec(`specs_loader`)+ 按 `semantic_type` **确定性合成**数据(`data_synth`,哈希种子、无随机);暴露 `/api/specs` `/api/spec/{id}` `/api/data/{id}/{entity}?frame=N` `/api/timeline/{id}` `/api/graph/{id}?frame=N` |
+| 后端 | **FastAPI (Python)** | 读 spec(`specs_loader`)+ 按 `semantic_type` **确定性合成**数据(`data_synth`,哈希种子、无随机);暴露 `/api/specs` `/api/spec/{id}` `/api/data/{id}/{entity}?frame=N` `/api/timeline/{id}` `/api/graph/{id}?frame=N` · `POST /api/sim/{id}`(轨迹仿真,`simulation`) |
 | 前端 | **Vite + React + TypeScript** | 取 spec → 由 `views` 生成 tab、由实体 `attributes` 生成面板、由 **widget resolver**(`widgets.tsx`)按 `semantic_type` 选控件 |
 
 > 后端不认识"管道"或"图书";`data_synth.py` 只认 `semantic_type`。把合成数据换成真实数据源,只需替换
@@ -70,6 +70,13 @@ npm run dev            # http://127.0.0.1:5173
 - 后端 `GET /api/graph/{id}?frame=N`:节点=各实体在该帧的实例(行),边=由 `relations` 生成的**确定性实例映射**(每个 `from` 实例连到一个 `to` 实例)。
 - 前端:SVG 分层布局(每个实体类型一列),节点按该帧 `status` 上色,**复用 P1 的 slider 逐帧重放**(拖动只重上色、不重排——拓扑跨帧稳定);点节点 → 右侧详情**复用同一套 widget resolver**。
 - 领域无关:图纯由 spec 的 `entities`/`relations` 生成,布局通用,零领域假设。详见 [`docs/ROADMAP.md`](docs/ROADMAP.md) P2。
+
+## 预测·仿真(P3)
+
+驾驶舱再多一个 **🔮 预测·仿真** tab:把 slider 从"回放过去"延伸到"模拟未来"。
+- 后端 `POST /api/sim/{id}`(`backend/app/simulation.py`):对一个数值属性外推 `horizon` 帧,给出**基线 + N 个 what-if 情景**轨迹,每条带**不确定带**(min/中位/max,多次确定性 roll)、越限帧、以及一个 `verdict`(优先避免越限,否则终值最低)。动力学(均值回复 `rate`/`trend`/`volatility`)与阈值取自 spec 的 [`dynamics`](docs/SPEC_FORMAT.md)。
+- 前端:SVG 扇形带图(基线 + 情景对比、阈值线、越限标记)+ what-if 编辑器(设定点 `shift` / 脉冲 `pulse`)+ 判定横幅;**诚实标注**"确定性合成示意 · 非实测"。
+- 引擎**自包含、确定性**(不 import `data_synth`,无随机/时钟);接 live 状态只需给 `simulate(baseline=…)`。详见 [`docs/ROADMAP.md`](docs/ROADMAP.md) P3 与 [`docs/OBSERVER_NOTES.md`](docs/OBSERVER_NOTES.md)。
 
 ## 预留 TODO(v0 之后)
 

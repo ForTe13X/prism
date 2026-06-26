@@ -31,7 +31,7 @@
         { "name": "name", "label": "分馆", "semantic_type": "identifier", "prefix": "BR" },
         { "name": "district", "label": "城区", "semantic_type": "category", "values": ["城东", "城西", "城南", "城北"] },
         { "name": "collection_size", "label": "馆藏量", "semantic_type": "metric", "unit": "册", "range": [5000, 80000], "evolves": true, "drift": 0.1 },
-        { "name": "occupancy", "label": "上座率", "semantic_type": "gauge", "unit": "%", "range": [0, 100], "threshold": { "warn": 85, "limit": 95 }, "evolves": true, "drift": 0.4 },
+        { "name": "occupancy", "label": "上座率", "semantic_type": "gauge", "unit": "%", "range": [0, 100], "threshold": { "warn": 85, "limit": 95 }, "evolves": true, "drift": 0.4, "dynamics": { "model": "mean_revert", "rate": 0.2, "trend": 0.01, "volatility": 0.1 } },
         { "name": "status", "label": "状态", "semantic_type": "status", "values": ["open", "busy", "closed"], "evolves": true }
       ]
     }

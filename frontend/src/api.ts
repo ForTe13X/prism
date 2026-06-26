@@ -1,4 +1,4 @@
-import type { Graph, Row, Spec, SpecSummary, Temporal } from "./types";
+import type { Graph, Row, SimRequest, SimResult, Spec, SpecSummary, Temporal } from "./types";
 
 // The Vite dev server talks to the Prism backend. Override with VITE_API_BASE if you change the port.
 const API_BASE = (import.meta.env.VITE_API_BASE as string | undefined) ?? "http://127.0.0.1:8200";
@@ -25,3 +25,22 @@ export const fetchData = (specId: string, entityType: string, frame?: number) =>
 // The instance graph at a frame (nodes + edges). Omit `frame` to default to the spec's `now`.
 export const fetchGraph = (specId: string, frame?: number) =>
   getJSON<Graph>(`/api/graph/${specId}${frame == null ? "" : `?frame=${frame}`}`);
+
+// Run a trajectory simulation (baseline + what-if scenarios) for one numeric attribute.
+export async function runSimulation(specId: string, body: SimRequest): Promise<SimResult> {
+  const res = await fetch(`${API_BASE}/api/sim/${specId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    let detail = `${res.status} ${res.statusText}`;
+    try {
+      detail = (await res.json()).detail ?? detail;
+    } catch {
+      /* keep status text */
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as SimResult;
+}

@@ -100,3 +100,18 @@ def test_route_runs_and_maps_errors() -> None:
 
     assert client.post("/api/sim/does_not_exist", json={"entity_type": ENT, "attribute": ATTR}).status_code == 404
     assert client.post(f"/api/sim/{SPEC}", json={"entity_type": ENT, "attribute": "status"}).status_code == 400
+
+
+def test_sim_router_is_wired_into_main_app() -> None:
+    # the engine is no longer asleep: the real app (backend.app.main) must serve /api/sim
+    from backend.app.main import app as main_app
+
+    main_client = TestClient(main_app)
+    r = main_client.post(f"/api/sim/{SPEC}", json={"entity_type": ENT, "attribute": ATTR, "horizon": 6})
+    assert r.status_code == 200 and r.json()["ok"]
+
+
+def test_declared_dynamics_is_read_from_spec() -> None:
+    # pressure declares dynamics.rate=0.25 in the spec → the engine reports it (domain-agnostic)
+    r = simulate(SPEC, ENT, ATTR, horizon=4, baseline=8.0)
+    assert r["dynamics"]["rate"] == 0.25

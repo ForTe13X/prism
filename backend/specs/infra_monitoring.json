@@ -17,7 +17,7 @@
         { "name": "name", "label": "站点", "label_en": "Station", "semantic_type": "identifier", "prefix": "STN" },
         { "name": "region", "label": "区域", "semantic_type": "category", "values": ["华北", "华东", "西北", "西南"] },
         { "name": "throughput", "label": "吞吐量", "semantic_type": "metric", "unit": "10⁴m³/h", "range": [120, 980], "evolves": true, "drift": 0.3 },
-        { "name": "pressure", "label": "进站压力", "semantic_type": "gauge", "unit": "MPa", "range": [0, 12], "threshold": { "warn": 9, "limit": 10 }, "evolves": true, "drift": 0.35 },
+        { "name": "pressure", "label": "进站压力", "semantic_type": "gauge", "unit": "MPa", "range": [0, 12], "threshold": { "warn": 9, "limit": 10 }, "evolves": true, "drift": 0.35, "dynamics": { "model": "mean_revert", "rate": 0.25, "trend": 0.015, "volatility": 0.08 } },
         { "name": "status", "label": "运行状态", "semantic_type": "status", "values": ["normal", "warning", "critical"], "evolves": true },
         { "name": "h2s", "label": "H₂S 趋势", "semantic_type": "timeseries", "unit": "mg/m³", "range": [0, 12], "points": 24, "threshold": { "limit": 7 }, "evolves": true }
       ]

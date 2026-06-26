@@ -148,6 +148,12 @@ export default function OntologyGraph({ spec, frame }: { spec: Spec; frame?: num
                   className={`pr-node tone-${tone}${isSel ? " is-sel" : ""}${dim ? " is-dim" : ""}`}
                   transform={`translate(${p.x} ${p.y})`}
                   onClick={() => setSelected(isSel ? null : n.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setSelected(isSel ? null : n.id);
+                    }
+                  }}
                   data-node-id={n.id}
                   role="button"
                   tabIndex={0}

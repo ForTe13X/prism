@@ -76,6 +76,24 @@
 
 > 演化规则只活在 spec(`evolves`/`drift`)+ `data_synth.py`,**绝不针对任何领域**。
 
+### dynamics —— 仿真动力学(P3,可选)
+
+数值属性(`metric`/`gauge`/`timeseries`)可声明 `dynamics`,供轨迹仿真 `POST /api/sim/{id}` 外推未来帧:
+
+```jsonc
+"dynamics": { "model": "mean_revert", "rate": 0.25, "trend": 0.015, "volatility": 0.08 }
+```
+| 字段 | 含义 | 默认 |
+| --- | --- | --- |
+| `model` | 动力学模型,目前仅 `mean_revert`(均值回复) | `mean_revert` |
+| `rate` | 回复强度 ∈ [0,1](越大越快拉回设定点) | `0.15` |
+| `trend` | 每帧漂移,占 `range` 跨度的比例 | `0` |
+| `volatility` | 每帧冲击幅度,占跨度比例(**确定性 hash,非真随机**) | `0.12` |
+
+- 全部可缺省(引擎有默认值);未声明 `dynamics` 的数值属性照样能仿真。
+- 仿真**永远带不确定带**(min/中位/max,多次确定性 roll)且**诚实标注**为合成示意(非实测)。
+- 领域无关:动力学只活在 spec + 仿真引擎(`backend/app/simulation.py`),不针对任何领域。详见 [`docs/ROADMAP.md`](ROADMAP.md) P3。
+
 ### status 上色约定(领域无关)
 值名(小写)落入约定集合即上色,否则中性:
 - **good**(绿):`normal/ok/available/open/healthy/online/good`

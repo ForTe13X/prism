@@ -106,3 +106,60 @@ export interface Graph {
   nodes: GraphNode[];
   edges: GraphEdge[];
 }
+
+// P3 trajectory simulation (POST /api/sim). A baseline + N what-if scenarios projected `horizon`
+// frames past `now`, each with a min/median/max uncertainty band and threshold-breach detection.
+export interface SimScenario {
+  label: string;
+  at: number;
+  delta: number;
+  mode: "shift" | "pulse"; // shift = setpoint change from `at` onward; pulse = one-time at `at`
+}
+
+export interface SimFrame {
+  f: number;
+  lo: number;
+  mid: number;
+  hi: number;
+}
+
+export interface SimTrajectory {
+  label: string;
+  frames: SimFrame[];
+  breach_frame: number | null;
+  terminal_mid: number;
+}
+
+export interface SimVerdict {
+  objective: "avoid_breach" | "min_terminal";
+  best_label: string;
+  breaches: Record<string, number | null>;
+  reason: string;
+  limit?: number;
+}
+
+export interface SimResult {
+  ok: boolean;
+  spec_id: string;
+  entity_type: string;
+  attribute: string;
+  row_index: number;
+  baseline: number;
+  now: number;
+  horizon: number;
+  range?: [number, number];
+  unit?: string;
+  threshold?: Threshold;
+  dynamics: { model: string; rate: number };
+  trajectories: SimTrajectory[];
+  verdict: SimVerdict;
+  confidence: { rolls: number; note: string };
+}
+
+export interface SimRequest {
+  entity_type: string;
+  attribute: string;
+  horizon: number;
+  row_index?: number | null;
+  scenarios: SimScenario[];
+}

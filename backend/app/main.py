@@ -11,6 +11,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from .data_synth import resolve_frame, resolve_temporal, synth_entity_rows, synth_graph
+from .sim_routes import sim_router
 from .specs_loader import list_specs, load_spec
 
 app = FastAPI(title="Prism", description="Semantic-foundation-driven cockpit", version="0.1.0")
@@ -20,9 +21,13 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=False,
-    allow_methods=["GET"],
+    allow_methods=["GET", "POST"],  # POST for /api/sim (trajectory simulation)
     allow_headers=["*"],
 )
+
+# Trajectory simulation (decision-support): POST /api/sim/{spec}. Self-contained engine; see
+# backend/app/simulation.py. Wiring is a one-liner by design (the engine has no main.py coupling).
+app.include_router(sim_router)
 
 
 @app.get("/api/health")
