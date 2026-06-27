@@ -7,6 +7,7 @@ from fastapi import APIRouter, HTTPException
 
 from .data_package import load_source
 from .nexus_eval import discrimination_sweep, negative_controls, run_baseline_ladder
+from .nexus_lens_sem import run_sem_lens
 
 nexus_router = APIRouter(prefix="/api/nexus", tags=["nexus"])
 
@@ -36,3 +37,11 @@ def sweep(source_id: str, dirt: float = 0.0) -> dict:
 def controls(source_id: str, link: int = 4, dirt: float = 0.0) -> dict:
     _require_source(source_id)
     return {**negative_controls(source_id, link=link, dirt=dirt), "caveat": _CAVEAT}
+
+
+@nexus_router.get("/{source_id}/sem")
+def sem_lens(source_id: str) -> dict:
+    """M1: the time-free SEMANTIC lens (I_sem + ΔL/Kraft). The honest positive — wins L1–L3/L5, beats the
+    naive-string baseline under dirtiness (dealias robustness), and concedes L4 (below chance)."""
+    _require_source(source_id)
+    return {**run_sem_lens(source_id), "caveat": _CAVEAT}
