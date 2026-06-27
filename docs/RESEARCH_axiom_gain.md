@@ -30,7 +30,7 @@
 ## 4. headline = 成本×质量**前沿**,不是单数
 "便宜但答错"不是 gain。固定质量比成本,或画 cost–accuracy 前沿。单指标首选 **cost per correct(每正确答案成本)**。
 
-## 5. 建造成本 + 摊销曲线(核心,最有研究味)
+## 5. 建造成本 + 摊销曲线(核心,最有研究味) · 已落地 → §11b
 axiom-net = **一次性 BUILD 成本**(learning loop 自己烧 token/calls)+ **每查询 SAVING**。
 - 真 gain(N 次查询)`= saving·N − build`。
 - 画**累计成本 with vs without ~ N** 两条线 → **break-even N\***(回本点)。
@@ -85,7 +85,22 @@ LLM 调用口(`backend/app/llm_client.py`)每次记 `{model, in_tok, out_tok, ca
 - **H1 成立(首跑)**:axiom-RAG **质量≥naive 且输入 token ≈40%**(每正确答案省 55–71% token)。
 - **§6b robustness 成立**:**增益随脏度增长**(gemma +0.11→**+0.34**;naive 0.81→0.53 崩,axiom 0.92→0.87 稳)。
 - **H2 的诚实读法**:此处 gemma-12b 增益 > qwen-8b,但**因为 gemma 在 naive 上更差**(量化模型对原始跨源更吃力)——增益最大处=naive baseline 最弱处,与"参数量"不直接挂钩。
-- **诚实边界**:axiom 层**算法式(无训练)⇒ build 成本≈0、摊销平凡**(学习式 axiom-net 才有真 build 要摊);**小规模首跑**(无多 seed CI、无 $ 定价、单场景);naive-RAG 给的是真原始多源(非稻草人)。完整研究(跨模型矩阵 + CI + cost frontier + 真 build 摊销 + agentic 解析器 + 真实校准)是后续。
+- **诚实边界**:**小规模首跑**(无多 seed CI、无 $ 定价、单场景);naive-RAG 给的是真原始多源(非稻草人)。完整研究(跨模型矩阵 + CI + cost frontier + agentic 解析器 + 真实校准)是后续。
+
+### 11b. §5 建造成本 + 摊销已落地(确定性,含诚实负结果)
+`backend/app/axiom_learn.py`(**学习式** canonical 解析:别名词典从『训练集』各包 `corruption_map['aliases']` 增量挖出,**有真 build 成本**;held-out 永不暴露自身 corruption_map,train/eval seed 不相交)+ `backend/app/amortization.py` + `GET /api/axiomgain/{id}/amortization`。全确定性/离线(学习与解析无 LLM;每查询实测 token 取自冻结 fixtures 作旁证)。把 §11 那条「算法式⇒build≈0、摊销平凡」**实测化**,结果是一个**价值分解**——也是**部分负结果**(§10 要的,胜过造假增益):
+
+(数值取自 `run_amortization('logistics_demo')`,eval=manifest held-out seeds、dirt=0.6;energy 同形,见括注)
+
+| 成分 | held-out F1 | build 成本 | 是否摊销 |
+|---|---|---|---|
+| basic linked(OR-of-cues,无互斥) | 0.625 | — | — |
+| **+ 结构性公理**(互斥匹配 + 观测异常帧锚定 + 时间优先打分,三者合力) | 0.95(**+0.325**) | **免 build** | 真增益,即时 |
+| **+ 压缩/预联结** | 同上 | **免 build**(空词典即生成正确紧凑上下文) | 真增益,即时 |
+| **+ 学习式别名词典** | 0.95(**+0.000**) | ≈4.4k est-token(收敛第 4 轮,4414;energy 4264) | **永不**(N\*=∞) |
+
+- **结论**:axiom 层的真实增益**全部来自免 build 的结构性联结**(互斥匹配 + 异常帧锚定 + 时间优先,合力 +0.325;及压缩)与下游 LLM 读取优势(§11);**唯一有 build 成本的成分(学习式别名词典)在本任务族零边际准确率增益**(两域、脏度 0/0.3/0.6/0.9 全为 0)——因为跨源联结**锚定在观测到的指标异常帧**,不靠实体归一,故词典从不改变归因。其 break-even N\*=∞。注:`+0.325` 是**三个结构改动合力**,非单靠互斥(单加互斥到 news-帧打分反而 ≈0.60,低于 basic)。
+- **诚实**:学习器**确实学对了**(收敛时 held-out F1 == 算法式,parity 通过)⇒ 0 增益是**任务性质**而非学习器坏掉;build 成本为**估算 token**(非模型实测,真 LLM build 只会更贵 ⇒ 摊销差距下界);若把压缩收益错记到词典 build 上,名义 N\*≈16(=4414/285,energy≈15),但压缩本不需词典 ⇒ 真值=∞。
 
 ---
 *—— 研究设计锚。这是给在建会话的方法学参照,不是指令;建造的人说了算。*

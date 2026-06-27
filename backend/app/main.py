@@ -48,7 +48,9 @@ app.include_router(compile_router)
 app.include_router(datapackage_router)
 
 # Axiom-gain ablation (DP2): GET /api/axiomgain/{source} — naive-RAG vs axiom-RAG on the cross-source
-# task (local LLM), served from frozen fixtures. See backend/app/benchmark.py + RESEARCH_axiom_gain.md.
+# task (local LLM), served from frozen fixtures. Plus /{source}/amortization (RESEARCH §5): a learned
+# resolver with a real build cost, amortized to a break-even (deterministic). See benchmark.py /
+# amortization.py + RESEARCH_axiom_gain.md §11/§11b.
 app.include_router(benchmark_router)
 
 # §5 agentic parser: GET /api/parse/{source} — render a package messy, parse it back, report round-trip
