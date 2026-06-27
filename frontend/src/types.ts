@@ -297,3 +297,21 @@ export interface NexusView {
   };
   caveat: string;
 }
+
+// Sinkhorn alignment — the animated "money moment" data (residual + transport snapshots per iteration).
+export interface NexusAlignSnapshot {
+  iter: number;
+  residual: number;
+  transport: number[][]; // [anchor-A index][anchor-B index] mass at this iteration
+}
+export interface NexusAlign {
+  seed: string;
+  n_anchor_a: number;
+  n_anchor_b: number;
+  iters: number;
+  reg: number;
+  residuals: number[];
+  snapshots: NexusAlignSnapshot[];
+  pairs: { a_idx: number; b_idx: number; transport: number; cost: number; real: boolean }[];
+  note: string;
+}

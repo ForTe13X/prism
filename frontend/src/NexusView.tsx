@@ -1,7 +1,7 @@
 import { Component, Suspense, lazy, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
-import { fetchNexusView } from "./api";
-import type { NexusView as NexusViewData, NexusUnit } from "./types";
+import { fetchNexusAlign, fetchNexusView } from "./api";
+import type { NexusAlign, NexusView as NexusViewData, NexusUnit } from "./types";
 
 // the heavy three.js galaxy is a lazy chunk — it never enters the main bundle, and we fall back to the SVG
 // when WebGL is unavailable (DESIGN_visual_fusion §5: the 2D form is the accessibility/no-WebGL fallback).
@@ -61,6 +61,31 @@ export default function NexusView() {
   const [mode, setMode] = useState<"3d" | "2d">("3d");
   const [galaxyFailed, setGalaxyFailed] = useState(false);
   const show3d = mode === "3d" && webgl && !galaxyFailed;
+  // alignment replay (the money moment): the galaxy collides as the real Sinkhorn residual converges
+  const [replay, setReplay] = useState(false);
+  const [align, setAlign] = useState<NexusAlign | null>(null);
+  const [step, setStep] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  const nSteps = align?.snapshots.length ?? 0;
+
+  // fetch the Sinkhorn snapshots lazily when replay turns on (or the seed changes while replaying)
+  useEffect(() => {
+    if (!replay || !show3d) return;
+    let cancelled = false;
+    setAlign(null);
+    setStep(0);
+    fetchNexusAlign(seed)
+      .then((a) => { if (!cancelled) { setAlign(a); setStep(0); setPlaying(true); } })
+      .catch(() => !cancelled && setReplay(false));
+    return () => { cancelled = true; };
+  }, [replay, show3d, seed]);
+
+  // playback: advance one iteration at a time, stop at convergence (the last snapshot)
+  useEffect(() => {
+    if (!playing || nSteps <= 1) return;
+    const id = setInterval(() => setStep((s) => (s + 1 >= nSteps ? (setPlaying(false), nSteps - 1) : s + 1)), 280);
+    return () => clearInterval(id);
+  }, [playing, nSteps]);
 
   useEffect(() => {
     let cancelled = false;
@@ -99,6 +124,12 @@ export default function NexusView() {
               <button className={!show3d ? "is-active" : ""} onClick={() => setMode("2d")} title="2D SVG">2D</button>
             </div>
           )}
+          {show3d && (
+            <button className={replay ? "pr-nexus-replaybtn is-active" : "pr-nexus-replaybtn"}
+              onClick={() => { setReplay((r) => !r); setPlaying(false); }} title="按真实 Sinkhorn 对齐迭代回放碰撞">
+              ✦ 对齐回放
+            </button>
+          )}
           <label className="pr-nexus-seed">
             种子
             <select value={seed} onChange={(e) => setSeed(e.target.value)}>
@@ -112,6 +143,20 @@ export default function NexusView() {
         </div>
       </div>
 
+      {show3d && replay && (
+        <div className="pr-nexus-replay">
+          <button className="pr-play" onClick={() => setPlaying((p) => !p)} aria-label={playing ? "暂停" : "播放对齐"} disabled={nSteps === 0}>
+            {playing ? "⏸" : "▶"}
+          </button>
+          <input className="pr-range" type="range" min={0} max={Math.max(0, nSteps - 1)} step={1} value={step}
+            disabled={nSteps === 0} aria-label="Sinkhorn 迭代"
+            onChange={(e) => { setPlaying(false); setStep(Number(e.target.value)); }} />
+          <span className="pr-nexus-replay-meta">
+            {nSteps === 0 ? "对齐计算中…" : `迭代 ${align?.snapshots[step]?.iter ?? 0} · 残差 ${(align?.snapshots[step]?.residual ?? 0).toFixed(4)} · 动画=真实对齐回放`}
+          </span>
+        </div>
+      )}
+
       {error && <p className="pr-error">加载失败:{error}</p>}
       {!data && !error && <p className="pr-muted">加载中…</p>}
 
@@ -120,7 +165,7 @@ export default function NexusView() {
           {show3d ? (
             <GalaxyBoundary onError={() => setGalaxyFailed(true)}>
               <Suspense fallback={<div className="pr-nexus-svg pr-nexus-loading">渲染银河…</div>}>
-                <NexusGalaxy data={data} />
+                <NexusGalaxy data={data} align={replay ? align : null} step={replay ? step : undefined} />
               </Suspense>
             </GalaxyBoundary>
           ) : layout ? (

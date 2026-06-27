@@ -291,7 +291,7 @@ body {
 .pr-nexus-title { font-weight: 600; letter-spacing: 0.02em; }
 .pr-nexus-seed { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; color: var(--pr-muted, #8b8b9a); }
 .pr-nexus-seed select { background: #14141e; color: inherit; border: 1px solid #2a2a3a; border-radius: 6px; padding: 0.15rem 0.4rem; }
-.pr-nexus-stage { position: relative; display: grid; grid-template-columns: 1fr; }
+.pr-nexus-stage { position: relative; width: 100%; }
 .pr-nexus-svg { width: 100%; height: auto; display: block; border-radius: 12px; background: #07070d; box-shadow: inset 0 0 80px rgba(0,0,0,0.7); }
 .pr-nexus-bg { fill: #07070d; }
 .pr-nexus-domlabel { font-size: 15px; font-weight: 600; letter-spacing: 0.06em; opacity: 0.85; }
@@ -316,3 +316,10 @@ body {
 .pr-nexus-canvas-wrap { width: 100%; height: 600px; border-radius: 12px; overflow: hidden; background: #05050b; box-shadow: inset 0 0 80px rgba(0,0,0,0.8); }
 .pr-nexus-canvas { display: block; }
 .pr-nexus-loading { display: flex; align-items: center; justify-content: center; min-height: 600px; color: #7e7e96; }
+
+/* nexus alignment replay strip */
+.pr-nexus-replaybtn { background: #14141e; color: #9a9ab4; border: 1px solid #2a2a3a; border-radius: 7px; padding: 0.18rem 0.6rem; font-size: 0.8rem; cursor: pointer; }
+.pr-nexus-replaybtn.is-active { background: var(--accent, #39a7c8); color: #07070d; font-weight: 700; border-color: transparent; }
+.pr-nexus-replay { display: flex; align-items: center; gap: 0.7rem; margin: 0.5rem 0; padding: 0.4rem 0.6rem; background: rgba(10,10,18,0.5); border: 1px solid #1d1d2c; border-radius: 9px; }
+.pr-nexus-replay .pr-range { flex: 1; }
+.pr-nexus-replay-meta { font-size: 0.78rem; color: #8b8ba2; font-variant-numeric: tabular-nums; white-space: nowrap; }

@@ -3,6 +3,7 @@ import type {
   CompileResult,
   Graph,
   LlmHealth,
+  NexusAlign,
   NexusView,
   PolicyRequest,
   PolicyResult,
@@ -76,3 +77,7 @@ export const fetchLlmHealth = () => getJSON<LlmHealth>("/api/llm/health");
 // Phase-B cross-domain nexus view: per-bridge confidence for one coupled package (the galaxy-collision data).
 export const fetchNexusView = (seed: string) =>
   getJSON<NexusView>(`/api/nexus_xdom/view?seed=${encodeURIComponent(seed)}`);
+
+// Sinkhorn alignment for one package: the residual + transport snapshots the animated collision scrubs.
+export const fetchNexusAlign = (seed: string) =>
+  getJSON<NexusAlign>(`/api/nexus_xdom/align?seed=${encodeURIComponent(seed)}`);
