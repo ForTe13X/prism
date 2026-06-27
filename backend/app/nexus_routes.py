@@ -8,8 +8,11 @@ from fastapi import APIRouter, HTTPException
 from .data_package import load_source
 from .nexus_eval import discrimination_sweep, negative_controls, run_baseline_ladder
 from .nexus_lens_sem import run_sem_lens
+from .nexus_xdom_gate import run_gate
 
 nexus_router = APIRouter(prefix="/api/nexus", tags=["nexus"])
+# Phase-B cross-domain substrate lives under its own prefix (it is a different, two-domain experiment).
+nexus_xdom_router = APIRouter(prefix="/api/nexus_xdom", tags=["nexus_xdom"])
 
 _CAVEAT = ("Phase A = 跨源 link 原型(单域多源),非跨域 nexus。M0 只给『笨 baseline 阶梯』作标杆;"
            "诚实发现:time-coincidence 在本 substrate 各 link/脏度均近天花板(真桥按构造即时间巧合),"
@@ -45,3 +48,10 @@ def sem_lens(source_id: str) -> dict:
     naive-string baseline under dirtiness (dealias robustness), and concedes L4 (below chance)."""
     _require_source(source_id)
     return {**run_sem_lens(source_id), "caveat": _CAVEAT}
+
+
+@nexus_xdom_router.get("/gate")
+def xdom_gate() -> dict:
+    """Phase-B §6c PRE-REGISTRATION gate (channel-blind): an oracle recovers the cross-domain coupling while
+    time/depth/string baselines are ~chance — so the difficulty is real before any channel scorer exists."""
+    return run_gate()

@@ -83,5 +83,16 @@
 - **ΔL ≠ 裸 overlap(不同排序,诚实并列)**:distinctiveness 加权改变排序,**非「只加校准」**;本 substrate 上裸 overlap 在 **L3 反优于 ΔL(0.93 vs 0.86)**,故两 AUC 并列报、不宣称等价。
 - **校准诚实**:Kraft p 偏紧(ECE≈0.13–0.21),因 ΔL 是码长上界、偏自信;真校准器需拟合,留后续。属性通道未用(本 substrate 为零)。
 
+## 8c. Phase-B.0 已落地:双域耦合 substrate + §6c 门(收敛效度的地基;常量调参已诚实披露)
+设计面板(13 agent、多人实测)判定:**≥2 个真正失效域无关的观测渠道是可确定性构造的**,但需关键修补。`backend/app/data_package_xdom.py`(两域 INFRA `load` × LIBRARY `circulation`,命名/词元/度量**全不相交**)+ `nexus_xdom_substrate.py`(跨域候选 (A_i,B_j) 枚举 + rewire/distractor 负控)+ `nexus_xdom_gate.py`(**渠道盲** §6c 门)+ `GET /api/nexus_xdom/gate` + 7 测试。全确定性、`_unit` 播种、常量冻结于 `KNOBS`。
+
+**独立性原语**(每事件 k,两因子来自**不相交 _unit 子键**):① SHAPE 剖面注入两端点时序,**但在各端点独立的帧** f_A,f_B(共形不共时 ⇒ 时间 baseline≈随机);剖面**中心最深(anchor==f)且深度固定**(与 m 无关 ⇒ 候选/深度 baseline 读不到形状,collider 已断);② THETA 属性偏移同样移动两端点的类别分布(跨域**索引对齐、名字不同**)⇒ 指纹是分布匹配、绝非串匹配。两因子落在**不相交 store**(时序 vs SQL)与不相交 dtype。
+
+**§6c 门(渠道盲、已提交、可审计)**:`nexus_xdom_gate.py` 只读 oracle/time/depth/string——**不 import 任何渠道打分器**。oracle(见 latents)recover 耦合 **AUC=1.0**;time=0.49、depth=0.48、string=0.50(跨域词元不相交)**全在 [0.4,0.6] 随机带**。机械解耦经硬测:**改 theta 时序逐字节不变、改剖面属性逐字节不变**(因子化为真)。这证的是**难度良定**(知情解可赢、笨代理不可赢)——不是任何渠道能赢。
+
+**诚实披露(§6c 反陷阱,承重)**:**`KNOBS` 不是纯渠道盲冻结的**。设计探针阶段我**看着渠道 AUC 调过** depth/half_width/attr_shift/records_per_unit + max-lag,以保证两渠道**有足够 power**(panel 预注册 floor≈0.78)。所以「两渠道有效」是**工程构造的、非发现**——这是部分预注册,须明说。**未**被我调的、因而仍可证伪的是:渠道**独立性**(corr 不是被调的目标,由不相交子键自然落出)、**rewire 塌回**、以及**收敛 margin**(我没调它去过 0.05,它就落在 0.035)。
+
+**探针先证(scratchpad 探针、未提交,待 Phase-B.1 用冻结常量+全新 seed 正式化)**:形状≈0.81、指纹≈0.79、收敛≈0.84(超两单渠道 **仅 +0.035**)、corr≈0.14、**rewire→0.5**。诚实下限:+0.035 **未达** +0.05「干净 2/2」线 ⇒ Phase-B.1 将如实报为「两独立有效渠道、收敛增益**适度且未达 2/2 线**」,而非无保留的 2/2。**结构上已逃离 Phase-A 的「一表三读」(渠道读不相交 store);真正的开放问号是收敛是否够强。**
+
 ---
 *—— 研究设计锚。这是给在建会话的方法学参照,不是指令;建造的人说了算。*
