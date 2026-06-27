@@ -85,34 +85,45 @@ def test_dirtiness_records_recovery_map_but_not_truth():
 
 
 def test_sqlite_materializes_and_queries():
-    pkg = generate(SID, dirtiness=0.0, link_explicitness=4)
+    # role-generic export: one table per store, columns inferred from each store's schema — so it
+    # materializes for ANY domain, not just logistics. Assert a real join works for BOTH specs.
     import sqlite3
 
-    with tempfile.TemporaryDirectory() as tmp:
-        path = os.path.join(tmp, "pkg.db")
-        to_sqlite(pkg, path)
-        con = sqlite3.connect(path)
-        try:
-            n = con.execute("SELECT COUNT(*) FROM shipment").fetchone()[0]
-            joined = con.execute(
-                "SELECT s.id FROM shipment s JOIN warehouse w ON s.warehouse_id=w.id WHERE s.status='delayed'"
-            ).fetchall()
-        finally:
-            con.close()
-        assert n == pkg["manifest"]["counts"]["shipments"]
-        assert len(joined) >= 2  # the delayed shipments are queryable via a real SQL join
+    for sid in (SID, "energy_demo"):
+        pkg = generate(sid, dirtiness=0.0, link_explicitness=4)
+        r = pkg["roles"]
+        rec, hub, fk, status, affected = (r["record_store"], r["hub_store"], r["record_hub_fk"],
+                                          r["record_status"], r["affected_status"])
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "pkg.db")
+            to_sqlite(pkg, path)
+            con = sqlite3.connect(path)
+            try:
+                n = con.execute(f'SELECT COUNT(*) FROM "{rec}"').fetchone()[0]
+                joined = con.execute(
+                    f'SELECT s.id FROM "{rec}" s JOIN "{hub}" w ON s."{fk}"=w.id WHERE s."{status}"=?',
+                    (affected,),
+                ).fetchall()
+            finally:
+                con.close()
+            assert n == pkg["manifest"]["counts"][rec]  # rows materialized for this domain
+            assert len(joined) >= 2  # the affected records are queryable via a real cross-table SQL join
 
 
 def test_events_distinct_and_anomalies_materialized_even_when_ngt_equals_nw():
     # the keystone: build truth, then materialize stores consistent with it. Even with one event per
     # warehouse (ngt == nw), event warehouses must be DISTINCT and each event's frame must show a real
     # throughput dip (so no ground-truth row is left unobservable).
+    from backend.app.data_package import _cfg
+
     p = {"warehouses": 3, "carriers": 2, "shipments": 18, "frames": 60, "news_events": 5,
          "ground_truth_events": 3, "delay_window": 4}
-    wh, _cr, _sh, truth = _build_truth("seedX", p, ["A", "B", "C"], ["P", "Q", "R"])
+    cfg = _cfg({"regions": ["A", "B", "C"], "ports": ["P", "Q", "R"]})
+    wh, _cr, _sh, truth = _build_truth("seedX", p, cfg)
     wids = [e["warehouse_id"] for e in truth["events"]]
     assert len(wids) == len(set(wids)) == 3  # distinct warehouses, no collision
-    anom = _anomaly_frames({"throughput": _throughput("seedX", wh, truth), "frames": truth["frames"]})
+    anom = _anomaly_frames({"throughput": _throughput("seedX", wh, truth, cfg), "frames": truth["frames"]},
+                           cfg["roles"]["metric_store"])
     for e in truth["events"]:
         assert e["warehouse_id"] in anom and abs(anom[e["warehouse_id"]] - e["frame"]) <= 2  # dip at the event frame
         assert len(e["shipment_ids"]) >= 1
@@ -129,6 +140,45 @@ def test_anomaly_cause_scoring_is_shape_aware():
     k = next(iter(wrong))
     wrong[k] = {"frame": wrong[k]["frame"] + 99, "news": wrong[k]["news"]}
     assert score(wrong, ans)["f1"] < 1.0  # a wrong frame is actually penalized
+
+
+def test_second_domain_is_spec_driven_and_discriminative():
+    # "add scenario = add spec": energy_demo reuses the SAME generator + discriminability, only the spec
+    # (vocab/roles) differs — proving the data foundation is domain-agnostic, not logistics-hardcoded.
+    pkg = generate("energy_demo", dirtiness=0.0, link_explicitness=4)
+    assert set(pkg["stores"]["sql"].keys()) == {"substations", "crews", "readings"}  # domain-renamed stores
+    assert "load" in pkg["stores"]["timeseries"]
+    evs = pkg["ground_truth"]["events"]
+    assert len(evs) >= 2 and all(e["reading_ids"] for e in evs)  # truth materialized for the new domain
+    # cross-domain discriminability: explicit key is trivial; non-explicit needs cross-source reasoning
+    e1 = evaluate(generate("energy_demo", link_explicitness=1))
+    e3 = evaluate(generate("energy_demo", link_explicitness=3))
+    assert e1["naive_f1"] == 1.0
+    assert e3["naive_f1"] == 0.0 and e3["linked_f1"] > e3["naive_f1"]
+    # deterministic for the new domain too
+    assert _canon(generate("energy_demo", dirtiness=0.3)) == _canon(generate("energy_demo", dirtiness=0.3))
+
+
+def test_energy_l4_linked_is_honestly_weaker_no_time_exclusivity():
+    # HONESTY (asserted, not hidden): energy's L4 news is pure-temporal (no region/port/hub cue) and its
+    # two ground-truth anomalies fall within the basic linked solver's time tolerance — so the OR-of-cues
+    # solver, having no exclusivity, cross-attributes and drops well below logistics (whose events are
+    # farther apart). The signal direction still holds (linked > naive), but the magnitude is weaker. This
+    # is a documented BASIC-SOLVER limit, not a truth defect — closing it is exactly the job of the future
+    # LLM/axiom solver. We pin it so the weakness stays visible rather than silently sidestepped.
+    energy_l4 = evaluate(generate("energy_demo", dirtiness=0.0, link_explicitness=4))
+    logi_l4 = evaluate(generate(SID, dirtiness=0.0, link_explicitness=4))
+    assert energy_l4["naive_f1"] == 0.0                        # naive still collapses (link is hidden)
+    assert energy_l4["linked_f1"] > energy_l4["naive_f1"]      # linked still beats naive — signal remains
+    assert energy_l4["linked_f1"] < logi_l4["linked_f1"]       # ...but weaker than logistics: the honest dip
+    assert energy_l4["linked_f1"] < 0.6                        # magnitude of the no-exclusivity limit (~0.33)
+
+
+def test_api_lists_both_domains():
+    body = client.get("/api/datapackage").json()
+    ids = {s["id"] for s in body["sources"]}
+    assert {"logistics_demo", "energy_demo"} <= ids
+    assert client.get("/api/datapackage/energy_demo/discriminability").status_code == 200
 
 
 def test_api_inspect_and_discriminability():

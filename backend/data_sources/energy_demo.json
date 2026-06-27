@@ -1,0 +1,56 @@
+{
+  "id": "energy_demo",
+  "title": "能源电网跨源数据包",
+  "title_en": "Energy/grid cross-source data package",
+  "description": "示例领域 B(通用,非 SPI):变电站读数(SQL)+ 变电站负荷(时序)+ 电网/天气新闻(文本)。预埋『故障/检修事件 → 负荷异常 → 受影响读数』跨源真值。与 logistics 同一套生成器,只换一份 spec —— 证明数据基底领域无关。",
+  "seed": "energy_demo",
+  "scenario": "event_anomaly_delay",
+  "params": {
+    "hubs": 3,
+    "agents": 4,
+    "records": 24,
+    "frames": 60,
+    "news_events": 8,
+    "ground_truth_events": 2,
+    "delay_window": 4
+  },
+  "regions": ["华东", "华南", "华北"],
+  "ports": ["特高压东站", "特高压南站", "特高压北站"],
+  "vocab": {
+    "hub": { "prefix": "SS", "id_width": 3, "name_suffix": "变电站" },
+    "agent": { "prefix": "MT", "id_width": 3, "names": ["一号运维班", "二号运维班", "南网检修队", "北网检修队", "应急抢修队", "巡检一班"] },
+    "record": { "prefix": "MR", "id_width": 4, "label": "读数", "measure_field": "load_mw", "measure_range": [5, 95], "unit": "MW" },
+    "metric": { "name": "load", "range": [50, 400] },
+    "status": { "initial": "pending", "affected": "abnormal", "settle_high": "normal", "settle_low": "pending", "settle_threshold": 0.3 },
+    "event": { "kinds": ["设备故障", "计划检修"] },
+    "aliases": { "华东": ["华東", "华东区", "HD"], "华南": ["华南区", "HN", "华南"], "华北": ["华北区", "HB"] },
+    "news": {
+      "l1": "{kind}影响 {hub_id}({hub_name});受影响{record_label}:{ids}。",
+      "l2": "{kind}波及『{region}{name_suffix}』一带,多处计量异常。",
+      "l3": "{kind}发生于{region},约第 {frame} 帧前后负荷波动。",
+      "l4": "第 {frame} 帧前后,某变电站因{kind}临时停运,负荷骤降。",
+      "l5": "{kind}逼近{port}所辖电网,供电预计受扰数日。",
+      "distractor": "{region}近日{kind}演练,暂未见明显影响。",
+      "headline": "{kind}快报",
+      "distractor_headline": "{region}{kind}通告"
+    }
+  },
+  "roles": {
+    "hub_store": "substations", "agent_store": "crews", "record_store": "readings", "metric_store": "load",
+    "record_hub_fk": "substation_id", "record_agent_fk": "crew_id", "record_frame": "reading_frame",
+    "record_status": "status", "record_ids_field": "reading_ids", "affected_status": "abnormal"
+  },
+  "tasks": [
+    {
+      "id": "explain_delays",
+      "q": "哪些异常读数能由哪条新闻事件解释?",
+      "q_en": "Which abnormal readings does which news event explain?",
+      "needs": ["news", "timeseries", "sql"],
+      "answer_kind": "event_to_records"
+    }
+  ],
+  "notes": {
+    "scope": "与 logistics_demo 同一套确定性生成器 + 判别力骨架,只换 vocab/roles/spec。证明数据基底领域无关(spec 驱动)。axiom-gain LLM-ablation 暂只在 logistics 跑(需新 fixtures)。",
+    "honesty": "真值始终保留;脏度/link 只动观测。通用能源域,非任何专有领域。判别力诚实下限:纯时间型 L4 的两个真值异常落在 linked 时间容差内(相距仅 3 帧),使基础 linked 失去互斥性、交叉误配,linked_f1≈0.33(logistics 事件相距 10 帧、L4 仍 0.8)——基础解题器下限,非真值缺陷,待 LLM/axiom 层补;已由 test_energy_l4_linked_is_honestly_weaker_no_time_exclusivity 钉住。"
+  }
+}

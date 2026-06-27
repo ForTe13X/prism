@@ -16,6 +16,7 @@ is what the future LLM/axiom solver is meant to exercise; here it is a stand-in.
 """
 from __future__ import annotations
 
+from .data_package import _DEFAULT_ROLES
 
 # a solver's delay-attribution tolerance is a DOMAIN PRIOR (a plausible delay SLA window), NOT read
 # from the ground-truth — so linked never sees a generation parameter through the observation channel.
@@ -24,16 +25,23 @@ _DELAY_TOL = 7
 
 def observation_view(package: dict) -> dict:
     """The stores a solver may see — ONLY observations; ground-truth metadata (``_truth_event``) and the
-    truth-side delay window are excluded."""
+    truth-side delay window are excluded. ``roles`` is included so the solvers stay DOMAIN-GENERIC (they
+    read the record/hub stores + status/fk/frame fields by role, not by hardcoded name)."""
     sql = package["stores"]["sql"]
     news = [{k: v for k, v in n.items() if not k.startswith("_")} for n in package["stores"]["news"]]
-    return {"sql": sql, "timeseries": package["stores"]["timeseries"], "news": news}
+    return {"sql": sql, "timeseries": package["stores"]["timeseries"], "news": news,
+            "roles": package.get("roles", _DEFAULT_ROLES)}
 
 
-def _anomaly_frames(timeseries: dict) -> dict:
-    """Detect each warehouse's throughput-dip frame (min well below the series mean)."""
+def _anomaly_frames(timeseries: dict, metric_store: str | None = None) -> dict:
+    """Detect each hub's metric-dip frame (min well below the series mean). Domain-generic: the metric
+    series is read by ROLE (``metric_store``) when given, so a domain with multiple timeseries streams
+    resolves the right one; absent that, fall back to the first non-scalar (non-``frames``) dict entry."""
+    series_map = timeseries.get(metric_store) if metric_store else None
+    if not isinstance(series_map, dict):
+        series_map = next((v for k, v in timeseries.items() if k != "frames" and isinstance(v, dict)), {})
     out = {}
-    for wid, series in timeseries["throughput"].items():
+    for wid, series in series_map.items():
         if not series:
             continue
         mean = sum(series) / len(series)
@@ -51,16 +59,18 @@ def naive_solve(obs: dict, task_id: str) -> dict:
     """Literal exact-key / single-source only — no cross-source inference."""
     if task_id != "explain_delays":
         return {}
-    delayed = {s["id"]: s for s in obs["sql"]["shipments"] if s.get("status") == "delayed"}
+    r = obs["roles"]
+    rst, affected, rhf = r["record_status"], r["affected_status"], r["record_hub_fk"]
+    delayed = {s["id"]: s for s in obs["sql"][r["record_store"]] if s.get(rst) == affected}
     by_wh: dict[str, list] = {}
     for sid, s in delayed.items():
-        by_wh.setdefault(s["warehouse_id"], []).append(sid)
+        by_wh.setdefault(s[rhf], []).append(sid)
     pred: dict[str, list] = {}
     for n in obs["news"]:
-        hits = sorted(sid for sid in delayed if sid in n["body"])  # literal shipment ids
+        hits = sorted(sid for sid in delayed if sid in n["body"])  # literal record ids
         if not hits:
             for wid, sids in by_wh.items():
-                if wid in n["body"]:  # literal warehouse id
+                if wid in n["body"]:  # literal hub id
                     hits = sorted(sids)
                     break
         if hits:
@@ -69,14 +79,16 @@ def naive_solve(obs: dict, task_id: str) -> dict:
 
 
 def linked_solve(obs: dict, task_id: str) -> dict:
-    """Cross-source join: align news ⇄ throughput anomaly ⇄ delayed shipments via region/port/time
-    cues (no explicit key needed). Degrades when those cues are corrupted — the robustness signal."""
+    """Cross-source join: align news ⇄ metric anomaly ⇄ affected records via region/port/time cues
+    (no explicit key needed). Degrades when those cues are corrupted — the robustness signal."""
     if task_id != "explain_delays":
         return {}
-    wh = {w["id"]: w for w in obs["sql"]["warehouses"]}
-    anomalies = _anomaly_frames(obs["timeseries"])
+    r = obs["roles"]
+    rst, affected, rhf, rfr = r["record_status"], r["affected_status"], r["record_hub_fk"], r["record_frame"]
+    wh = {w["id"]: w for w in obs["sql"][r["hub_store"]]}
+    anomalies = _anomaly_frames(obs["timeseries"], r.get("metric_store"))
     tol = 3
-    delayed = [s for s in obs["sql"]["shipments"] if s.get("status") == "delayed"]
+    delayed = [s for s in obs["sql"][r["record_store"]] if s.get(rst) == affected]
     pred: dict[str, list] = {}
     for n in obs["news"]:
         best, best_score = None, 0
@@ -96,7 +108,7 @@ def linked_solve(obs: dict, task_id: str) -> dict:
             continue
         hits = sorted(
             s["id"] for s in delayed
-            if s["warehouse_id"] == best and abs(s["dispatch_frame"] - n["frame"]) <= _DELAY_TOL
+            if s[rhf] == best and abs(s[rfr] - n["frame"]) <= _DELAY_TOL
         )
         if hits:
             pred[n["id"]] = hits

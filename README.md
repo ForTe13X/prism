@@ -96,7 +96,7 @@ npm run dev            # http://127.0.0.1:5173
 ## 跨源数据包 · axiom-gain 基底(DP1)
 
 一条新主线的地基:一份**确定性、clean-room、spec 驱动**的异构数据包生成器,为"语义/公理层是否真比裸 RAG 强"的基准([`docs/RESEARCH_axiom_gain.md`](docs/RESEARCH_axiom_gain.md))供题。
-- 后端 `backend/app/data_package.py` + `GET /api/datapackage[/{id}[/discriminability]]`:读一份 `data_source` spec(`backend/data_sources/logistics_demo.json`),**先建 ground-truth『新闻事件 → 吞吐量异常 → 运单延误』,再让 SQL(运单/承运商/仓库)+ 时序(吞吐量)+ 新闻三源与真值一致**;SQL 可落成真 SQLite。
+- 后端 `backend/app/data_package.py` + `GET /api/datapackage[/{id}[/discriminability]]`:读一份 `data_source` spec,**先建 ground-truth『源事件 → 指标异常 → 受影响记录』,再让 SQL + 时序 + 新闻三源与真值一致**;SQL 可落成真 SQLite。生成器**领域无关(spec 驱动)**:跨源因果模式是引擎,领域字符串全进 spec 的 `vocab`/`roles`——**加领域=加一份 spec,零生成器代码**。自带两个域:`logistics_demo`(运单/吞吐量)与 `energy_demo`(变电站/负荷,通用能源),**跨域判别力成立**(两域 L1 naive=1.0、L≥2 naive=0、linked 仍复原大部分;唯 energy 纯时间型 L4 因基础 linked 无互斥性而偏弱 ≈0.33——诚实下限,留给后续 LLM/axiom 层)。
 - **两个旋钮(只动观测、留真值)**:`link_explicitness`(1 字面 id → 5 纯语义)与 `dirtiness`(别名/单位/缺失/时移/数值/乱码,记 `corruption_map`)。
 - **判别力骨架**:`naive`(字面单源)/ `linked`(跨源时空+实体联结)/ `oracle`(知真值)三解题器——link≥2 时 naive 失效、linked 仍可复原(任务确需跨源);脏度↑ linked 退化(鲁棒性曲线)。这是 axiom-gain ablation 的**确定性骨架**。详见 [`docs/DESIGN_data_package.md`](docs/DESIGN_data_package.md)。
 
