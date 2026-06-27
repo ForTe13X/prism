@@ -41,6 +41,10 @@ KNOBS = {
     "band_lo": 24, "band_span": 8, "n_cats": 6, "records_per_unit": 40,
     "base": 250.0, "wiggle": 8.0, "depth": 180.0, "half_width": 6, "attr_shift": 3.0,
     "candidacy_dip_frac": 0.7,  # a unit is an anchor iff its in-band min < frac*mean
+    # Phase-B.2 ADDITIVE third channel: a relational "tags" store from a THIRD disjoint latent (psi). Added
+    # without touching the series or records, so the frozen shape/fingerprint channels + §6c gate are
+    # byte-identical. tag_shift power-tuned with channel visibility, same honest caveat as the others.
+    "n_tags": 10, "tag_pick": 4, "tag_shift": 2.4,
 }
 
 # two DISJOINT-namespace domains. Category NAMES are domain-specific (so a string match across domains is
@@ -50,9 +54,11 @@ KNOBS = {
 # suffixes would leak the alignment to a string matcher; IN-001 vs LB-101 share no token).
 DOMAINS = {
     "A": {"prefix": "IN", "metric": "load", "id_offset": 0,
-          "cats": ["cpu", "mem", "disk", "net", "iops", "gpu"]},
+          "cats": ["cpu", "mem", "disk", "net", "iops", "gpu"],
+          "tags": ["rack", "zone", "pdu", "vlan", "blade", "psu", "nic", "bmc", "tor", "spine"]},
     "B": {"prefix": "LB", "metric": "circulation", "id_offset": 100,
-          "cats": ["fiction", "poetry", "drama", "essay", "atlas", "manual"]},
+          "cats": ["fiction", "poetry", "drama", "essay", "atlas", "manual"],
+          "tags": ["aisle", "wing", "annex", "vault", "carrel", "stack", "kiosk", "desk", "atrium", "mezz"]},
 }
 
 
@@ -85,12 +91,14 @@ def _incidents(seed: str) -> tuple[list, list]:
     """Coupled incidents k → (unit i(k)=k in A, unit j(k)=k in B), each with a shared shape profile + theta
     and PER-ENDPOINT frames. Plus one-sided distractors (deform only A or only B — hard temporal negatives)."""
     nc = KNOBS["n_cats"]
+    nt = KNOBS["n_tags"]
     coupled = []
     for k in range(KNOBS["k_true"]):
         coupled.append({
             "i": k, "j": k, "prof": _profile(seed, "prof", k),
             "fa": _band_frame(seed, "frmA", k), "fb": _band_frame(seed, "frmB", k),
             "theta": [_u(seed, "attr", k, c) - 0.5 for c in range(nc)],
+            "psi": [_u(seed, "psi", k, t) - 0.5 for t in range(nt)],  # THIRD latent (relational/tags)
         })
     distractor = []
     n = KNOBS["n_units"]
@@ -100,13 +108,14 @@ def _incidents(seed: str) -> tuple[list, list]:
             "side": side, "unit": int(_u(seed, "dunit", d) * n) % n,
             "prof": _profile(seed, "dprof", d), "f": _band_frame(seed, "dfrm", d),
             "theta": [_u(seed, "dattr", d, c) - 0.5 for c in range(nc)],
+            "psi": [_u(seed, "dpsi", d, t) - 0.5 for t in range(nt)],
         })
     return coupled, distractor
 
 
 def _build_domain(seed: str, dk: str, coupled: list, distractor: list) -> dict:
     base, wig, depth, hw = KNOBS["base"], KNOBS["wiggle"], KNOBS["depth"], KNOBS["half_width"]
-    nf, nc, nrec = KNOBS["frames"], KNOBS["n_cats"], KNOBS["records_per_unit"]
+    nf, nc, nrec, nt = KNOBS["frames"], KNOBS["n_cats"], KNOBS["records_per_unit"], KNOBS["n_tags"]
     spec = DOMAINS[dk]
     endpoint = (lambda inc: inc["i"]) if dk == "A" else (lambda inc: inc["j"])
     units, series = [], {}
@@ -114,6 +123,9 @@ def _build_domain(seed: str, dk: str, coupled: list, distractor: list) -> dict:
         uid = f"{spec['prefix']}-{spec['id_offset'] + uu + 1:03d}"
         s = [base + wig * (_u(seed, dk, "wig", uu, t) - 0.5) * 2 for t in range(nf)]
         logits = [(_u(seed, dk, "abase", uu, c) - 0.5) for c in range(nc)]
+        # tag affinity over nt tags (the THIRD store) — built from a DISJOINT sub-key, shifted by psi for an
+        # endpoint. Accumulated alongside but NEVER mixed into series/logits (the channels stay independent).
+        tag_aff = [(_u(seed, dk, "tagbase", uu, t) - 0.5) for t in range(nt)]
         for inc in coupled:
             if endpoint(inc) == uu:
                 f = inc["fa"] if dk == "A" else inc["fb"]
@@ -121,6 +133,7 @@ def _build_domain(seed: str, dk: str, coupled: list, distractor: list) -> dict:
                     if 0 <= f - hw + τ < nf:
                         s[f - hw + τ] -= depth * inc["prof"][τ]
                 logits = [logits[c] + KNOBS["attr_shift"] * inc["theta"][c] for c in range(nc)]
+                tag_aff = [tag_aff[t] + KNOBS["tag_shift"] * inc["psi"][t] for t in range(nt)]
         for dd in distractor:
             if dd["side"] == dk and dd["unit"] == uu:
                 f = dd["f"]
@@ -128,6 +141,7 @@ def _build_domain(seed: str, dk: str, coupled: list, distractor: list) -> dict:
                     if 0 <= f - hw + τ < nf:
                         s[f - hw + τ] -= depth * dd["prof"][τ]
                 logits = [logits[c] + KNOBS["attr_shift"] * dd["theta"][c] for c in range(nc)]
+                tag_aff = [tag_aff[t] + KNOBS["tag_shift"] * dd["psi"][t] for t in range(nt)]
         p = _softmax(logits)
         # R records per unit, each a categorical draw → the observed attribute distribution (a thin sample
         # of the latent theta-shifted multinomial). Category NAMES are domain-specific (string-disjoint).
@@ -141,7 +155,10 @@ def _build_domain(seed: str, dk: str, coupled: list, distractor: list) -> dict:
                     ci = c
                     break
             records.append({"cat_index": ci, "cat": spec["cats"][ci]})
-        units.append({"id": uid, "records": records})
+        # the unit's tag-set = the top tag_pick tags by affinity (index-aligned across domains, names disjoint)
+        tag_idx = sorted(sorted(range(nt), key=lambda t: -tag_aff[t])[: KNOBS["tag_pick"]])
+        units.append({"id": uid, "records": records,
+                      "tag_idx": tag_idx, "tags": [spec["tags"][t] for t in tag_idx]})
         series[uid] = s
     return {"domain": dk, "prefix": spec["prefix"], "metric": spec["metric"], "cats": spec["cats"],
             "units": units, "series": series}

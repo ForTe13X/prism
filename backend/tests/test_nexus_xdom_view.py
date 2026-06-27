@@ -11,12 +11,13 @@ def test_honest_sparsity_and_tier_structure():
     assert sc["candidates"] == sc["high"] + sc["medium"] + sc["coincidence"]
     assert sc["coincidence"] > sc["high"] + sc["medium"]      # most candidates are ghosts (honest sparsity)
     assert 0 < sc["high"] < sc["candidates"]                  # a few verified bridges light, not all
-    # every bridge's tier follows ONLY from the two channels firing — never from its truth label
+    # every bridge's tier follows ONLY from the ≥2/3 channel vote — never from its truth label
     for b in v["bridges"]:
-        expect = "high" if (b["shape_fires"] and b["fingerprint_fires"]) else \
-                 ("medium" if (b["shape_fires"] or b["fingerprint_fires"]) else "coincidence")
+        votes = b["shape_fires"] + b["fingerprint_fires"] + b["relational_fires"]
+        assert b["votes"] == votes
+        expect = "high" if votes >= 2 else ("medium" if votes == 1 else "coincidence")
         assert b["confidence"] == expect
-        assert b["dissent"] == (b["shape_fires"] != b["fingerprint_fires"])
+        assert b["dissent"] == (0 < votes < 3)
 
 
 def test_high_tier_is_mostly_real_but_recall_is_honestly_low():

@@ -1,12 +1,14 @@
-"""Phase-B.1 — the two independent channels + the honest convergence verdict. These pin: each channel reads
-ONLY its own store (shape⊥fingerprint by construction), both clear the pre-registered power floor on
-HELD-OUT seeds, they are independent, breaking the coupling collapses them, and — the honest headline — the
-convergence margin falls SHORT of the +0.05 'clean 2/2' bar, so the system reports the modest-convergence
-outcome rather than an unqualified 2/2."""
+"""Phase-B.1/B.2 — the THREE independent channels + the honest convergence verdict. These pin: each channel
+reads ONLY its own store (shape=series ⊥ fingerprint=histograms ⊥ relational=tags, by construction), all
+clear the power floor on HELD-OUT seeds, they are pairwise independent, breaking the coupling collapses
+them; the 2-way convergence margin's bootstrap CI STRADDLES 0.05 (indeterminate), but adding the third
+INDEPENDENT channel pushes the 3-way margin's whole CI ABOVE 0.05 — and a correlated-placebo control proves
+that clear is from INDEPENDENCE, not engineered power."""
 from __future__ import annotations
 
 from backend.app.data_package_xdom import generate_xdom
 from backend.app.nexus_chan_fingerprint import fingerprint_score
+from backend.app.nexus_chan_relational import relational_score
 from backend.app.nexus_chan_shape import shape_score
 from backend.app.nexus_xdom_eval import run_convergence
 from backend.app.nexus_xdom_substrate import candidate_bridges_xdom
@@ -18,11 +20,13 @@ def _a_bridge():
     return bridges[0]
 
 
+# each channel must read ONLY its own store — the three failure domains are disjoint BY CONSTRUCTION. With a
+# third store (tags) now riding on the same bridge dict, the tamper tests garble EVERY other store.
 def test_shape_channel_reads_only_the_series():
     b = _a_bridge()
     base = shape_score(b)
-    # mutate every NON-series field (frames, histograms, ids) — the shape score must not move
-    tampered = {**b, "a_frame": 99, "b_frame": -3, "a_hist": [9] * len(b["a_hist"]), "b_hist": [0] * len(b["b_hist"])}
+    tampered = {**b, "a_frame": 99, "b_frame": -3, "a_hist": [9] * len(b["a_hist"]), "b_hist": [0] * len(b["b_hist"]),
+                "a_tag_idx": [0, 1, 2], "b_tag_idx": [7, 8, 9]}
     assert shape_score(tampered) == base
 
 
@@ -30,24 +34,41 @@ def test_fingerprint_channel_reads_only_the_histograms():
     b = _a_bridge()
     base = fingerprint_score(b)
     tampered = {**b, "a_series": [0.0] * len(b["a_series"]), "b_series": [1.0] * len(b["b_series"]),
-                "a_frame": 1, "b_frame": 50}
+                "a_frame": 1, "b_frame": 50, "a_tag_idx": [0, 1, 2], "b_tag_idx": [7, 8, 9]}
     assert fingerprint_score(tampered) == base
 
 
-def test_convergence_margin_is_honestly_indeterminate_on_held_out_seeds():
-    # THE HONEST HEADLINE: both channels are informative (engineered) and independent + rewire-collapse
-    # (not tuned), convergence beats both singles — but the margin's 95% bootstrap CI STRADDLES the 0.05
-    # clean-2/2 floor, so whether it clears the bar is statistically indeterminate (within sampling noise),
-    # not a confident near-miss. The system reports that, not a rounded-up 2/2.
+def test_relational_channel_reads_only_the_tags():
+    b = _a_bridge()
+    base = relational_score(b)
+    tampered = {**b, "a_series": [0.0] * len(b["a_series"]), "b_series": [1.0] * len(b["b_series"]),
+                "a_hist": [9] * len(b["a_hist"]), "b_hist": [0] * len(b["b_hist"]), "a_frame": 1, "b_frame": 50}
+    assert relational_score(tampered) == base
+
+
+def test_third_channel_pushes_convergence_stably_over_the_bar():
+    # THE HEADLINE POSITIVE: 2 independent channels left convergence INDETERMINATE (CI straddled 0.05);
+    # a THIRD genuinely-independent channel (relational, disjoint latent) pushes the 3-way convergence
+    # margin's whole 95% CI ABOVE 0.05 — a stable clear, not a coin-flip. The convergent-validity
+    # architecture works when the channels are truly independent.
     r = run_convergence()
-    assert r["shape_auc"] >= 0.78 and r["fingerprint_auc"] >= 0.78      # both informative (engineered)
-    assert r["checks"]["channels_independent"] is True                  # corr small (NOT tuned)
+    assert r["shape_auc"] >= 0.78 and r["fingerprint_auc"] >= 0.78 and r["relational_auc"] >= 0.78
+    assert r["checks"]["all_three_clear_power_floor"] is True
+    assert r["checks"]["channels_independent"] is True                  # all 3 pairwise corr small (NOT tuned)
     assert r["checks"]["rewire_collapses"] is True                      # break coupling → chance (NOT tuned)
-    assert r["convergence_auc"] > max(r["shape_auc"], r["fingerprint_auc"])  # convergence does help...
-    lo, hi = r["margin_bootstrap_ci95"]
-    assert lo < 0.05 < hi and r["margin_straddles_floor"] is True       # ...but the CI straddles the floor
-    assert r["checks"]["convergence_margin"] == "indeterminate_at_0.05_bar"
-    assert r["outcome"].endswith("indeterminate_at_0.05_bar")
+    # 2-way stays indeterminate (its CI straddles the floor) — the honest baseline
+    lo2, hi2 = r["margin_bootstrap_ci95"]
+    assert lo2 < 0.05 < hi2 and r["checks"]["convergence2_margin"] == "indeterminate_at_0.05_bar"
+    # 3-way clears: the entire CI sits above the floor
+    lo3, hi3 = r["margin3_bootstrap_ci95"]
+    assert lo3 >= 0.05 and r["margin3_straddles_floor"] is False
+    assert r["checks"]["convergence3_margin"] == "clears_0.05"
+    assert r["convergence3_auc"] > r["convergence_auc"]                 # the 3rd vote genuinely adds signal
+    assert r["outcome"] == "three_independent_channels__3way_convergence_clears_0.05"
+    # ANTI-REVERSE-TRAP CONTROL: a CORRELATED third channel of similar power does NOT clear the bar — so the
+    # clear is from INDEPENDENCE, not engineered power.
+    assert r["correlated_placebo_3way_margin"] < r["convergence3_margin_point"]
+    assert r["clear_is_from_independence_not_power"] is True
 
 
 def test_rewire_control_collapses_both_channels():

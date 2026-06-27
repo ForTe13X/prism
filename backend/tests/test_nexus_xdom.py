@@ -32,39 +32,42 @@ def test_domains_are_token_disjoint():
     assert _domain_tokens(g["A"]).isdisjoint(_domain_tokens(g["B"]))
 
 
-def test_shape_and_attribute_latents_are_mechanically_decoupled():
-    # the independence PRIMITIVE: the series depends only on the shape profile, the attributes only on theta.
+def test_three_latents_are_mechanically_decoupled():
+    # the independence PRIMITIVE: series depends ONLY on the shape profile, attributes ONLY on theta, tags
+    # ONLY on psi — three disjoint latents → three independent channels.
     prof = _profile("s", "prof", 0)
     prof2 = _profile("s", "prof", 1)
-    base = [{"i": 0, "j": 0, "prof": prof, "fa": 26, "fb": 26, "theta": [0.1] * 6}]
-    diff_theta = [{"i": 0, "j": 0, "prof": prof, "fa": 26, "fb": 26, "theta": [-0.3, 0.4, 0.0, 0.2, -0.1, 0.1]}]
-    diff_prof = [{"i": 0, "j": 0, "prof": prof2, "fa": 26, "fb": 26, "theta": [0.1] * 6}]
+    P0, T0, PS0 = [0.1] * 6, [0.1] * 6, [0.1] * 10
+    base = [{"i": 0, "j": 0, "prof": prof, "fa": 26, "fb": 26, "theta": T0, "psi": PS0}]
+    diff_theta = [{"i": 0, "j": 0, "prof": prof, "fa": 26, "fb": 26, "theta": [-0.3, 0.4, 0.0, 0.2, -0.1, 0.1], "psi": PS0}]
+    diff_prof = [{"i": 0, "j": 0, "prof": prof2, "fa": 26, "fb": 26, "theta": T0, "psi": PS0}]
+    diff_psi = [{"i": 0, "j": 0, "prof": prof, "fa": 26, "fb": 26, "theta": T0,
+                 "psi": [0.9, -0.8, 0.7, -0.6, 0.5, -0.4, 0.3, -0.2, 0.1, 0.0]}]
+
+    def cats(d):
+        return [r["cat_index"] for r in d["units"][0]["records"]]
 
     d0 = _build_domain("s", "A", base, [])
     d_theta = _build_domain("s", "A", diff_theta, [])
     d_prof = _build_domain("s", "A", diff_prof, [])
+    d_psi = _build_domain("s", "A", diff_psi, [])
     uid = d0["units"][0]["id"]
-    cats0 = [r["cat_index"] for r in d0["units"][0]["records"]]
-    cats_theta = [r["cat_index"] for r in d_theta["units"][0]["records"]]
-    cats_prof = [r["cat_index"] for r in d_prof["units"][0]["records"]]
 
-    assert d0["series"][uid] == d_theta["series"][uid]    # changing theta does NOT touch the series
-    assert cats0 != cats_theta                            # ...but it DOES change the attributes
-    assert d0["series"][uid] != d_prof["series"][uid]     # changing the profile DOES change the series
-    assert cats0 == cats_prof                             # ...and does NOT touch the attributes
+    # theta moves ONLY attributes
+    assert d0["series"][uid] == d_theta["series"][uid] and cats(d0) != cats(d_theta)
+    assert d0["units"][0]["tag_idx"] == d_theta["units"][0]["tag_idx"]
+    # profile moves ONLY the series
+    assert d0["series"][uid] != d_prof["series"][uid] and cats(d0) == cats(d_prof)
+    assert d0["units"][0]["tag_idx"] == d_prof["units"][0]["tag_idx"]
+    # psi moves ONLY the tags
+    assert d0["series"][uid] == d_psi["series"][uid] and cats(d0) == cats(d_psi)
+    assert d0["units"][0]["tag_idx"] != d_psi["units"][0]["tag_idx"]
 
-    # AND it must still hold under the same-unit COLLISION that occurs in real packages (a distractor
-    # landing on a coupled unit superimposes a 2nd dip + 2nd theta on the same series/logits).
-    dist = [{"side": "A", "unit": 0, "prof": _profile("s", "dprof", 0), "f": 30, "theta": [0.2] * 6}]
+    # and the shape⊥theta decoupling still holds under the same-unit COLLISION in real packages
+    dist = [{"side": "A", "unit": 0, "prof": _profile("s", "dprof", 0), "f": 30, "theta": [0.2] * 6, "psi": PS0}]
     c_base = _build_domain("s", "A", base, dist)
-    c_theta = _build_domain("s", "A", diff_theta, dist)        # only the coupled theta differs
-    c_prof = _build_domain("s", "A", diff_prof, dist)          # only the coupled profile differs
-    assert c_base["series"][uid] == c_theta["series"][uid]     # under collision: theta still ⊥ series
-    assert [r["cat_index"] for r in c_base["units"][0]["records"]] != \
-           [r["cat_index"] for r in c_theta["units"][0]["records"]]
-    assert c_base["series"][uid] != c_prof["series"][uid]      # profile still drives the series
-    assert [r["cat_index"] for r in c_base["units"][0]["records"]] == \
-           [r["cat_index"] for r in c_prof["units"][0]["records"]]
+    c_theta = _build_domain("s", "A", diff_theta, dist)
+    assert c_base["series"][uid] == c_theta["series"][uid] and cats(c_base) != cats(c_theta)
 
 
 def test_candidates_labelled_observation_only():

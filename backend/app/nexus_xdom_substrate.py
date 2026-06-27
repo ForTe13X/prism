@@ -52,6 +52,7 @@ def candidate_bridges_xdom(g: dict, *, coupling: list | None = None) -> tuple[li
                 "a_frame": fa, "b_frame": fb,
                 "a_series": A["series"][A["units"][i]["id"]], "b_series": B["series"][B["units"][j]["id"]],
                 "a_hist": histA[i], "b_hist": histB[j],
+                "a_tag_idx": A["units"][i].get("tag_idx", []), "b_tag_idx": B["units"][j].get("tag_idx", []),
                 "y": 1 if (i, j) in truth else 0,
                 "label": "real" if (i, j) in truth else "coincidence",
             })

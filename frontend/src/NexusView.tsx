@@ -140,7 +140,7 @@ export default function NexusView() {
               <h4>诚实计分板</h4>
               <dl>
                 <div><dt>候选桥</dt><dd>{sc.candidates}</dd></div>
-                <div className="pr-hud-high"><dt>真桥（双渠道点亮）</dt><dd>{sc.high}</dd></div>
+                <div className="pr-hud-high"><dt>真桥（≥2/3 渠道）</dt><dd>{sc.high}</dd></div>
                 <div><dt>单渠道（异议）</dt><dd>{sc.medium}</dd></div>
                 <div><dt>巧合（虚影）</dt><dd>{sc.coincidence}</dd></div>
                 <div><dt>实际耦合数</dt><dd>{sc.true_couplings}</dd></div>

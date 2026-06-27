@@ -13,6 +13,7 @@ from __future__ import annotations
 
 from .data_package_xdom import generate_xdom
 from .nexus_chan_fingerprint import fingerprint_score
+from .nexus_chan_relational import relational_score
 from .nexus_chan_shape import shape_score
 from .nexus_xdom_substrate import candidate_bridges_xdom
 
@@ -33,17 +34,21 @@ def bridge_view(seed: str) -> dict:
     bridges, ctx = candidate_bridges_xdom(g)
     sh = [shape_score(b) for b in bridges]
     fp = [fingerprint_score(b) for b in bridges]
-    sh_fire, fp_fire = _fires(sh), _fires(fp)
+    rl = [relational_score(b) for b in bridges]
+    sh_fire, fp_fire, rl_fire = _fires(sh), _fires(fp), _fires(rl)
 
+    # the METRIC ≥2/3 convergence rule: a bridge is a verified nexus iff ≥2 of the 3 independent channels
+    # fire; exactly 1 → medium (single-channel dissent); 0 → coincidence (ghost).
     out, counts = [], {"high": 0, "medium": 0, "coincidence": 0}
-    for b, s, f, sfire, ffire in zip(bridges, sh, fp, sh_fire, fp_fire):
-        tier = "high" if (sfire and ffire) else ("medium" if (sfire or ffire) else "coincidence")
+    for b, s, f, r, sfire, ffire, rfire in zip(bridges, sh, fp, rl, sh_fire, fp_fire, rl_fire):
+        votes = sfire + ffire + rfire
+        tier = "high" if votes >= 2 else ("medium" if votes == 1 else "coincidence")
         counts[tier] += 1
         out.append({
             "a_idx": b["a_idx"], "b_idx": b["b_idx"], "a_id": b["a_id"], "b_id": b["b_id"],
-            "shape": round(s, 4), "fingerprint": round(f, 4),
-            "shape_fires": sfire, "fingerprint_fires": ffire,
-            "confidence": tier, "dissent": (sfire != ffire),  # exactly one channel → single-lens dissent
+            "shape": round(s, 4), "fingerprint": round(f, 4), "relational": round(r, 4),
+            "shape_fires": sfire, "fingerprint_fires": ffire, "relational_fires": rfire, "votes": votes,
+            "confidence": tier, "dissent": (0 < votes < 3),  # not unanimous → some lens dissents
             "_truth": b["y"],   # view scoreboard ONLY — the tiering above never reads it
         })
 
@@ -58,6 +63,7 @@ def bridge_view(seed: str) -> dict:
         "bridges": out,
         "scorecard": {"candidates": len(out), **counts, "true_couplings": sum(o["_truth"] for o in out),
                       "high_tier_precision": lit_precision},
-        "caveat": ("跨源 link 原型(双域),非已证跨域 nexus。高亮=两独立渠道(形状⊥指纹)皆入各自 top-"
-                   f"{int(FIRE_FRAC * 100)}%;判别力本身在抽样噪声内未稳过 2/2 线(见 METRIC §8d)。光多少=过双渠道的桥多少,稀疏是诚实的。"),
+        "caveat": ("跨源 link 原型(双域),非已证跨域 nexus。高亮=三独立渠道(形状⊥指纹⊥关系)中 ≥2 个入各自 top-"
+                   f"{int(FIRE_FRAC * 100)}%(METRIC ≥2/3 收敛门);加入第三独立渠道后 3-way 收敛 margin 95%CI 已稳过 0.05(见 METRIC §8e)。"
+                   "光多少=过 ≥2 渠道的桥多少,稀疏是诚实的。"),
     }
