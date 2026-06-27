@@ -83,5 +83,28 @@
 - **ΔL ≠ 裸 overlap(不同排序,诚实并列)**:distinctiveness 加权改变排序,**非「只加校准」**;本 substrate 上裸 overlap 在 **L3 反优于 ΔL(0.93 vs 0.86)**,故两 AUC 并列报、不宣称等价。
 - **校准诚实**:Kraft p 偏紧(ECE≈0.13–0.21),因 ΔL 是码长上界、偏自信;真校准器需拟合,留后续。属性通道未用(本 substrate 为零)。
 
+## 8c. Phase B gate 已落地(写 channel 前的硬关:time-coincidence 必须「弱而在场」+ 窗须混类)
+锚:`backend/app/nexus_phaseb.py`(纯函数、确定性、`_unit` 播种,复用 `generate()` spec 机制 + `nexus_eval.roc_auc` 平局校正 + `nexus_baselines.time_coincidence`)+ `data_sources/infra_demo.json`×`library_demo.json`(双域 spec,**区域/端口/实体词表零 token 重叠**;news 模板骨架跨域共用、非域标识词,后续读 news 须分离)+ `tests/test_nexus_phaseb.py`(11 断言)。**未写任何 channel**——这是 channel 前的关。
+
+**为何先建 gate**:§8 已证 Phase A 上 time 是充分统计量(real≡时间巧合),lens 无诚实空间。Phase B 全部赌注=把 time 调成**弱而在场**的对手,留出空间。该「time-AUC 落 [0.60,0.75]」此前**未证**;若空,基底按 kill-criterion (i)/(iii) 自否,设计须先改。**这是先量对手强度、再投 channel 的预注册**(§6c 反陷阱:难度旋钮由与 lens 无关的独立判据=time 自己的 AUC + 窗混类 定,lens 分数不参与选难度)。
+
+**机制(全确定性)**:K=4 潜类 · W=3 共享事件窗 · span=16 帧/窗 · 每侧 8 锚(取自 `generate()` 的 hub store)。候选 = **同窗(|Δwindow|=0)** 的 锚A×锚B 对;**real ⇔ 两锚同潜类**(跨域共因),潜类 hash 自 (seed,side,id)、**独立于窗**。同类锚在窗内同相位点火(real 对 |Δframe| 小),异类锚相位分离(coincidence 对 |Δframe| 大)——**把 time 从天平降为弱对手的唯一旋钮 = 窗内 frame jitter**;window_load(每窗每侧点火锚数)调每窗潜类混合度。
+
+**统计纠错(对抗式 review 抓到的 blocker,随结论挂出)**:gate (b) **不能**按「逐窗熵的最坏窗(`min`)≥1 bit」判——`min` 是 3·N 个窗上的**秩序统计量**,随种子只降不升、**无大样本极限**;本基底(K=4 / 每侧 8 锚)任何非退化 load 总有某种子产出欠混窗,故 `min≥1bit` 闸**只量池子大小、不量基底**:同一旋钮 N=40 过、N≥80 即出现 class-pure 窗而崩。**改用收敛统计**:窗均熵(≥1 bit)+ **leak-rate=P(窗熵<1 bit)≤ 1%**(预注册容差);二者随 N 收敛,leak-rate 随 load 单调降。AUC 同时**去偏**:删掉原 `_frame` 的边界 clamp(它把外侧类的 jitter 尾压到窗沿,class-不对称地**虚高 time-AUC ~0.02**);窗是**类别**分组,dframe 只在同窗内算,绝对帧位相消,故无需 clamp。
+
+**实测(400 seed 池化——AUC ≥40 即稳,但 ~1% 的 leak-rate 需 N·W·τ≫1 窗故取 400;66 格点 load×jitter,~9s)**:
+| 量 | 值 |
+|---|---|
+| time-AUC(jitter=0) | **1.0000**(time 完美分离 = Phase A 杀手如实复现) |
+| time-AUC 随 jitter 单调衰减(去偏后) | 1.00 → ≈0.59(jitter=20);带内点遍布各 load |
+| 窗均熵 | 各 load 均 ≥1 bit(1.34→1.85),随 N 稳 |
+| leak-rate by load(收敛值) | L2≈19% · L3≈6% · **L4≈1.8%** · **L5≈0.5%** · **L6≈0%** · L7≈0% |
+| 带 [0.60,0.75] **可达?** | **是**(20 接受点);但 (b) 把诚实下限钉在 **window_load ≥ 5**(load=4 的 ~1.8% leak 超 1% 容差被拒;**非** 旧报的 load≥4——那是 N=40 假象) |
+| 冻结旋钮(最低 leak) | **load=6, jitter=14 → time-AUC=0.660**(去偏;旧 clamp 报 0.676/0.679),窗均熵=1.80 bit,leak=0.0%,prevalence=0.25(=1/K) |
+
+⇒ **基底可行(GATE 意义上):time 弱而在场、窗稳混类,§4 Phase B 设计不自否,可投 CH1/CH2/CH3——但冻结 load=6,不是 load=4。**
+
+**诚实命门(随结论永久挂出,最承重一条)**:gate **只证 time 弱到留出空间 + 窗混类,不证任何 lens 真能补上**。当前潜类是**纯 hash 抽象标签、无可观测语义**——此刻没有 lens 能复原它(time 也不能)。**必要非充分**:把「同潜类共享可观测词表/结构(CH1/CH2/CH3 读)」做进去、再验「time-free 通道确实能复原潜类且**严格 > time**」才是 channel 活儿,gate 不碰(故 harness 刻意 **channel-blind**:只读锚身份 + 注入的潜类/窗/jitter 层,不读 news/throughput/语义)。次要诚实:候选用 (a,b,w) 三元(同对跨多窗 = 多次时间观测,标签一致不偏);`window_load≥5` / load=6 是与 (K=4, 每侧8锚) 及 1% leak 容差绑定的结论,**非普适常数**;严格逐窗 ≥1 bit 在本基底对任何非退化 load 不可保证(故采分布式判据)。
+
 ---
 *—— 研究设计锚。这是给在建会话的方法学参照,不是指令;建造的人说了算。*

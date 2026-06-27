@@ -1,0 +1,48 @@
+{
+  "id": "library_demo",
+  "title": "图书馆藏跨源数据包(Phase B 域 B)",
+  "title_en": "Library cross-source data package (Phase B domain B)",
+  "description": "Phase B 双域之一(域 B · library):馆藏书库(SQL)+ 书库流通量(时序)+ 盘点/迁移公告(文本)。与 logistics/energy 同一套确定性生成器,只换 spec —— 提供 nexus Phase B 所需的『锚 hub』(8 个书库)。区域/端口词表与域 A(infra)零重叠,以兑现 Phase B『抹掉跨域字符串线索』前提。本包仅为 gate 提供锚;news/throughput 留给后续 CH1/CH2/CH3。",
+  "seed": "library_demo",
+  "scenario": "event_anomaly_delay",
+  "params": {
+    "hubs": 8,
+    "agents": 4,
+    "records": 24,
+    "frames": 48,
+    "news_events": 8,
+    "ground_truth_events": 3,
+    "delay_window": 4
+  },
+  "regions": ["文学馆", "科技馆", "古籍馆"],
+  "ports": ["阅览区", "典藏区", "数字区"],
+  "vocab": {
+    "hub": { "prefix": "COL", "id_width": 3, "name_suffix": "书库" },
+    "agent": { "prefix": "CAT", "id_width": 3, "names": ["编目一室", "编目二室", "采访室", "典藏室", "数字化室", "流通部"] },
+    "record": { "prefix": "LN", "id_width": 4, "label": "借阅", "measure_field": "page_count", "measure_range": [20, 800], "unit": "页" },
+    "metric": { "name": "circulation", "range": [50, 500] },
+    "status": { "initial": "在架", "affected": "逾期", "settle_high": "已归还", "settle_low": "在架", "settle_threshold": 0.3 },
+    "event": { "kinds": ["馆藏盘点", "系统迁移"] },
+    "aliases": { "文学馆": ["文学部", "LIT", "文馆"], "科技馆": ["科技部", "SCI", "科馆"], "古籍馆": ["古籍部", "RARE", "善本馆"] },
+    "news": {
+      "l1": "{kind}影响 {hub_id}({hub_name});受影响{record_label}:{ids}。",
+      "l2": "{kind}波及『{region}{name_suffix}』一带,多笔{record_label}受阻。",
+      "l3": "{kind}发生于{region},约第 {frame} 帧前后服务受限。",
+      "l4": "第 {frame} 帧前后,某书库因{kind}临时闭架,流通骤降。",
+      "l5": "{kind}临近{port}所辖馆区,借阅预计延迟数日。",
+      "distractor": "{region}近日{kind}演练,暂未见明显影响。",
+      "headline": "{kind}公告",
+      "distractor_headline": "{region}{kind}提示"
+    }
+  },
+  "roles": {
+    "hub_store": "collections", "agent_store": "catalogers", "record_store": "loans", "metric_store": "circulation",
+    "record_hub_fk": "collection_id", "record_agent_fk": "cataloger_id", "record_frame": "loan_frame",
+    "record_status": "status", "record_ids_field": "loan_ids", "affected_status": "逾期"
+  },
+  "tasks": [],
+  "notes": {
+    "scope": "Phase B 域 B。与 logistics/energy 同生成器,只换 spec。本 spec 当前仅被 nexus_phaseb gate 用于取『8 个锚书库』;news/throughput/事件留给后续 CH1/CH2/CH3 通道。",
+    "honesty": "真值始终保留;脏度/link 只动观测。区域/端口/实体词表(hub/agent/record/metric/status/event/aliases)与域 A 零 token 重叠,兑现 Phase B 抹除跨域字符串线索前提;news 模板骨架(l1/l3/distractor 等)为通用脚手架、跨域共用,非域标识词,后续 channel 若读 news 须按此分离。gate 阶段 channel-blind,只读锚身份。"
+  }
+}

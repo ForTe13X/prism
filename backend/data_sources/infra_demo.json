@@ -1,0 +1,48 @@
+{
+  "id": "infra_demo",
+  "title": "基础设施跨源数据包(Phase B 域 A)",
+  "title_en": "Infrastructure cross-source data package (Phase B domain A)",
+  "description": "Phase B 双域之一(域 A · infra):计算集群(SQL)+ 集群 QPS(时序)+ 故障/容量新闻(文本)。与 logistics/energy 同一套确定性生成器,只换 spec —— 提供 nexus Phase B 所需的『锚 hub』(8 个集群)。区域/端口词表与域 B(library)零重叠,以兑现 Phase B『抹掉跨域字符串线索』前提。本包仅为 gate 提供锚;news/throughput 留给后续 CH1/CH2/CH3。",
+  "seed": "infra_demo",
+  "scenario": "event_anomaly_delay",
+  "params": {
+    "hubs": 8,
+    "agents": 4,
+    "records": 24,
+    "frames": 48,
+    "news_events": 8,
+    "ground_truth_events": 3,
+    "delay_window": 4
+  },
+  "regions": ["华北机房", "华东机房", "西南机房"],
+  "ports": ["可用区A", "可用区B", "可用区C"],
+  "vocab": {
+    "hub": { "prefix": "CL", "id_width": 3, "name_suffix": "集群" },
+    "agent": { "prefix": "OP", "id_width": 3, "names": ["一号运维组", "二号运维组", "平台SRE组", "网络保障组", "应急响应组", "值班一组"] },
+    "record": { "prefix": "JOB", "id_width": 4, "label": "工单", "measure_field": "cpu_pct", "measure_range": [5, 95], "unit": "%" },
+    "metric": { "name": "qps", "range": [100, 800] },
+    "status": { "initial": "queued", "affected": "degraded", "settle_high": "healthy", "settle_low": "queued", "settle_threshold": 0.3 },
+    "event": { "kinds": ["节点宕机", "网络分区"] },
+    "aliases": { "华北机房": ["华北区", "HB-DC", "北区机房"], "华东机房": ["华東机房", "HD-DC", "东区机房"], "西南机房": ["西南区", "SW-DC", "川渝机房"] },
+    "news": {
+      "l1": "{kind}影响 {hub_id}({hub_name});受影响{record_label}:{ids}。",
+      "l2": "{kind}波及『{region}{name_suffix}』一带,多个{record_label}受阻。",
+      "l3": "{kind}发生于{region},约第 {frame} 帧前后服务受限。",
+      "l4": "第 {frame} 帧前后,某集群因{kind}临时离线,吞吐骤降。",
+      "l5": "{kind}逼近{port}所辖节点,服务预计抖动数小时。",
+      "distractor": "{region}近日{kind}演练,暂未见明显影响。",
+      "headline": "{kind}通报",
+      "distractor_headline": "{region}{kind}提示"
+    }
+  },
+  "roles": {
+    "hub_store": "clusters", "agent_store": "operators", "record_store": "jobs", "metric_store": "qps",
+    "record_hub_fk": "cluster_id", "record_agent_fk": "operator_id", "record_frame": "submit_frame",
+    "record_status": "status", "record_ids_field": "job_ids", "affected_status": "degraded"
+  },
+  "tasks": [],
+  "notes": {
+    "scope": "Phase B 域 A。与 logistics/energy 同生成器,只换 spec。本 spec 当前仅被 nexus_phaseb gate 用于取『8 个锚集群』;news/throughput/事件留给后续 CH1/CH2/CH3 通道。",
+    "honesty": "真值始终保留;脏度/link 只动观测。区域/端口/实体词表(hub/agent/record/metric/status/event/aliases)与域 B 零 token 重叠,兑现 Phase B 抹除跨域字符串线索前提;news 模板骨架(l1/l3/distractor 等)为通用脚手架、跨域共用,非域标识词,后续 channel 若读 news 须按此分离。gate 阶段 channel-blind,只读锚身份。"
+  }
+}
