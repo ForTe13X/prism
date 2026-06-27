@@ -307,3 +307,12 @@ body {
 .pr-nexus-hud dd { margin: 0; font-variant-numeric: tabular-nums; font-weight: 600; }
 .pr-nexus-hud .pr-hud-high dd { color: #f5f7ff; text-shadow: 0 0 8px rgba(180,200,255,0.8); }
 .pr-nexus-caveat { margin: 0.6rem 0 0; font-size: 0.7rem; line-height: 1.4; color: #7e7e96; }
+
+/* —— nexus 3D galaxy controls + canvas —— */
+.pr-nexus-controls { display: inline-flex; align-items: center; gap: 0.8rem; }
+.pr-nexus-modes { display: inline-flex; border: 1px solid #2a2a3a; border-radius: 7px; overflow: hidden; }
+.pr-nexus-modes button { background: #14141e; color: #9a9ab4; border: none; padding: 0.18rem 0.6rem; font-size: 0.8rem; cursor: pointer; }
+.pr-nexus-modes button.is-active { background: var(--accent, #39a7c8); color: #07070d; font-weight: 700; }
+.pr-nexus-canvas-wrap { width: 100%; height: 600px; border-radius: 12px; overflow: hidden; background: #05050b; box-shadow: inset 0 0 80px rgba(0,0,0,0.8); }
+.pr-nexus-canvas { display: block; }
+.pr-nexus-loading { display: flex; align-items: center; justify-content: center; min-height: 600px; color: #7e7e96; }

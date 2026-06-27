@@ -1,6 +1,19 @@
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, lazy, useEffect, useMemo, useState } from "react";
 import { fetchNexusView } from "./api";
 import type { NexusView as NexusViewData, NexusUnit } from "./types";
+
+// the heavy three.js galaxy is a lazy chunk — it never enters the main bundle, and we fall back to the SVG
+// when WebGL is unavailable (DESIGN_visual_fusion §5: the 2D form is the accessibility/no-WebGL fallback).
+const NexusGalaxy = lazy(() => import("./NexusGalaxy"));
+
+function hasWebGL(): boolean {
+  try {
+    const c = document.createElement("canvas");
+    return !!(window.WebGLRenderingContext && (c.getContext("webgl") || c.getContext("experimental-webgl")));
+  } catch {
+    return false;
+  }
+}
 
 // The two domains live at fixed columns; each bulges toward the centre so the gap between them is the
 // "collision zone" where verified bridges light. Cold cyan = INFRA, warm amber = LIBRARY (the only
@@ -23,6 +36,9 @@ export default function NexusView() {
   const [seed, setSeed] = useState(SEEDS[0]);
   const [data, setData] = useState<NexusViewData | null>(null);
   const [error, setError] = useState("");
+  const webgl = useMemo(() => hasWebGL(), []);
+  const [mode, setMode] = useState<"3d" | "2d">("3d");
+  const show3d = mode === "3d" && webgl;
 
   useEffect(() => {
     let cancelled = false;
@@ -54,23 +70,36 @@ export default function NexusView() {
     <div className="pr-nexus">
       <div className="pr-nexus-bar">
         <span className="pr-nexus-title">星系碰撞 · 跨域 nexus（INFRA × LIBRARY）</span>
-        <label className="pr-nexus-seed">
-          种子
-          <select value={seed} onChange={(e) => setSeed(e.target.value)}>
-            {SEEDS.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </select>
-        </label>
+        <div className="pr-nexus-controls">
+          {webgl && (
+            <div className="pr-nexus-modes" role="group" aria-label="渲染模式">
+              <button className={show3d ? "is-active" : ""} onClick={() => setMode("3d")} title="3D 银河碰撞">3D</button>
+              <button className={!show3d ? "is-active" : ""} onClick={() => setMode("2d")} title="2D SVG">2D</button>
+            </div>
+          )}
+          <label className="pr-nexus-seed">
+            种子
+            <select value={seed} onChange={(e) => setSeed(e.target.value)}>
+              {SEEDS.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
       </div>
 
       {error && <p className="pr-error">加载失败:{error}</p>}
       {!data && !error && <p className="pr-muted">加载中…</p>}
 
-      {data && layout && (
+      {data && (
         <div className="pr-nexus-stage">
+          {show3d ? (
+            <Suspense fallback={<div className="pr-nexus-svg pr-nexus-loading">渲染银河…</div>}>
+              <NexusGalaxy data={data} />
+            </Suspense>
+          ) : layout ? (
           <svg viewBox={`0 0 ${W} ${H}`} className="pr-nexus-svg" role="img" aria-label="跨域 nexus 碰撞视图">
             <defs>
               <filter id="nexglow" x="-60%" y="-60%" width="220%" height="220%">
@@ -134,6 +163,7 @@ export default function NexusView() {
               {data.B.prefix} · {data.B.metric}
             </text>
           </svg>
+          ) : null}
 
           {sc && (
             <div className="pr-nexus-hud">
