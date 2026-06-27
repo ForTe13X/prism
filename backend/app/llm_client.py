@@ -212,6 +212,15 @@ def _fix_key(model: str, system: str, user: str, schema: dict) -> str:
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()[:24]
 
 
+def _json_schema_block(schema: dict) -> dict:
+    """Normalize a caller's schema into LM Studio's ``response_format.json_schema`` block. LM Studio requires
+    a ``name``; a BARE JSON Schema (just type/properties) 400s. Callers are inconsistent — some pass a
+    pre-wrapped ``{name, schema, ...}`` (e.g. benchmark), others a bare schema (e.g. compile). A wrapper
+    passes through as-is; a bare schema is wrapped with a name. The fixture key hashes the ORIGINAL ``schema``
+    arg (not this block), so this normalization never invalidates existing fixtures."""
+    return schema if ("schema" in schema and "name" in schema) else {"name": "response", "schema": schema}
+
+
 def structured_complete(system: str, user: str, schema: dict, model: str | None = None, *,
                         use_fixture: bool = True, allow_live: bool = True) -> dict:
     """Generic structured-output completion with token instrumentation + a frozen fixture cache.
@@ -231,7 +240,7 @@ def structured_complete(system: str, user: str, schema: dict, model: str | None 
         "model": mdl,
         "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
         "temperature": 0, "max_tokens": 700,
-        "response_format": {"type": "json_schema", "json_schema": schema},
+        "response_format": {"type": "json_schema", "json_schema": _json_schema_block(schema)},
     }
     try:
         resp = _post("/chat/completions", payload)

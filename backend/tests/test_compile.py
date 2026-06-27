@@ -110,3 +110,28 @@ def test_compile_happy_path_with_stubbed_model(monkeypatch) -> None:
     body = r.json()
     assert body["ok"] and body["source"] == "llm_compiled" and body["model"] == "qwen"
     assert body["rules"] == [{"when": {"op": ">=", "value": 9.0}, "do": {"action": "shift", "by": -0.2}}]
+
+
+def test_json_schema_block_normalizes_bare_and_passes_wrapper() -> None:
+    # LM Studio requires response_format.json_schema to carry a `name`; a bare schema 400s. The normalizer
+    # wraps a bare schema and passes a pre-wrapped one through unchanged (so benchmark's fixtures stay valid).
+    bare = {"type": "object", "properties": {"x": {"type": "string"}}, "required": ["x"]}
+    blk = llm_client._json_schema_block(bare)
+    assert blk["name"] == "response" and blk["schema"] == bare
+    wrapped = {"name": "ans", "strict": True, "schema": bare}
+    assert llm_client._json_schema_block(wrapped) is wrapped
+
+
+def test_structured_complete_payload_always_names_the_json_schema(monkeypatch) -> None:
+    # the actual 400-fix: whatever a caller passes, the outgoing payload's json_schema has a `name`.
+    captured: dict = {}
+    def fake_post(path, payload):
+        captured["payload"] = payload
+        return {"choices": [{"message": {"content": '{"x":"ok"}'}}], "usage": {"prompt_tokens": 1, "completion_tokens": 1}, "model": "m"}
+    monkeypatch.setattr(llm_client, "_post", fake_post)
+    monkeypatch.setattr(llm_client, "_fix_save", lambda cache: None)  # never mutate the committed fixture cache
+    bare = {"type": "object", "properties": {"x": {"type": "string"}}, "required": ["x"]}
+    r = llm_client.structured_complete("sys", "user", bare, model="m", use_fixture=False, allow_live=True)
+    assert r["ok"]
+    js = captured["payload"]["response_format"]["json_schema"]
+    assert js["name"] == "response" and js["schema"] == bare
