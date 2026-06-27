@@ -88,12 +88,13 @@ function Bridges({ data }: { data: NexusViewData }) {
 }
 
 // a white-hot core at the collision centre, scaled by the verified-bridge count (the merged nucleus)
-function Core({ high }: { high: number }) {
+function Core({ high, reducedMotion }: { high: number; reducedMotion: boolean }) {
   const ref = useRef<THREE.Mesh>(null);
   useFrame(({ clock }) => {
     if (ref.current) {
-      const s = 0.18 + 0.12 * high + 0.03 * Math.sin(clock.elapsedTime * 1.6);
-      ref.current.scale.setScalar(Math.max(0.05, s));
+      // honor prefers-reduced-motion (DESIGN §7.4: static after convergence) — freeze the breathing pulse
+      const pulse = reducedMotion ? 0 : 0.03 * Math.sin(clock.elapsedTime * 1.6);
+      ref.current.scale.setScalar(Math.max(0.05, 0.18 + 0.12 * high + pulse));
     }
   });
   if (high <= 0) return null;
@@ -113,7 +114,7 @@ function Scene({ data, reducedMotion }: { data: NexusViewData; reducedMotion: bo
       <Cluster units={data.A.units} side="A" base={COLD} />
       <Cluster units={data.B.units} side="B" base={WARM} />
       <Bridges data={data} />
-      <Core high={data.scorecard.high} />
+      <Core high={data.scorecard.high} reducedMotion={reducedMotion} />
       <OrbitControls enablePan={false} enableDamping minDistance={7} maxDistance={26}
         autoRotate={!reducedMotion} autoRotateSpeed={0.35} />
       <EffectComposer>

@@ -1,4 +1,5 @@
-import { Suspense, lazy, useEffect, useMemo, useState } from "react";
+import { Component, Suspense, lazy, useEffect, useMemo, useState } from "react";
+import type { ReactNode } from "react";
 import { fetchNexusView } from "./api";
 import type { NexusView as NexusViewData, NexusUnit } from "./types";
 
@@ -9,9 +10,29 @@ const NexusGalaxy = lazy(() => import("./NexusGalaxy"));
 function hasWebGL(): boolean {
   try {
     const c = document.createElement("canvas");
-    return !!(window.WebGLRenderingContext && (c.getContext("webgl") || c.getContext("experimental-webgl")));
+    const gl = (c.getContext("webgl") || c.getContext("experimental-webgl")) as WebGLRenderingContext | null;
+    if (!gl) return false;
+    gl.getExtension("WEBGL_lose_context")?.loseContext(); // don't leak the probe context
+    return true;
   } catch {
     return false;
+  }
+}
+
+// A probe passing does NOT guarantee the real Canvas + postprocessing pipeline initialises; a runtime
+// WebGL/EffectComposer failure (context exhaustion, driver blocklist, context loss) throws during render,
+// and Suspense does NOT catch that. This boundary delivers the actual §5 contract: on any galaxy error,
+// fall back to the 2D SVG instead of blanking the whole cockpit.
+class GalaxyBoundary extends Component<{ onError: () => void; children: ReactNode }, { failed: boolean }> {
+  state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  componentDidCatch() {
+    this.props.onError();
+  }
+  render() {
+    return this.state.failed ? null : this.props.children;
   }
 }
 
@@ -38,7 +59,8 @@ export default function NexusView() {
   const [error, setError] = useState("");
   const webgl = useMemo(() => hasWebGL(), []);
   const [mode, setMode] = useState<"3d" | "2d">("3d");
-  const show3d = mode === "3d" && webgl;
+  const [galaxyFailed, setGalaxyFailed] = useState(false);
+  const show3d = mode === "3d" && webgl && !galaxyFailed;
 
   useEffect(() => {
     let cancelled = false;
@@ -73,7 +95,7 @@ export default function NexusView() {
         <div className="pr-nexus-controls">
           {webgl && (
             <div className="pr-nexus-modes" role="group" aria-label="渲染模式">
-              <button className={show3d ? "is-active" : ""} onClick={() => setMode("3d")} title="3D 银河碰撞">3D</button>
+              <button className={show3d ? "is-active" : ""} onClick={() => { setGalaxyFailed(false); setMode("3d"); }} title="3D 银河碰撞">3D</button>
               <button className={!show3d ? "is-active" : ""} onClick={() => setMode("2d")} title="2D SVG">2D</button>
             </div>
           )}
@@ -96,9 +118,11 @@ export default function NexusView() {
       {data && (
         <div className="pr-nexus-stage">
           {show3d ? (
-            <Suspense fallback={<div className="pr-nexus-svg pr-nexus-loading">渲染银河…</div>}>
-              <NexusGalaxy data={data} />
-            </Suspense>
+            <GalaxyBoundary onError={() => setGalaxyFailed(true)}>
+              <Suspense fallback={<div className="pr-nexus-svg pr-nexus-loading">渲染银河…</div>}>
+                <NexusGalaxy data={data} />
+              </Suspense>
+            </GalaxyBoundary>
           ) : layout ? (
           <svg viewBox={`0 0 ${W} ${H}`} className="pr-nexus-svg" role="img" aria-label="跨域 nexus 碰撞视图">
             <defs>

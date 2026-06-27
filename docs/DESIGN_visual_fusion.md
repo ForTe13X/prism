@@ -4,7 +4,7 @@
 > 关联:[`METRIC_nexus_reality.md`](METRIC_nexus_reality.md)(奇观渲染的就是它的输出)· [`OBSERVER_NOTES.md`](OBSERVER_NOTES.md) §10(超图远期)· 现有 `OntologyGraph.tsx`/`graph.ts`/P1 `ReplaySlider`(不动)。
 
 > **v1 已落地(SVG)+ v2 已落地(three.js 银河碰撞)**:后端 `GET /api/nexus_xdom/view?seed=` 给**每桥 nexus_confidence**(三独立渠道 ≥2/3 入各自 top-10% → 点亮;否则 medium/巧合,**标签无关分层**)。前端 Cockpit `跨域 nexus` tab,**3D/2D 切换**:
-> - **v2 `NexusGalaxy.tsx`(R3F,懒加载独立 chunk 890kB——不进主包)**:两螺旋星团(INFRA 冷青 × LIBRARY 暖琥珀)+ 白热合并核(scale=真桥数)+ 候选桥三态;**SelectiveBloom 只让白热高桥 + 核过曝**(luminanceThreshold,**代码层虚影/单渠道不可能发亮**),OrbitControls 自转(`prefers-reduced-motion` 关),drei `Stars` 极淡星场(唯一非数据元素)。无 WebGL → 自动回退 SVG。
+> - **v2 `NexusGalaxy.tsx`(R3F,懒加载独立 chunk 890kB——不进主包)**:两螺旋星团(INFRA 冷青 × LIBRARY 暖琥珀)+ 白热合并核(scale=真桥数)+ 候选桥三态;**luminance-threshold Bloom 只让白热高桥 + 核过曝**(`luminanceThreshold=0.7`;仅 HDR HOT 高桥/核 toneMapped=false 超阈,**代码层虚影/单渠道不可能发亮**,普通混合不叠加),OrbitControls 自转(`prefers-reduced-motion` 关),drei `Stars` 极淡星场(唯一非数据元素)。无 WebGL → 自动回退 SVG。
 > - **v1 `NexusView.tsx`(SVG,回退/无障碍)**:同数据,候选桥三态 + feGaussianBlur 辉光。
 > - 共享:**诚实计分板 HUD**(候选/真桥/单渠道/巧合/精度)+ 不可摘 caveat。落实 §0/§6 铁律:**光多少=过 ≥2 渠道的桥多少**,**诚实稀疏**(实测每包仅 ~6 桥发光、其余 100+ 虚影),前端零发明置信(只读后端)。实测:R3F canvas WebGL2 正常、prod build 懒 chunk 分离、3D/2D 切换 + SVG 回退均通。GW/Sinkhorn 对齐动画(§2 v2 引擎)仍是后续。
 
