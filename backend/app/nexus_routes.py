@@ -10,6 +10,7 @@ from .nexus_eval import discrimination_sweep, negative_controls, run_baseline_la
 from .nexus_lens_sem import run_sem_lens
 from .nexus_xdom_eval import run_convergence
 from .nexus_xdom_gate import run_gate
+from .nexus_xdom_view import bridge_view
 
 nexus_router = APIRouter(prefix="/api/nexus", tags=["nexus"])
 # Phase-B cross-domain substrate lives under its own prefix (it is a different, two-domain experiment).
@@ -64,3 +65,10 @@ def xdom_channels() -> dict:
     convergence verdict on HELD-OUT seeds. The headline is a faithful near-miss: both clear the power floor
     and are independent with a rewire-collapse, but convergence falls just short of the +0.05 clean-2/2 bar."""
     return run_convergence()
+
+
+@nexus_xdom_router.get("/view")
+def xdom_view(seed: str = "xe-0") -> dict:
+    """Per-bridge nexus_confidence for ONE coupled package — the data the galaxy-collision visual renders.
+    Only top-of-both-channels bridges light (high); the rest are ghosts (honest sparsity)."""
+    return bridge_view(seed)

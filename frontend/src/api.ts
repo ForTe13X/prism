@@ -3,6 +3,7 @@ import type {
   CompileResult,
   Graph,
   LlmHealth,
+  NexusView,
   PolicyRequest,
   PolicyResult,
   Row,
@@ -71,3 +72,7 @@ export const compilePolicy = (specId: string, body: CompileRequest) =>
 
 // Local-LLM health: reachability + which model + honest compile counters.
 export const fetchLlmHealth = () => getJSON<LlmHealth>("/api/llm/health");
+
+// Phase-B cross-domain nexus view: per-bridge confidence for one coupled package (the galaxy-collision data).
+export const fetchNexusView = (seed: string) =>
+  getJSON<NexusView>(`/api/nexus_xdom/view?seed=${encodeURIComponent(seed)}`);

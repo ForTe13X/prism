@@ -1,7 +1,9 @@
 # 设计笔记 · 多域融合视觉奇观(stunning 且诚实)
 
-> **状态:方向锚(design note),非已建成、非指令。** 旁观会话 + 一轮 4-概念视觉 workflow(发散→综合)整理。
+> **状态:方向锚(design note)。v1 的 SVG 形态已落地**(见下「v1 已落地」),three.js 银河碰撞是后续升级。
 > 关联:[`METRIC_nexus_reality.md`](METRIC_nexus_reality.md)(奇观渲染的就是它的输出)· [`OBSERVER_NOTES.md`](OBSERVER_NOTES.md) §10(超图远期)· 现有 `OntologyGraph.tsx`/`graph.ts`/P1 `ReplaySlider`(不动)。
+
+> **v1 已落地(SVG,非 three.js)**:后端 `GET /api/nexus_xdom/view?seed=` 给**每桥 nexus_confidence**(双独立渠道各入 top-10% → 点亮;否则 medium/巧合,**标签无关分层**)。前端 `NexusView.tsx` + Cockpit `跨域 nexus` tab:两域(INFRA 冷青 × LIBRARY 暖琥珀)星团 + 候选桥三态(巧合=虚影 0.05 透明、单渠道=点线异议、**双渠道=唯一发光的白热桥**)+ **诚实计分板 HUD**(候选/真桥/单渠道/巧合/精度)+ 不可摘 caveat。落实 §0/§6 铁律:**光多少=过双渠道的桥多少**(代码层虚影不可能发亮),**诚实稀疏**(实测每包仅 2–6 桥发光、其余 100+ 虚影),前端零发明置信(只读后端)。three.js 银河碰撞 + GW 动画(§1–§3)是 v2 升级。
 
 ## 0. 命题
 把"多个领域本体的 net space **碰撞 → 融合**为一个新空间"做成 **stunning 的视觉奇观**。

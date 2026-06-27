@@ -284,3 +284,26 @@ body {
 
 /* ---- footer ---- */
 .pr-footer { margin-top: 26px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+
+/* —— Cross-domain nexus (galaxy-collision) view —— */
+.pr-nexus { display: flex; flex-direction: column; gap: 0.6rem; }
+.pr-nexus-bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.pr-nexus-title { font-weight: 600; letter-spacing: 0.02em; }
+.pr-nexus-seed { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; color: var(--pr-muted, #8b8b9a); }
+.pr-nexus-seed select { background: #14141e; color: inherit; border: 1px solid #2a2a3a; border-radius: 6px; padding: 0.15rem 0.4rem; }
+.pr-nexus-stage { position: relative; display: grid; grid-template-columns: 1fr; }
+.pr-nexus-svg { width: 100%; height: auto; display: block; border-radius: 12px; background: #07070d; box-shadow: inset 0 0 80px rgba(0,0,0,0.7); }
+.pr-nexus-bg { fill: #07070d; }
+.pr-nexus-domlabel { font-size: 15px; font-weight: 600; letter-spacing: 0.06em; opacity: 0.85; }
+.pr-nexus-hud {
+  position: absolute; top: 14px; left: 14px; width: 240px;
+  background: rgba(10,10,18,0.74); border: 1px solid #23233a; border-radius: 10px;
+  padding: 0.7rem 0.85rem; backdrop-filter: blur(3px); color: #cfcfe2;
+}
+.pr-nexus-hud h4 { margin: 0 0 0.45rem; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: #9a9ab4; }
+.pr-nexus-hud dl { margin: 0; display: flex; flex-direction: column; gap: 0.22rem; }
+.pr-nexus-hud dl > div { display: flex; justify-content: space-between; gap: 0.6rem; font-size: 0.82rem; }
+.pr-nexus-hud dt { color: #9a9ab4; }
+.pr-nexus-hud dd { margin: 0; font-variant-numeric: tabular-nums; font-weight: 600; }
+.pr-nexus-hud .pr-hud-high dd { color: #f5f7ff; text-shadow: 0 0 8px rgba(180,200,255,0.8); }
+.pr-nexus-caveat { margin: 0.6rem 0 0; font-size: 0.7rem; line-height: 1.4; color: #7e7e96; }

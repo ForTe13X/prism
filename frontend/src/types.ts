@@ -263,3 +263,37 @@ export interface LlmHealth {
   compile_failures: number;
   last_error?: string | null;
 }
+
+// Phase-B cross-domain nexus view — per-bridge confidence for one coupled package (METRIC §8c/§8d).
+export interface NexusUnit {
+  idx: number;
+  id: string;
+  anchor: boolean;
+}
+export interface NexusBridge {
+  a_idx: number;
+  b_idx: number;
+  a_id: string;
+  b_id: string;
+  shape: number;
+  fingerprint: number;
+  shape_fires: boolean;
+  fingerprint_fires: boolean;
+  confidence: "high" | "medium" | "coincidence";
+  dissent: boolean;
+}
+export interface NexusView {
+  seed: string;
+  A: { prefix: string; metric: string; units: NexusUnit[] };
+  B: { prefix: string; metric: string; units: NexusUnit[] };
+  bridges: NexusBridge[];
+  scorecard: {
+    candidates: number;
+    high: number;
+    medium: number;
+    coincidence: number;
+    true_couplings: number;
+    high_tier_precision: number | null;
+  };
+  caveat: string;
+}

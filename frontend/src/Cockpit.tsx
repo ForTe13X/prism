@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { fetchData, fetchTimeline } from "./api";
+import NexusView from "./NexusView";
 import OntologyGraph from "./OntologyGraph";
 import PolicyView from "./PolicyView";
 import SimView from "./SimView";
@@ -12,6 +13,9 @@ import { renderWidget } from "./widgets";
 const GRAPH_TAB = "__prism_graph__";
 const SIM_TAB = "__prism_sim__";
 const POLICY_TAB = "__prism_policy__";
+// A spec-INDEPENDENT lab view: the cross-domain nexus metric runs on its own two domains (INFRA × LIBRARY),
+// not the current spec, so this tab shows the same experiment regardless of the selected domain.
+const NEXUS_TAB = "__prism_nexus__";
 
 function EntityCard({ entity, row }: { entity: Entity; row: Row }) {
   const idAttr = entity.attributes.find((a) => a.semantic_type === "identifier");
@@ -198,7 +202,8 @@ export default function Cockpit({ spec }: { spec: Spec }) {
   const isGraph = activeId === GRAPH_TAB;
   const isSim = activeId === SIM_TAB;
   const isPolicy = activeId === POLICY_TAB;
-  const view = isGraph || isSim || isPolicy ? undefined : spec.views.find((v) => v.id === activeId) ?? spec.views[0];
+  const isNexus = activeId === NEXUS_TAB;
+  const view = isGraph || isSim || isPolicy || isNexus ? undefined : spec.views.find((v) => v.id === activeId) ?? spec.views[0];
   const hasAxis = !!timeline && timeline.frames > 1;
   const showGraphTab = spec.entities.length > 0;
   const showSimTab = spec.entities.some((e) =>
@@ -245,8 +250,13 @@ export default function Cockpit({ spec }: { spec: Spec }) {
             🧭 策略对比
           </button>
         )}
+        <button key={NEXUS_TAB} className={isNexus ? "pr-tab is-active" : "pr-tab"} onClick={() => setActiveId(NEXUS_TAB)}>
+          ✦ 跨域 nexus
+        </button>
       </nav>
-      {isPolicy && showSimTab ? (
+      {isNexus ? (
+        <NexusView />
+      ) : isPolicy && showSimTab ? (
         <PolicyView spec={spec} />
       ) : isSim && showSimTab ? (
         <SimView spec={spec} />
