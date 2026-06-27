@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import math
 
-from .data_package_xdom import KNOBS, generate_xdom
+from .data_package_xdom import generate_xdom
 from .nexus_eval import roc_auc
 from .nexus_substrate import _tokens
 from .nexus_xdom_substrate import candidate_bridges_xdom
@@ -53,11 +53,11 @@ def _unit_string_tokens(domain: dict, idx: int) -> set:
     return toks
 
 
-def _collect(seeds: list[str]) -> tuple[dict, list]:
+def _collect(seeds: list[str], cal: dict | None = None) -> tuple[dict, list]:
     pools = {"oracle": [], "time": [], "depth": [], "string": []}
     labels = []
     for sd in seeds:
-        g = generate_xdom(sd)
+        g = generate_xdom(sd, cal)
         latA, latB = _latent_lookup(g)
         bridges, _ = candidate_bridges_xdom(g)
         for b in bridges:
@@ -75,9 +75,9 @@ def _collect(seeds: list[str]) -> tuple[dict, list]:
     return pools, labels
 
 
-def run_gate(seeds: list[str] | None = None) -> dict:
+def run_gate(seeds: list[str] | None = None, cal: dict | None = None) -> dict:
     seeds = seeds or [f"xd-{i}" for i in range(60)]
-    pools, labels = _collect(seeds)
+    pools, labels = _collect(seeds, cal)
     n, npos = len(labels), sum(labels)
     auc = {k: roc_auc(v, labels) for k, v in pools.items()}
     oracle_ok = auc["oracle"] >= 0.95

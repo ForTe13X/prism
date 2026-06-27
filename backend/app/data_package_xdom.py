@@ -113,8 +113,16 @@ def _incidents(seed: str) -> tuple[list, list]:
     return coupled, distractor
 
 
-def _build_domain(seed: str, dk: str, coupled: list, distractor: list) -> dict:
-    base, wig, depth, hw = KNOBS["base"], KNOBS["wiggle"], KNOBS["depth"], KNOBS["half_width"]
+def _build_domain(seed: str, dk: str, coupled: list, distractor: list, cal: dict | None = None) -> dict:
+    # cal (Track 1, §4b): override the OBSERVABLE marginals with values fitted to REAL data — base/wiggle
+    # (metric mean/std), depth (SNR-preserved relative to wiggle), and the attribute base logits (real
+    # category proportions). cal=None ⇒ the frozen substrate, byte-identical. The COUPLING latents
+    # (prof/theta/psi) are NOT calibrated — that deeper external-validity gap stays, honestly.
+    base = cal["base"] if cal else KNOBS["base"]
+    wig = cal["wiggle"] if cal else KNOBS["wiggle"]
+    depth = cal["depth"] if cal else KNOBS["depth"]
+    attr_logits = cal["attr_logits"] if cal else None
+    hw = KNOBS["half_width"]
     nf, nc, nrec, nt = KNOBS["frames"], KNOBS["n_cats"], KNOBS["records_per_unit"], KNOBS["n_tags"]
     spec = DOMAINS[dk]
     endpoint = (lambda inc: inc["i"]) if dk == "A" else (lambda inc: inc["j"])
@@ -122,7 +130,7 @@ def _build_domain(seed: str, dk: str, coupled: list, distractor: list) -> dict:
     for uu in range(KNOBS["n_units"]):
         uid = f"{spec['prefix']}-{spec['id_offset'] + uu + 1:03d}"
         s = [base + wig * (_u(seed, dk, "wig", uu, t) - 0.5) * 2 for t in range(nf)]
-        logits = [(_u(seed, dk, "abase", uu, c) - 0.5) for c in range(nc)]
+        logits = [(attr_logits[c] if attr_logits else 0.0) + (_u(seed, dk, "abase", uu, c) - 0.5) for c in range(nc)]
         # tag affinity over nt tags (the THIRD store) — built from a DISJOINT sub-key, shifted by psi for an
         # endpoint. Accumulated alongside but NEVER mixed into series/logits (the channels stay independent).
         tag_aff = [(_u(seed, dk, "tagbase", uu, t) - 0.5) for t in range(nt)]
@@ -164,11 +172,15 @@ def _build_domain(seed: str, dk: str, coupled: list, distractor: list) -> dict:
             "units": units, "series": series}
 
 
-def generate_xdom(seed: str) -> dict:
-    """Two coupled domains + the eval-only coupling table and latents (for the oracle). Deterministic."""
+def generate_xdom(seed: str, cal: dict | None = None) -> dict:
+    """Two coupled domains + the eval-only coupling table and latents (for the oracle). Deterministic.
+
+    cal (Track 1, §4b): optional calibrated marginals (base/wiggle/depth/attr_logits) fitted to REAL data.
+    cal=None ⇒ the frozen substrate (byte-identical). See nexus_xdom_calibrate.py.
+    """
     coupled, distractor = _incidents(seed)
-    A = _build_domain(seed, "A", coupled, distractor)
-    B = _build_domain(seed, "B", coupled, distractor)
+    A = _build_domain(seed, "A", coupled, distractor, cal)
+    B = _build_domain(seed, "B", coupled, distractor, cal)
     coupling = sorted({(inc["i"], inc["j"]) for inc in coupled})
     return {
         "seed": seed, "A": A, "B": B,

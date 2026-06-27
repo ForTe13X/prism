@@ -138,5 +138,23 @@
 - **诚实**:transport **不是第 4 个独立渠道**——它读的是三渠道合成的代价,故其高 AUC **不计入收敛效度**(那需失效域独立);它是「全局指派 > 逐桥打分」的重组增益,与 §8e 的三票独立性是两回事,须分开讲。
 - **动画引擎(DESIGN_visual_fusion §2 money moment)**:残差驱动星系间距、transport 质量逐条点亮真桥——**动画=真实对齐回放,非预录关键帧**(§0 铁律)。前端把 `snapshots` 接到 slider 即得「咬合」时机=残差拐点。前端动画落地是后续。
 
+## 8g. Track 1 已落地:把 substrate 校准到**真实数据**,再重跑收敛——一个**决定性的诚实塌缩**
+`backend/app/nexus_xdom_calibrate.py`(确定性、clean-room)+ `GET /api/nexus_xdom/{calibrate|calibrate_sweep}` + 测试。回应 OBSERVER §11 的判断:**度量已严谨,瓶颈移到 substrate 的外部效度**——其边缘是手设的(base=250, wiggle=8 ⇒ 变异系数 CV≈0.018,比任何真实测量都干净)。问题:**把可观测边缘校准到真实数据后,诚实结论是存活还是塌缩?**
+
+**做法(DESIGN_data_package §4b,逆机制)**:取 sklearn `load_breast_cancer`(569 真实样本、BSD、随包,**只取聚合量**,绝不存真实行)。在 **train 半**拟合:度量 marginal 的均值 μ / 标准差 σ ⇒ `base=μ, wiggle=σ·√3`(基线 uniform 的 std 即 wiggle/√3,故可观测 std=σ);一列真实特征等宽分箱成 n_cats 占比 ⇒ 属性基底 logits=log(真实占比),**分箱端点也只取 train**(test 端点不泄)。**只校准边缘**;耦合(dip/profile/theta/psi=信号)保持**设计的相对效应量**(dip = 冻结的 depth/base≈0.72 × μ),于是真实数据的高 CV 把形状渠道 SNR(=depth/(wiggle/√3),全篇一个口径)从冻结的 **≈39 压到 ≈2.8**。`cal=None` ⇒ 冻结 substrate **逐字节不变**(已断言)。
+
+**验证非声称(§4b 命门)**:拿**没拟合过的 held-out test 半**的矩对校准 substrate 的**可观测边缘**做检验——实测 mean 14.09 vs 真实 test 14.17(误差 0.55%)、std 3.60 vs 3.43(4.9%)、属性占比 **L1=0.0825**(train-only 分箱端点的诚实值),**全部 < 容差 0.12 ⇒ 校准是真像、非声称**。检验对的是**去信号的干净基线** marginal(测时用 latent 排除 dip 帧/incident 单元——验证侧可见真值,同 gate 的 oracle;solver 拿不到);**raw 含 dip 的序列方差更宽**(mean 12.71 / std 5.08,比 σ 宽 ~48%,见 `raw_observable_metric`),那是注入信号本身,不属被校准的边缘。
+
+**实测(xd-* 60 gate + xe-* 120 held-out)**:
+- **gate 仍过**:oracle AUC=1.0、time/depth/string≈0.50 ⇒ **难度仍良定义**——塌缩的是渠道功率,不是题。
+- **形状渠道塌到随机**:shape AUC **0.540**(冻结 0.805);fingerprint 0.676(冻结 0.798);relational **0.832 存活**(它在类目/tag 上,不在带噪连续标度上)。
+- **3-way 收敛塌**:margin point **−0.012**,bootstrap CI **[−0.024, −0.002]**——**整段 < 0.05**。`verdict = collapses_under_real_calibration`。
+- **效应量扫描**(`calibrate_sweep`):3-way margin 只在 effect_scale≈8–14(SNR≈22–39)才逼近 0.05 线——**即耦合须比设计强约一个数量级、把度量渠道拉回到冻结那种(不真实的)干净度,收敛才回得来**。
+
+**承重诚实(随结论挂出)**:
+- **这是真发现,不是 bug**:冻结 substrate 的连续渠道 CV 比真实诊断数据低 ~14×;**冻结的 3-way 胜很大程度由一个不真实地干净的连续渠道撑着**。校准到真实噪声后,时序渠道塌到随机,只有类目/关系渠道挺住。
+- **未校准的更深缺口(不声称已补)**:**耦合本身的真实性**——0.72 这个相对效应量真不真、latent(prof/theta/psi)结构真不真——**没碰**;那需要真实**配对**跨域源(OBSERVER §11 张力 #1)。Track 1 补的是**边缘**外部效度,不是**耦合**外部效度。
+- **clean-room/确定性**:校准 KNOBS 是静态随包真实数据聚合量的固定函数(6 位小数),substrate 生成仍走 Prism 自有 `_u` 哈希;无 `random`/无时钟。真实数据不可得时(sklearn 缺)**大声报错、绝不伪造**——这正是 Track 1 要守的诚实线。
+
 ---
 *—— 研究设计锚。这是给在建会话的方法学参照,不是指令;建造的人说了算。*

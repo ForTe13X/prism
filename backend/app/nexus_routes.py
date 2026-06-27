@@ -9,6 +9,7 @@ from .data_package import load_source
 from .nexus_eval import discrimination_sweep, negative_controls, run_baseline_ladder
 from .nexus_lens_sem import run_sem_lens
 from .nexus_xdom_align import run_alignment, run_alignment_eval
+from .nexus_xdom_calibrate import run_calibration, run_effect_sweep
 from .nexus_xdom_eval import run_convergence
 from .nexus_xdom_gate import run_gate
 from .nexus_xdom_view import bridge_view
@@ -88,3 +89,20 @@ def xdom_align_eval() -> dict:
     """Does the OT transport (global assignment + mutual exclusivity) recover the coupling better than the
     per-bridge channels? Measured AUC of transport vs each single channel."""
     return run_alignment_eval()
+
+
+@nexus_xdom_router.get("/calibrate")
+def xdom_calibrate(conv_seeds: int = 60) -> dict:
+    """Track 1 (§4b): calibrate the substrate's OBSERVABLE marginals to REAL data (sklearn breast_cancer,
+    aggregates only), verify on held-out moments, then re-run the gate + 3-way convergence. The honest
+    external-validity test — `verdict` reports survive vs collapse. conv_seeds limits the held-out seed
+    count for API latency (offline/tests use the full set)."""
+    return run_calibration(conv_seeds=conv_seeds)
+
+
+@nexus_xdom_router.get("/calibrate_sweep")
+def xdom_calibrate_sweep(conv_seeds: int = 40) -> dict:
+    """The honest robustness curve: 3-way convergence margin vs the coupling's relative effect size under
+    real-calibrated marginal noise — locates the survive↔collapse boundary (and where the frozen design's
+    clean SNR sits relative to it)."""
+    return run_effect_sweep(conv_seeds=conv_seeds)

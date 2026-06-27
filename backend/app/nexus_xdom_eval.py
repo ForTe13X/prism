@@ -46,11 +46,11 @@ def _margins(sh: list, fp: list, rel: list, y: list) -> dict:
             "m2": round(conv2 - max(a_sh, a_fp), 4), "m3": round(conv3 - max(a_sh, a_fp, a_rel), 4)}
 
 
-def _by_seed(seeds: list[str], control: str | None = None) -> list[tuple]:
+def _by_seed(seeds: list[str], control: str | None = None, cal: dict | None = None) -> list[tuple]:
     """Per-seed (shape, fingerprint, relational, labels) — scores computed ONCE so the bootstrap re-pools."""
     out = []
     for sd in seeds:
-        b = labelled_bridges_xdom([sd], control=control)
+        b = labelled_bridges_xdom([sd], control=control, cal=cal)
         out.append(([shape_score(x) for x in b], [fingerprint_score(x) for x in b],
                     [relational_score(x) for x in b], [x["y"] for x in b]))
     return out
@@ -69,9 +69,9 @@ def _call(ci_lo: float, ci_hi: float) -> str:
         else ("clears_0.05" if ci_lo >= CONV_MARGIN_FLOOR else "below_0.05")
 
 
-def run_convergence(seeds: list[str] | None = None) -> dict:
+def run_convergence(seeds: list[str] | None = None, cal: dict | None = None) -> dict:
     seeds = seeds or HELD_OUT_SEEDS
-    groups = _by_seed(seeds)
+    groups = _by_seed(seeds, cal=cal)
     n = len(groups)
     full = _pool(groups, list(range(n)))
     a = _margins(*full)
@@ -89,7 +89,7 @@ def run_convergence(seeds: list[str] | None = None) -> dict:
     lo2, hi2 = b2[int(0.025 * _BOOTSTRAP)], b2[int(0.975 * _BOOTSTRAP) - 1]
     lo3, hi3 = b3[int(0.025 * _BOOTSTRAP)], b3[int(0.975 * _BOOTSTRAP) - 1]
 
-    rf = _pool(_by_seed(seeds, control="rewire"), list(range(n)))
+    rf = _pool(_by_seed(seeds, control="rewire", cal=cal), list(range(n)))
     ra = _margins(*rf)
     rewire = {"shape_auc": ra["shape"], "fingerprint_auc": ra["fp"], "relational_auc": ra["rel"],
               "conv2_auc": ra["conv2"], "conv3_auc": ra["conv3"]}

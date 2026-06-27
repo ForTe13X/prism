@@ -77,13 +77,14 @@ def rewired_coupling(g: dict) -> list:
     return out
 
 
-def labelled_bridges_xdom(seeds: list[str], *, control: str | None = None) -> list:
+def labelled_bridges_xdom(seeds: list[str], *, control: str | None = None, cal: dict | None = None) -> list:
     """Pool candidate bridges over seeds. ``control`` ∈ {None, 'rewire', 'distractor_only'}:
     'rewire' breaks the coupling (channels should fall to chance); 'distractor_only' keeps only bridges whose
-    BOTH endpoints are non-coupled anchors → a set with NO real bridges (any confident positive is false)."""
+    BOTH endpoints are non-coupled anchors → a set with NO real bridges (any confident positive is false).
+    ``cal`` (Track 1, §4b): optional real-data-calibrated marginals; None ⇒ frozen substrate."""
     out = []
     for sd in seeds:
-        g = generate_xdom(sd)
+        g = generate_xdom(sd, cal)
         if control == "rewire":
             bridges, _ = candidate_bridges_xdom(g, coupling=rewired_coupling(g))
         elif control == "distractor_only":
