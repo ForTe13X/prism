@@ -70,5 +70,22 @@ LLM 调用口(`backend/app/llm_client.py`)每次记 `{model, in_tok, out_tok, ca
 ## 10. 不要做(废数陷阱)
 - ❌ 稻草人 baseline(没人真用的"全塞 context");❌ 在 axiom 训练过的任务上测;❌ 忽略 build 成本只报每查询节省;❌ 降质量换成本却当 gain;❌ 单次跑、gain 落在噪声里;❌ 只报 token 不报 $/calls/quality。
 
+## 11. 实现状态(DP2,ablation 端到端首跑已落地)
+`backend/app/axiom_layer.py`(clean-room canonical 解析:异常锚定 + 别名归一,**不读 corruption_map**)+ `benchmark.py`(naive-RAG vs axiom-RAG,同模型同 prompt 只换上下文;token 插桩 + **冻结 fixture** 保证可复现)+ `GET /api/axiomgain/{id}`。LLM 调用走 `llm_client.structured_complete` 的 fixture 缓存。
+
+**首跑结果**(`logistics_demo`,4 held-out seeds × {qwen3-8b, gemma-12b-qat} × {dirt 0, 0.6};本地 $=0,故用 **tokens-per-correct**):
+
+| 模型 | 脏度 | naive-RAG F1 | axiom-RAG F1 | 输入 token 比 | tok/correct 比 |
+|---|---|---|---|---|---|
+| qwen3-8b | 0.0 | 0.92 | **1.00** | 0.41 | 0.45 |
+| qwen3-8b | 0.6 | 0.84 | **0.95** | 0.37 | 0.40 |
+| gemma-12b | 0.0 | 0.81 | **0.92** | 0.42 | 0.44 |
+| gemma-12b | 0.6 | 0.53 | **0.87** | 0.39 | 0.29 |
+
+- **H1 成立(首跑)**:axiom-RAG **质量≥naive 且输入 token ≈40%**(每正确答案省 55–71% token)。
+- **§6b robustness 成立**:**增益随脏度增长**(gemma +0.11→**+0.34**;naive 0.81→0.53 崩,axiom 0.92→0.87 稳)。
+- **H2 的诚实读法**:此处 gemma-12b 增益 > qwen-8b,但**因为 gemma 在 naive 上更差**(量化模型对原始跨源更吃力)——增益最大处=naive baseline 最弱处,与"参数量"不直接挂钩。
+- **诚实边界**:axiom 层**算法式(无训练)⇒ build 成本≈0、摊销平凡**(学习式 axiom-net 才有真 build 要摊);**小规模首跑**(无多 seed CI、无 $ 定价、单场景);naive-RAG 给的是真原始多源(非稻草人)。完整研究(跨模型矩阵 + CI + cost frontier + 真 build 摊销 + agentic 解析器 + 真实校准)是后续。
+
 ---
 *—— 研究设计锚。这是给在建会话的方法学参照,不是指令;建造的人说了算。*

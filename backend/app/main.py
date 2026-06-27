@@ -10,6 +10,7 @@ from __future__ import annotations
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
+from .benchmark_routes import benchmark_router
 from .compile_routes import compile_router
 from .data_synth import resolve_frame, resolve_temporal, synth_entity_rows, synth_graph
 from .datapackage_routes import datapackage_router
@@ -43,6 +44,10 @@ app.include_router(compile_router)
 # Cross-source data package (DP1): GET /api/datapackage[/...] — a deterministic, clean-room generator
 # of a heterogeneous multi-store dataset with pre-embedded ground-truth, for the axiom-gain benchmark.
 app.include_router(datapackage_router)
+
+# Axiom-gain ablation (DP2): GET /api/axiomgain/{source} — naive-RAG vs axiom-RAG on the cross-source
+# task (local LLM), served from frozen fixtures. See backend/app/benchmark.py + RESEARCH_axiom_gain.md.
+app.include_router(benchmark_router)
 
 
 @app.get("/api/health")

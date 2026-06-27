@@ -1,0 +1,17 @@
+{
+  "source_id": "logistics_demo",
+  "seeds": [
+    "ho-0",
+    "ho-1",
+    "ho-2",
+    "ho-3"
+  ],
+  "models": [
+    "qwen-3-8b-instruct",
+    "google/gemma-4-12b-qat"
+  ],
+  "dirts": [
+    0.0,
+    0.6
+  ]
+}

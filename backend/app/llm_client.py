@@ -18,12 +18,18 @@ FastAPI runs the blocking call in a threadpool.)
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 import os
+import pathlib
 import re
 import urllib.error
 import urllib.request
+
+# frozen, versioned LLM-output fixtures (RESEARCH_axiom_gain §7): the benchmark records each call here
+# so re-scoring is byte-reproducible and never calls the model live.
+_FIX = pathlib.Path(__file__).resolve().parent.parent / "benchmark_fixtures" / "llm_cache.json"
 
 _OPS = {">=", "<=", ">", "<"}
 _ACTIONS = {"shift", "pulse"}
@@ -187,6 +193,58 @@ def _system_prompt(attr: dict) -> str:
         f'{{"rules":[{{"when":{{"op":">=","value":{th.get("warn", round((lo+hi)/2,1))}}},'
         '"do":{"action":"shift","by":-0.15},"note":"near warn → ease off"}]}'
     )
+
+
+def _fix_load() -> dict:
+    try:
+        return json.loads(_FIX.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def _fix_save(cache: dict) -> None:
+    _FIX.parent.mkdir(parents=True, exist_ok=True)
+    _FIX.write_text(json.dumps(cache, ensure_ascii=False, indent=0, sort_keys=True), encoding="utf-8")
+
+
+def _fix_key(model: str, system: str, user: str, schema: dict) -> str:
+    blob = json.dumps([model, system, user, schema], ensure_ascii=False, sort_keys=True)
+    return hashlib.sha256(blob.encode("utf-8")).hexdigest()[:24]
+
+
+def structured_complete(system: str, user: str, schema: dict, model: str | None = None, *,
+                        use_fixture: bool = True, allow_live: bool = True) -> dict:
+    """Generic structured-output completion with token instrumentation + a frozen fixture cache.
+
+    Returns {ok, content (raw JSON str), usage {in,out}, model, cached} or {ok: False, error}. With a
+    fixture hit, NO live call is made (deterministic re-runs). Set allow_live=False to require fixtures.
+    """
+    mdl = model or resolve_model()
+    key = _fix_key(mdl, system, user, schema)
+    if use_fixture:
+        hit = _fix_load().get(key)
+        if hit:
+            return {"ok": True, "content": hit["content"], "usage": hit["usage"], "model": hit["model"], "cached": True}
+    if not allow_live:
+        return {"ok": False, "error": "no fixture and live disabled", "cached": False}
+    payload = {
+        "model": mdl,
+        "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
+        "temperature": 0, "max_tokens": 700,
+        "response_format": {"type": "json_schema", "json_schema": schema},
+    }
+    try:
+        resp = _post("/chat/completions", payload)
+        content = _extract_json((resp.get("choices") or [{}])[0].get("message", {}).get("content") or "")
+        usage = resp.get("usage") or {}
+        u = {"in": int(usage.get("prompt_tokens", 0)), "out": int(usage.get("completion_tokens", 0))}
+        rmodel = resp.get("model", mdl)
+        cache = _fix_load()
+        cache[key] = {"content": content, "usage": u, "model": rmodel}
+        _fix_save(cache)
+        return {"ok": True, "content": content, "usage": u, "model": rmodel, "cached": False}
+    except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError, ValueError, KeyError) as e:
+        return {"ok": False, "error": str(e), "cached": False}
 
 
 def compile_policy(attr: dict, nl: str) -> dict:

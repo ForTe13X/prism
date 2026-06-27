@@ -29,7 +29,7 @@ views + relations        选控件(仪表/趋势/徽章/…)        (UI = f(spec
 
 | 层 | 技术 | 职责 |
 | --- | --- | --- |
-| 后端 | **FastAPI (Python)** | 读 spec(`specs_loader`)+ 按 `semantic_type` **确定性合成**数据(`data_synth`,哈希种子、无随机);暴露 `/api/specs` `/api/spec/{id}` `/api/data/{id}/{entity}?frame=N` `/api/timeline/{id}` `/api/graph/{id}?frame=N` · `POST /api/sim/{id}`(轨迹仿真,`simulation`)· `POST /api/policy/{id}`(策略对比,`policy`)· `POST /api/compile/{id}` + `GET /api/llm/health`(LLM 编译,`llm_client`)· `GET /api/datapackage[/{id}[/discriminability]]`(跨源数据包,`data_package`) |
+| 后端 | **FastAPI (Python)** | 读 spec(`specs_loader`)+ 按 `semantic_type` **确定性合成**数据(`data_synth`,哈希种子、无随机);暴露 `/api/specs` `/api/spec/{id}` `/api/data/{id}/{entity}?frame=N` `/api/timeline/{id}` `/api/graph/{id}?frame=N` · `POST /api/sim/{id}`(轨迹仿真,`simulation`)· `POST /api/policy/{id}`(策略对比,`policy`)· `POST /api/compile/{id}` + `GET /api/llm/health`(LLM 编译,`llm_client`)· `GET /api/datapackage[/{id}[/discriminability]]`(跨源数据包,`data_package`)· `GET /api/axiomgain/{id}`(axiom-gain ablation,`benchmark`) |
 | 前端 | **Vite + React + TypeScript** | 取 spec → 由 `views` 生成 tab、由实体 `attributes` 生成面板、由 **widget resolver**(`widgets.tsx`)按 `semantic_type` 选控件 |
 
 > 后端不认识"管道"或"图书";`data_synth.py` 只认 `semantic_type`。把合成数据换成真实数据源,只需替换
@@ -98,7 +98,14 @@ npm run dev            # http://127.0.0.1:5173
 一条新主线的地基:一份**确定性、clean-room、spec 驱动**的异构数据包生成器,为"语义/公理层是否真比裸 RAG 强"的基准([`docs/RESEARCH_axiom_gain.md`](docs/RESEARCH_axiom_gain.md))供题。
 - 后端 `backend/app/data_package.py` + `GET /api/datapackage[/{id}[/discriminability]]`:读一份 `data_source` spec(`backend/data_sources/logistics_demo.json`),**先建 ground-truth『新闻事件 → 吞吐量异常 → 运单延误』,再让 SQL(运单/承运商/仓库)+ 时序(吞吐量)+ 新闻三源与真值一致**;SQL 可落成真 SQLite。
 - **两个旋钮(只动观测、留真值)**:`link_explicitness`(1 字面 id → 5 纯语义)与 `dirtiness`(别名/单位/缺失/时移/数值/乱码,记 `corruption_map`)。
-- **判别力骨架**:`naive`(字面单源)/ `linked`(跨源时空+实体联结)/ `oracle`(知真值)三解题器——link≥2 时 naive 失效、linked 仍可复原(任务确需跨源);脏度↑ linked 退化(鲁棒性曲线)。这是 axiom-gain ablation 的**确定性骨架**;LLM 版(naive-RAG vs axiom-RAG)是下一块。详见 [`docs/DESIGN_data_package.md`](docs/DESIGN_data_package.md)。
+- **判别力骨架**:`naive`(字面单源)/ `linked`(跨源时空+实体联结)/ `oracle`(知真值)三解题器——link≥2 时 naive 失效、linked 仍可复原(任务确需跨源);脏度↑ linked 退化(鲁棒性曲线)。这是 axiom-gain ablation 的**确定性骨架**。详见 [`docs/DESIGN_data_package.md`](docs/DESIGN_data_package.md)。
+
+## axiom-gain ablation · 本地 LLM(DP2)
+
+把上面的骨架接上真 LLM:**naive-RAG(原始多源)vs axiom-RAG(canonical 解析 + 预联结事实)**,同模型同 prompt 只换上下文。
+- 后端 `backend/app/axiom_layer.py`(clean-room 异常锚定 canonical 解析)+ `benchmark.py`(token 插桩 + **冻结 fixture** 可复现)+ `GET /api/axiomgain/{id}`(从 fixture 出报告,无需 live 模型)。
+- **首跑结果**(4 held-out seeds × {qwen3-8b, gemma-12b} × {dirt 0,0.6}):**axiom-RAG 质量≥naive 且输入 token≈40%**;**增益随脏度增长**(gemma 在 dirt0.6:naive 0.53 → axiom 0.87)。即 RESEARCH 的 H1 + §6b robustness 在首跑成立。
+- **诚实**:axiom 层算法式(无训练 ⇒ build≈0、摊销平凡);小规模首跑(无多 seed CI / $ 定价 / 多场景);naive 给真原始多源(非稻草人)。完整研究见 [`docs/RESEARCH_axiom_gain.md`](docs/RESEARCH_axiom_gain.md) §11。
 
 ## 预留 TODO(v0 之后)
 
