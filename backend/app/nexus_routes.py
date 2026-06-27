@@ -8,6 +8,7 @@ from fastapi import APIRouter, HTTPException
 from .data_package import load_source
 from .nexus_eval import discrimination_sweep, negative_controls, run_baseline_ladder
 from .nexus_lens_sem import run_sem_lens
+from .nexus_xdom_align import run_alignment, run_alignment_eval
 from .nexus_xdom_eval import run_convergence
 from .nexus_xdom_gate import run_gate
 from .nexus_xdom_view import bridge_view
@@ -72,3 +73,18 @@ def xdom_view(seed: str = "xe-0") -> dict:
     """Per-bridge nexus_confidence for ONE coupled package — the data the galaxy-collision visual renders.
     Only top-of-both-channels bridges light (high); the rest are ghosts (honest sparsity)."""
     return bridge_view(seed)
+
+
+@nexus_xdom_router.get("/align")
+def xdom_align(seed: str = "xe-0") -> dict:
+    """Sinkhorn alignment for ONE package — the iteration sequence (residual + transport snapshots) the
+    animated 'money moment' scrubs: the galaxies pull together as the residual converges, true bridges
+    ignite by transport mass. Animation == real alignment replay (DESIGN_visual_fusion §2)."""
+    return run_alignment(seed)
+
+
+@nexus_xdom_router.get("/align_eval")
+def xdom_align_eval() -> dict:
+    """Does the OT transport (global assignment + mutual exclusivity) recover the coupling better than the
+    per-bridge channels? Measured AUC of transport vs each single channel."""
+    return run_alignment_eval()
