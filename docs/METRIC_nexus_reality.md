@@ -57,5 +57,16 @@
 6. **合成外部效度**:合成高 AUC 不保真实域;真实域无 ground-truth → 只给相对排序 + 置换 p。
 7. **vanity 防线是承诺非保证**:多个隐藏旋钮客观可调;缓解(预注册冻结 + 跨实现一致性 + 硬闸)把"可悄悄调"降到"调了会被 null/一致性抓到",但旋钮存在,风险须如实记。
 
+## 8. 实现状态(M0 已落地:baseline 阶梯 + 一个决定性的诚实发现)
+`backend/app/nexus_substrate.py`(候选桥枚举:hub 异常 ±tol 内的 (news, hub) 对,eval 标签 real/coincidence 取自 `_truth_event`+events、**打分器永不可见**;负控:rewire / distractor-only)+ `nexus_baselines.py`(笨 baseline 阶梯:⭐time-coincidence / string-Jaccard / entity-mention / anomaly-depth)+ `nexus_eval.py`(tie-correct ROC-AUC、average precision、ECE,及 link 扫描 / 负控 runner;**≥40 seed 池化**——每包仅 ~2 正例,AUC 量子化步长 1/22,单包不可读)+ `GET /api/nexus/{id}/{baselines|sweep|controls}`。全确定性、role-generic(两域可跑)。
+
+**M0 的诚实发现(先量标杆,免得给自己配题 §5/§6c)**:在**现 substrate** 上,**time-coincidence baseline 在各 link(L1–L5)、各脏度(0–0.95)AUC 均近天花板(≈0.94–0.99)**。根因结构性:真桥**按构造即时间巧合**(news 帧 = 事件帧 = 异常帧,完美共线),而脏度只把 news 帧扰 ±1–2。⇒ **§5 字面要求的「L4–L5 严格超越 time-coincidence」在本 substrate 不可达**——时间戳即充分统计量。string baseline 如期:L1/L2≈1.0、**L3 仍靠 region 残留保持 ≈0.86**(`{kind}袭{region}` 仍泄漏 hub 名里的 region token)、**L4 才真崩(jaccard≈0.10)**、L5(端口字面)回升≈1.0;负控如期:rewire 时序信号跌破标杆、distractor-only 无真桥。
+
+**设计面板(13 agent、多人实测)与 M0 独立同证,并指出唯一诚实的正面通道**:不是「击败时间」(L4 不可能),而是**免时间的语义通道**——*去别名*(dealias)后的 token→hub 共现 `I_sem`(冻结 clean-vocab 表、**永不读帧**)。实测 `AUC(I_sem)`:L1=1.0、L2=1.0、L3=0.86、L5=0.86、**L4=0.36(诚实低于随机)**。真正可证伪的赢点 = **抗脏度**:d=0.5 时去别名 `I_sem` 守住 L1=1.0/L2=1.0,而*裸* string-Jaccard 跌到 0.95/0.70——**去别名 vs 裸串匹配的差距才是真结构内容**(冻结词表共现扛得住别名/乱码腐蚀,子串匹配扛不住)。ΔL/MDL 退为**诚实标尺**(Kraft 校准 `p=1−2^−ΔL`,把时间项 `L(n)` 单列、只给「超出时间的 bit」记功),非判别器。
+
+**诚实边界(承重,随 M0 数挂出)**:① **属性/记录残差通道在本 substrate 为零**——carrier/weight 按全局记录序号播种、**与 hub 无耦合**,每 hub 仅 0–2 延误记录,纯噪声,不可据此立论。② **「≥2/3 独立透镜」收敛效度在本 substrate 是戏**——ΔL_sem/CBBS/CACE 都读同一张 token 表,实为「一信号三读」而非三票;须明说,架构留待 Phase-B 真双域才有真独立性。③ 候选枚举用了**时间 candidacy-prior(±tol)**仅取「时间上邻近的硬负例」;面板的全笛卡尔(无时间预筛)只会让 time AUC 更高(混入平凡远负例),故 tol 集是**对「时间已解」更保守、更难**的度量——二者结论一致。
+
+**推论(指导 M1,绑死 §6c 反陷阱)**:要让透镜有意义,需引入**时间不可分的硬负例**(与真桥**同帧**却**无因果记录链**的 distractor 异常)。**但**(§6c 反陷阱警戒):该硬负例难度**必须由与三透镜无关的独立判据预注册**——co-timed 须经 oracle 验「确实时间不可分」**且**「record-link 缺失确可从观测复原」,**三透镜分数不得参与调难度**;否则「严格超越 time」将不可证伪(等于把任务配成只有所选透镜能分)。M1 路线(面板蓝图):先把 `I_sem` 语义透镜 + ΔL 校准 + **去别名 vs 裸串抗脏度**结果落地(这本身就是可发表的真赢点 + 诚实 L4 负结果),再谈硬负例与 CBBS/CACE 佐证。
+
 ---
 *—— 研究设计锚。这是给在建会话的方法学参照,不是指令;建造的人说了算。*
