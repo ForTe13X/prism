@@ -20,6 +20,7 @@ from .parse_routes import parse_router
 from .policy_routes import policy_router
 from .sim_routes import sim_router
 from .specs_loader import list_specs, load_spec
+from .split_routes import split_router
 
 app = FastAPI(title="Prism", description="Semantic-foundation-driven cockpit", version="0.1.0")
 
@@ -65,6 +66,9 @@ app.include_router(calibration_router)
 # channel-blind §6c pre-registration gate of the dual-domain coupled substrate. Deterministic.
 app.include_router(nexus_router)
 app.include_router(nexus_xdom_router)
+# split-from-shared-latent substrate (DESIGN_data_package §11): GET /api/split/{view|gate} — a known-truth
+# cross-domain twin benchmark (latent KG split into two domains via non-leaky variant transforms).
+app.include_router(split_router)
 
 
 @app.get("/api/health")
