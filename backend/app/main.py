@@ -11,9 +11,11 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from .benchmark_routes import benchmark_router
+from .calibration_routes import calibration_router
 from .compile_routes import compile_router
 from .data_synth import resolve_frame, resolve_temporal, synth_entity_rows, synth_graph
 from .datapackage_routes import datapackage_router
+from .parse_routes import parse_router
 from .policy_routes import policy_router
 from .sim_routes import sim_router
 from .specs_loader import list_specs, load_spec
@@ -48,6 +50,12 @@ app.include_router(datapackage_router)
 # Axiom-gain ablation (DP2): GET /api/axiomgain/{source} — naive-RAG vs axiom-RAG on the cross-source
 # task (local LLM), served from frozen fixtures. See backend/app/benchmark.py + RESEARCH_axiom_gain.md.
 app.include_router(benchmark_router)
+
+# §5 agentic parser: GET /api/parse/{source} — render a package messy, parse it back, report round-trip
+# recovery + observable failures. §4b calibration: GET /api/calibration — fit a mechanism from a
+# (synthetic-stand-in) reference's aggregates, re-sample, check held-out moments. Both deterministic.
+app.include_router(parse_router)
+app.include_router(calibration_router)
 
 
 @app.get("/api/health")
