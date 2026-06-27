@@ -8,6 +8,7 @@ from fastapi import APIRouter, HTTPException
 from .data_package import load_source
 from .nexus_eval import discrimination_sweep, negative_controls, run_baseline_ladder
 from .nexus_lens_sem import run_sem_lens
+from .nexus_xdom_eval import run_convergence
 from .nexus_xdom_gate import run_gate
 
 nexus_router = APIRouter(prefix="/api/nexus", tags=["nexus"])
@@ -55,3 +56,11 @@ def xdom_gate() -> dict:
     """Phase-B §6c PRE-REGISTRATION gate (channel-blind): an oracle recovers the cross-domain coupling while
     time/depth/string baselines are ~chance — so the difficulty is real before any channel scorer exists."""
     return run_gate()
+
+
+@nexus_xdom_router.get("/channels")
+def xdom_channels() -> dict:
+    """Phase-B.1: the two independent channels (shape = timeseries, fingerprint = SQL attrs) + the honest
+    convergence verdict on HELD-OUT seeds. The headline is a faithful near-miss: both clear the power floor
+    and are independent with a rewire-collapse, but convergence falls just short of the +0.05 clean-2/2 bar."""
+    return run_convergence()

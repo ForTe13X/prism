@@ -29,10 +29,13 @@ from .data_synth import _unit
 # FROZEN knobs (pre-registered difficulty; validated over >=60 seeds). The channel scorers (Phase-B.1) must
 # NOT import or tune these — difficulty is fixed channel-blind.
 # HONESTY (§6c reverse-trap): these were NOT frozen purely channel-blind — during design the shape/attr
-# constants (depth, half_width, attr_shift, records_per_unit) were explored WITH visibility of the probe
-# channel AUCs to ensure adequate power, so "the channels are informative" is engineered, not discovered.
-# The committed §6c GATE (nexus_xdom_gate, oracle vs baselines) IS channel-blind; what stays falsifiable is
-# channel INDEPENDENCE and the convergence MARGIN (neither was tuned). Phase-B.1 must not tune these further.
+# COUPLING/POWER constants (depth, attr_shift, records_per_unit, wiggle) were explored WITH visibility of the
+# probe channel AUCs to ensure adequate power, so "the channels are informative" is engineered, not
+# discovered. The committed §6c GATE (nexus_xdom_gate, oracle vs baselines) IS channel-blind; what stays
+# falsifiable is channel INDEPENDENCE and the convergence MARGIN (neither was tuned). Phase-B.1 must not tune
+# any of these. A channel scorer may read the BAND/WINDOW candidacy constants (band_lo/band_span/half_width)
+# — those are shared OBSERVATION context (the substrate's own _anchors detector uses them, not a coupling
+# secret) — but must NOT read the coupling/power constants (depth/attr_shift/records_per_unit/wiggle/base).
 KNOBS = {
     "n_units": 16, "frames": 64, "k_true": 10, "n_distractor": 14,
     "band_lo": 24, "band_span": 8, "n_cats": 6, "records_per_unit": 40,
