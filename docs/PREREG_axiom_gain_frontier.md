@@ -100,6 +100,38 @@ CIs** ⇒ a tiny wobble would flip that pair to a tie. The monotone flag is **ca
   the ~61% headline is model-independent, as predicted.
 - **No grid pruned.** The off-line point is kept and reported (it would have been tempting to drop it to
   preserve "monotone −1.0"); that would violate DON'T #4.
+
+## Genuine frontier point — GPT-5.5 (browser-captured, 2026-06-28) — **H2a CONFIRMED**
+
+The local candidates topped out at naive F1 0.81 (not actually frontier). With no frontier API, the user
+drove a **GPT-5.5** session (ChatGPT web, "极速"/fast = low thinking effort) via the Chrome MCP to obtain a
+genuinely-more-capable point. Slice: **dirt 0.6, 4 seeds (naive) + an axiom check** (browser-driving is slow,
+so a small honest sample).
+
+| model | naive F1 (dirt 0.6) | axiom F1 | quality gain |
+|---|---|---|---|
+| gemma-12b | 0.532 | — | 0.271 |
+| qwen3.6-35b-a3b | 0.715 | — | 0.193 |
+| qwen3-8b | 0.751 | — | 0.156 |
+| gemma-31b | 0.777 | — | 0.130 |
+| **GPT-5.5 (frontier)** | **0.950** | **≈1.0** | **≈ 0.00** |
+
+- **H2a CONFIRMED at the frontier.** GPT-5.5 has the **highest** naive F1 (0.950 — it does the cross-source
+  resolution itself, e.g. ho-0/ho-1/ho-3 = 1.0; ho-2 = 0.8 only because a true shipment was dirt-NULLED and
+  it correctly refused to hallucinate it) and the **smallest** quality gain (≈ 0 — the axiom context just
+  hands it an answer it already produces). The registered Confirm rule (*frontier ΔF1 ≤ gemma-31b's 0.108*)
+  is **met** (≈0.00 ≤ 0.108). The structured-foundation **QUALITY** benefit **vanishes** at frontier
+  capability — exactly H2a, now at a point that is genuinely more capable (unlike the qwen3.6 interior point).
+- **H2b NOT measured here (and that's the honest gap).** The web UI exposes no token counts, so GPT-5.5's
+  token *saving* is not measured. It is **structural** (the axiom context is ~40% the size regardless of
+  model), so the ~61% saving would still apply — but for GPT-5.5 it would buy **token savings with ~no
+  quality change**, which is the most useful honest framing of the whole H2 result.
+- **Honesty caveats (loud).** Browser-captured from "ChatGPT GPT-5.5 极速 as of 2026-06-28", **not** API:
+  one-off, **not** re-runnable against a pinned model (recorded values only, not frozen as fixtures);
+  **no token counts**; **small sample** (dirt 0.6, 4 naive + 1 axiom); prompt newlines were flattened to
+  spaces and one mojibake *distractor* per cell un-garbled (distractors don't affect the answer); this row
+  is NOT in the protocol matrix/fixtures (it can't be reproduced offline) — it lives here as a disclosed
+  manual measurement. The local API rows remain the reproducible record.
 - **No silent grid-pruning (DON'T #4/§15).** If the frontier cell shows *no* gain, it is **kept and reported**
   (a confirmed H2a, the predicted outcome) — never deleted to preserve a prettier headline.
 - **Win either way.** Confirm ⇒ a real cross-capability result (the structural 61% survives; the quality

@@ -136,5 +136,20 @@ LLM 调用口(`backend/app/llm_client.py`)每次记 `{model, in_tok, out_tok, ca
 - **H2b:确认**。新模型 token 省 0.634,spread 仍 **0.025 < 0.05**(结构性持平);头条「省 ~61%」**与模型无关**,如预测。
 - **不删格**:这个离线点**保留并报**(删了能保「单调 −1.0」更好看,但那违反 DON'T #4)。复跑:`run_protocol(models=PROTO_MODELS+['qwen/qwen3.6-35b-a3b'])`。前置 harness 修:qwen3.6 是推理模型、LM Studio 把 json_schema 答案塞进 `reasoning_content`(`content` 空)⇒ `llm_client` 加了 content-空时回退 `reasoning_content` + 慢模型 `timeout` 透传。
 
+### 11e. **真前沿点(GPT-5.5,浏览器抓取)——H2a 在前沿被确认**
+本地候选 naive F1 封顶 0.81(非真前沿)。无前沿 API,故用 Chrome MCP 驱动一个 **GPT-5.5**(ChatGPT web,「极速」= low thinking)会话取一个**确实更强**的点。切片 **脏度 0.6,4 seed(naive)+ 1 axiom 校验**(浏览器驱动慢,诚实小样本)。
+
+| 模型(脏度 0.6) | 能力(naive F1) | 质量增益 ΔF1 |
+|---|---|---|
+| gemma-12b | 0.532 | 0.271 |
+| qwen3.6-35b-a3b | 0.715 | 0.193 |
+| qwen3-8b | 0.751 | 0.156 |
+| gemma-31b | 0.777 | 0.130 |
+| **GPT-5.5(前沿)** | **0.950** | **≈ 0.00** |
+
+- **H2a 在前沿确认**。GPT-5.5 **naive F1 最高(0.950**——它自己就完成跨源解析:ho-0/1/3 = 1.0;ho-2 = 0.8 仅因一条真发货被脏度 NULL 掉、它**正确地拒绝幻觉**它**)且质量增益最小(≈ 0**——axiom 上下文只是把它已能产出的答案递给它)。预注册 Confirm 规则(前沿 ΔF1 ≤ gemma-31b 的 0.108)**满足**(≈0.00 ≤ 0.108)。**结构化语义底座的「质量」红利在前沿能力处消失**——正是 H2a,而且这次是真更强的点(不像 qwen3.6 那个内点)。
+- **H2b 此处未测(诚实缺口)**。web UI 无 token 计数 ⇒ GPT-5.5 的 token 省**没测**。它是**结构性的**(axiom 上下文恒约 40% 大小),故 ~61% 仍应成立——但对 GPT-5.5 而言它买到的是**token 省 + 质量几乎不变**,这是整个 H2 结果最有用的诚实表述。
+- **诚实警示(放大声)**:取自「ChatGPT GPT-5.5 极速 @ 2026-06-28」的**浏览器抓取**、**非 API**:一次性、**不能对固定模型复跑**(仅记录值,未冻为 fixture);**无 token 计数**;**小样本**(脏度 0.6、4 naive + 1 axiom);prompt 换行被压成空格、每格一个 mojibake **干扰项**被还原(干扰项不影响答案);**该行不进 protocol 矩阵/fixtures**(离线不可复现)——它作为**已披露的手测**留在文档里。本地 API 行仍是可复现记录。详见 [`docs/PREREG_axiom_gain_frontier.md`](PREREG_axiom_gain_frontier.md)。
+
 ---
 *—— 研究设计锚。这是给在建会话的方法学参照,不是指令;建造的人说了算。*
