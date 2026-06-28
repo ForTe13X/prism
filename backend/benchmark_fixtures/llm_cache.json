@@ -119,6 +119,14 @@
 "out": 133
 }
 },
+"1187cc3508199884e1df547e": {
+"content": "{\n    \"answer\": []\n}",
+"model": "qwen-3-8b-instruct",
+"usage": {
+"in": 3498,
+"out": 8
+}
+},
 "189b8611b9c30d8255496705": {
 "content": "{\n  \"answer\": [\n    {\n      \"news_id\": \"NEWS-001\",\n      \"shipment_ids\": [\n        \"SHP-0008\",\n        \"SHP-0011\"\n      ]\n    },\n    {\n      \"news_id\": \"NEWS-002\",\n      \"shipment_ids\": [\n        \"SHP-0021\"\n      ]\n    }\n  ]\n}",
 "model": "google/gemma-4-31b-qat",
@@ -141,6 +149,14 @@
 "usage": {
 "in": 548,
 "out": 100
+}
+},
+"1eb3aa54dd41cdc8ac174978": {
+"content": "{\n    \"answer\": []\n}",
+"model": "qwen-3-8b-instruct",
+"usage": {
+"in": 3491,
+"out": 8
 }
 },
 "1f283ef3bb245673d048c297": {
@@ -173,6 +189,14 @@
 "usage": {
 "in": 521,
 "out": 113
+}
+},
+"2374b0239285fa621a45e3bb": {
+"content": "{\"answer\": [{\"a_id\": \"AX-001\", \"b_tags\": [\"scroll\", \"essay\", \"folio\", \"score\"]}, {\"a_id\": \"AX-002\", \"b_tags\": [\"scroll\", \"manual\", \"fiction\", \"vellum\"]}, {\"a_id\": \"AX-003\", \"b_tags\": [\"poetry\", \"score\", \"drama\", \"vellum\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"essay\", \"atlas\", \"fiction\", \"vellum\"]}, {\"a_id\": \"005\", \"b_tags\": [\"atlas\", \"folio\", \"score\", \"drama\"]}, {\"a_id\": \"AX-005\", \"b_tags\": [\"atlas\", \"folio\", \"score\", \"drama\"]}, {\"a_id\": \"AX-006\", \"b_tags\": [\"atlas\", \"fiction\", \"quire\", \"codex\"]}, {\"a_id\": \"AX-007\", \"b_tags\": [\"manual\", \"folio\", \"poetry\", \"quire\"]}, {\"a_id\": \"AX-008\", \"b_tags\": [\"essay\", \"folio\", \"quire\", \"vellum\"]}, {\"a_id\": \"AX-009\", \"b_tags\": [\"fiction\", \"codex\", \"drama\", \"vellum\"]}, {\"a_id\": \"AX-010\", \"b_tags\": [\"scroll\", \"manual\", \"score\", \"codex\"]}, {\"a_id\": \"AX-011\", \"b_tags\": [\"essay\", \"folio\", \"quire\", \"score\"]}, {\"a_id\": \"AX-012\", \"b_tags\": [\"atlas\", \"folio\", \"score\", \"codex\"]}, {\"a_id\": \"AX-013\", \"b_tags\": [\"scroll\", \"poetry\", \"quire\", \"vellum\"]}, {\"a_id\": \"AX-014\", \"b_tags\": [\"essay\", \"manual\", \"poetry\", \"drama\"]}, {\"a_id\": \"AX-015\", \"b_tags\": [\"scroll\", \"essay\", \"folio\", \"vellum\"]}, {\"a_id\": \"AX-016\", \"b_tags\": [\"fiction\", \"quire\", \"drama\", \"vellum\"]}, {\"a_id\": \"AX-017\", \"b_tags\": [\"folio\", \"poetry\", \"quire\", \"codex\"]}, {\"a_id\": \"AX-018\", \"b_tags\": [\"scroll\", \"folio\", \"codex\", \"vellum\"]}, {\"a_id\": \"AX-019\", \"b_tags\": [\"scroll\", \"fiction\", \"codex\", \"vellum\"]}, {\"a_id\": \"AX-020\", \"b_tags\": [\"scroll\", \"atlas\", \"poetry\", \"score\"]}, {\"a_id\": \"AX-021\", \"b_tags\": [\"essay\", \"folio\", \"poetry\", \"quire\"]}, {\"a_id\": \"AX-022\", \"b_tags\": [\"manual\", \"quire\", \"score\", \"codex\"]}, {\"a_id\": \"AX-023\", \"b_tags\": [\"essay\", \"manual\", \"atlas\", \"folio\"]}, {\"a_id\": \"AX-024\", \"b_tags\": [\"scroll\", \"atlas\", \"score\", \"drama\"]}, {\"a_id\": \"AX-025\", \"b_tags\": [\"atlas\", \"folio\", \"score\", \"codex\"]}, {\"a_id\": \"AX-026\", \"b_tags\": [\"scroll\", \"fiction\", \"score\", \"vellum\"]}, {\"a_id\": \"AX-027\", \"b_tags\": [\"essay\", \"manual\", \"quire\", \"drama\"]}, {\"a_id\": \"AX-028\", \"b_tags\": [\"scroll\", \"fiction\", \"score\", \"vellum\"]}, {\"a_id\": \"AX-029\", \"b_tags\": [\"scroll\", \"fiction\", \"codex\", \"vellum\"]}, {\"a_id\": \"AX-030\", \"b_tags\": [\"scroll\", \"atlas\", \"poetry\", \"score\"]}, {\"a_id\": \"AX-031\", \"b_tags\": [\"scroll\", \"essay\", \"folio\", \"score\"]}, {\"a_id\": \"AX-032\", \"b_tags\": [\"scroll\", \"manual\", \"fiction\", \"vellum\"]}, {\"a_id\": \"AX-033\", \"b_tags\": [\"poetry\", \"score\", \"drama\", \"vellum\"]}, {\"a_id\": \"AX-034\", \"b_tags\": [\"essay\", \"atlas\", \"fiction\", \"vellum\"]}, {\"a_id\": \"AX-035\", \"b_tags\": [\"atlas\", \"folio\", \"score\", \"drama\"]}, {\"a_id\": \"AX-036\", \"b_tags\": [\"atlas\", \"fiction\", \"quire\", \"codex\"]}, {\"a_id\": \"AX-037\", \"b_tags\": [\"manual\", \"folio\", \"poetry\", \"quire\"]}, {\"a_id\": \"AX-038\", \"b_tags\": [\"essay\", \"folio\", \"quire\", \"vellum\"]}, {\"a_id\": \"AX-039\", \"b_tags\": [\"fiction\", \"codex\", \"drama\", \"vellum\"]}, {\"a_id\": \"AX-040\", \"b_tags\": [\"scroll\", \"manual\", \"score\", \"codex\"]}, {\"a_id\": \"004\", \"b_tags\": [\"essay\", \"folio\", \"quire\", \"score\"]}, {\"a_id\": \"AX-041\", \"b_tags\": [\"atlas\", \"folio\", \"004\", \"codex\"]}, {\"a_id\": \"AX-042\", \"b_tags\": [\"scroll\", \"poetry\", \"quire\", \"vellum\"]}, {\"a_id\": \"AX-043\", \"b_tags\": [\"essay\", \"manual\", \"poetry\", \"drama\"]}, {\"a_id\": \"AX-044\", \"b_tags\": [\"scroll\", \"essay\", \"folio\", \"vellum\"]}, {\"a_id\": \"AX-045\", \"b_tags\": [\"fiction\", \"quire\", \"drama\", \"vellum\"]}, {\"a_id\": \"AX-046\", \"b_tags\": [\"folio\", \"poetry\", \"quire\", \"codex\"]}, {\"a_id\": \"AX-047\", \"b_tags\": [\"scroll\", \"folio\", \"codex\", \"vellum\"]}, {\"a_id\": \"AX-048\", \"b_tags\": [\"scroll\", \"fiction\", \"codex\", \"vellum\"]}, {\"a_id\": \"AX",
+"model": "google/gemma-4-12b-qat",
+"usage": {
+"in": 3535,
+"out": 1500
 }
 },
 "23a288a7c50027dd0cbaad50": {
@@ -215,6 +239,22 @@
 "out": 69
 }
 },
+"2a3da4559e03fbb05ff6dd60": {
+"content": "{\"answer\": []}",
+"model": "google/gemma-4-12b-qat",
+"usage": {
+"in": 3550,
+"out": 7
+}
+},
+"2b1f970171ec7a7b5bc88592": {
+"content": "{\n    \"answer\": []\n}",
+"model": "qwen-3-8b-instruct",
+"usage": {
+"in": 3492,
+"out": 8
+}
+},
 "2c2d5204c2c8b901bd176feb": {
 "content": "{\"answer\": [{\"news_id\": \"NEWS-001\", \"shipment_ids\": [\"SHP-0011\"]}, {\"news_id\": \"NEWS-002\", \"shipment_ids\": [\"SHP-0023\"]}]}",
 "model": "google/gemma-4-12b-qat",
@@ -239,12 +279,28 @@
 "out": 100
 }
 },
+"31f3c9fef476bb6958ddca8f": {
+"content": "{\"answer\": [{\"a_id\": \"AX-003\", \"b_tags\": [\"bmc\", \"core\", \"rack\", \"zone\"]}, {\"a_id\": \"AX-005\", \"b_tags\": [\"bmc\", \"tor\", \"rack\", \"zone\"]}, {\"a_id\": \"AX-007\", \"b_tags\": [\"bmc\", \"leaf\", \"psu\", \"pdu\"]}, {\"a_id\": \"AX-008\", \"b_tags\": [\"leaf\", \"psu\", \"spine\", \"pdu\"]}, {\"a_id\": \"AX-010\", \"b_tags\": [\"nic\", \"core\", \"psu\", \"zone\"]}, {\"a_id\": \"AX-011\", \"b_tags\": [\"bmc\", \"blade\", \"tor\", \"rack\"]}, {\"a_id\": \"AX-012\", \"b_tags\": [\"bmc\", \"blade\", \"core\", \"rack\"]}, {\"a_id\": \"AX-013\", \"b_tags\": [\"vlan\", \"core\", \"pdu\", \"zone\"]}, {\"a_id\": \"AX-014\", \"b_tags\": [\"vlan\", \"core\", \"psu\", \"zone\"]}, {\"a_id\": \"AX-015\", \"b_tags\": [\"leaf\", \"nic\", \"psu\", \"spine\"]}, {\"a_id\": \"AX-016\", \"b_tags\": [\"bmc\", \"pdu\", \"rack\", \"zone\"]}, {\"a_id\": \"AX-017\", \"b_tags\": [\"bmc\", \"blade\", \"core\", \"zone\"]}, {\"a_id\": \"AX-018\", \"b_tags\": [\"core\", \"psu\", \"spine\", \"zone\"]}, {\"a_id\": \"AX-019\", \"b_tags\": [\"core\", \"tor\", \"spine\", \"rack\"]}, {\"a_id\": \"AX-020\", \"b_tags\": [\"bmc\", \"tor\", \"spine\", \"rack\"]}, {\"a_id\": \"axis-021\", \"b_tags\": [\"nic\", \"psu\", \"tor\", \"rack\"]}, {\"a_id\": \"AX-022\", \"b_tags\": [\"bmc\", \"leaf\", \"core\", \"pdu\"]}, {\"a_id\": \"AX-023\", \"b_tags\": [\"psu\", \"tor\", \"spine\", \"pdu\"]}, {\"a_id\": \"AX-024\", \"b_tags\": [\"bmc\", \"vlan\", \"core\", \"psu\"]}, {\"a_id\": \"AX-025\", \"b_tags\": [\"leaf\", \"nic\", \"vlan\", \"tor\"]}, {\"a_id\": \"AX-026\", \"b_tags\": [\"blade\", \"nic\", \"tor\", \"zone\"]}, {\"a_id\": \"AX-001\", \"b_tags\": [\"leaf\", \"vlan\", \"core\", \"zone\"]}, {\"a_id\": \"AX-002\", \"b_tags\": [\"psu\", \"spine\", \"rack\", \"zone\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"vlan\", \"core\", \"tor\", \"zone\"]}, {\"a_id\": \"AX-006\", \"b_tags\": [\"blade\", \"vlan\", \"psu\", \"rack\"]}, {\"a_id\": \"AX-009\", \"b_tags\": [\"blade\", \"core\", \"psu\", \"rack\"]}, {\"a_id\": \"000-AX\", \"b_tags\": [\"leaf\", \"spine\", \"pdu\", \"rack\"]}, {\"a_id\": \"AX-000\", \"b_tags\": [\"leaf\", \"spine\", \"pdu\", \"rack\"]}, {\"a_id\": \"AX-013\", \"b_tags\": [\"vlan\", \"core\", \"pdu\", \"zone\"]}, {\"a_id\": \"AX-014\", \"b_tags\": [\"000-AX\", \"000-AX\", \"000-AX\", \"000-AX\"]}, {\"a_id\": \"AX-014\", \"b_tags\": [\"vlan\", \"core\", \"psu\", \"zone\"]}, {\"a_id\": \"AX-015\", \"b_tags\": [\"leaf\", \"nic\", \"psu\", \"spine\"]}, {\"a_id\": \"AX-016\", \"b_tags\": [\"bmc\", \"pdu\", \"rack\", \"zone\"]}, {\"a_id\": \"AX-017\", \"b_tags\": [\"bmc\", \"blade\", \"core\", \"zone\"]}, {\"a_id\": \"AX-018\", \"b_tags\": [\"core\", \"psu\", \"spine\", \"zone\"]}, {\"a_id\": \"AX-019\", \"b_tags\": [\"core\", \"tor\", \"spine\", \"rack\"]}, {\"a_id\": \"AX-020\", \"b_tags\": [\"bmc\", \"tor\", \"spine\", \"rack\"]}, {\"a_id\": \"AX-021\", \"b_tags\": [\"nic\", \"psu\", \"tor\", \"rack\"]}, {\"a_id\": \"AX-022\", \"b_tags\": [\"bmc\", \"hall\", \"core\", \"pdu\"]}, {\"a_id\": \"AX-023\", \"b_tags\": [\"psu\", \"tor\", \"spine\", \"pdu\"]}, {\"a_id\": \"AX-024\", \"b_tags\": [\"bmc\", \"vlan\", \"core\", \"psu\"]}, {\"a_id\": \"AX-025\", \"b_tags\": [\"leaf\", \"nic\", \"vlan\", \"tor\"]}, {\"a_id\": \"AX-026\", \"b_tags\": [\"blade\", \"nic\", \"tor\", \"zone\"]}, {\"a_id\": \"AX-000\", \"b_tags\": [\"leaf\", \"spine\", \"pdu\", \"rack\"]}, {\"a_id\": \"AX-001\", \"b_tags\": [\"leaf\", \"vlan\", \"core\", \"zone\"]}, {\"a_id\": \"AX-002\", \"b_tags\": [\"psu\", \"spine\", \"rack\", \"zone\"]}, {\"a_id\": \"AX-003\", \"b_tags\": [\"bmc\", \"core\", \"rack\", \"zone\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"vlan\", \"core\", \"tor\", \"zone\"]}, {\"a_id\": \"AX-005\", \"b_tags\": [\"bmc\", \"tor\", \"rack\", \"zone\"]}, {\"a_id\": \"AX-006\", \"b",
+"model": "google/gemma-4-12b-qat",
+"usage": {
+"in": 3515,
+"out": 1500
+}
+},
 "326cd2bd83e1ddfa26b2ec1e": {
 "content": "{\"answer\": [{\"news_id\": \"NEWS-002\", \"shipment_ids\": [\"SHP-0024\"]}, {\"news_id\": \"NEWS-001\", \"shipment_ids\": [\"SHP-0017\"]}]}",
 "model": "google/gemma-4-12b-qat",
 "usage": {
 "in": 579,
 "out": 68
+}
+},
+"3549567ba4b5fc3e1d69a9fe": {
+"content": "{\n    \"answer\": []\n}",
+"model": "qwen-3-8b-instruct",
+"usage": {
+"in": 3479,
+"out": 8
 }
 },
 "377da4804f6e2364e5165ac8": {
@@ -287,6 +343,22 @@
 "out": 88
 }
 },
+"3bb12899f625efeaef325550": {
+"content": "{\"answer\": [{\"a_id\": \"AX-001\", \"b_tags\": [\"codex\", \"fiction\", \"poetry\", \"vellum\"]}, {\"a_id\": \"AX-003\", \"b_tags\": [\"drama\", \"folio\", \"quire\", \"scroll\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"codex\", \"fiction\", \"folio\", \"poetry\"]}, {\"a_id\": \"005\", \"b_tags\": [\"codex\", \"manual\", \"poetry\", \"vellum\"]}, {\"a_id\": \"AX-010\", \"b_tags\": [\"codex\", \"manual\", \"score\", \"scroll\"]}, {\"a_id\": \"AX-011\", \"b_tags\": [\"a_id\", \"drama\", \"manual\", \"poetry\", \"score\"]}, {\"a_id\": \"AX-012\", \"b_tags\": [\"atlas\", \"fiction\", \"folio\", \"scroll\"]}, {\"a_id\": \"id\", \"b_tags\": [\"atlas\", \"essay\", \"manual\", \"poetry\"]}, {\"a_id\": \"AX-016\", \"b_tags\": [\"atlas\", \"essay\", \"manual\", \"poetry\"]}, {\"a_id\": \"AX-019\", \"b_tags\": [\"codex\", \"folio\", \"manual\", \"quire\"]}, {\"a_id\": \"AX-020\", \"b_tags\": [\"codex\", \"fiction\", \"poetry\", \"scroll\"]}, {\"a_id\": \"AX-021\", \"b_tags\": [\"codex\", \"drama\", \"score\", \"vellum\"]}, {\"a_id\": \"AX-024\", \"b_tags\": [\"poetry\", \"quire\", \"score\", \"scroll\"]}, {\"a_id\": \"AX-025\", \"b_tags\": [\"codex\", \"poetry\", \"scroll\", \"vellum\"]}, {\"a_id\": \"AX-029\", \"b_tags\": [\"atlas\", \"drama\", \"folio\", \"score\"]}, {\"a_id\": \"AX-011\", \"b_tags\": [\"drama\", \"manual\", \"poetry\", \"score\"]}, {\"a_id\": \"AX-011\", \"b_tags\": [\"a_id\", \"drama\", \"manual\", \"poetry\", \"score\"]}, {\"a_id\": \"AX-011\", \"b_tags\": [ \"codex\", \"fiction\", \"poetry\", \"vellum\" ]}, {\"a_id\": \"AX-011\", \"b_tags\": [ \"codex\", \"fiction\", \"poetry\", \"vellum\" ]}, {\"a_id\": \"AX-011\", \"b_tags\": [ \"codex\", \"fiction\", \"poetry\", \"vellum\" ]}, {\"a_id\": \"AX-011\", \"b_tags\": [ \"codex\", \"fiction\", \"poetry\", \"vellum\" ]}, {\"a_id\": \"AX-011\", \"b_tags\": [ \"codex\", \"fiction\", \"poetry\", \"vellum\" ]}, {\"a_id\": \"AX-011\", \"b_tags\": [ \"codex\", \"fiction\", \"poetry\", \"vellum\" ]}, {\"a_id\": \"AX-011\", \"b_tags\": [ \"codex\", \"fiction\", \"poetry\", \"vellum\" ]}, {\"a_id\": \"AX-011\", \"b_tags\": [ \"codex\", \"fiction\", \"poetry\", \"vellum\"]}\n    ]}",
+"model": "google/gemma-4-12b-qat",
+"usage": {
+"in": 552,
+"out": 805
+}
+},
+"3c3509c16152a840977baeb3": {
+"content": "{\"answer\": [{\"a_id\": \"AX-001\", \"b_tags\": [\"fiction\", \"manual\", \"score\", \"scroll\"]}, {\"a_id\": \"AX-002\", \"b_tags\": [\"drama\", \"poetry\", \"quire\", \"score\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"fiction\", \"folio\", \"vellum\"]}, {\"a_id\": \"AX-005\", \"b_tags\": [\"atlas\", \"fiction\", \"poetry\", \"scroll\"]}, {\"a_id\": \"AX-006\", \"b_tags\": [\"atlas\", \"fiction\", \"folio\", \"manual\"]}, {\"a_id\": \"AX-011\", \"b_tags\": [\"codex\", \"drama\", \"quire\", \"vellum\"]}, {\"a_id\": \"AX-012\", \"b_tags\": [\"codex\", \"drama\", \"folio\", \"vellum\"]}, {\"a_id\": \"AX-014\", \"b_tags\": [\"drama\", \"fiction\", \"folio\", \"manual\"]}, {\"a_id\": \"AX-015\", \"b_tags\": [\"fiction\", \"manual\", \"score\", \"vellum\"]}, {\"a_id\": \"AX-017\", \"b_tags\": [\"codex\", \"essay\", \"score\", \"vellum\"]}, {\"a_id\": \"AX-021\", \"b_tags\": [\"atlas\", \"codex\", \"folio\", \"vellum\"]}, {\"a_id\": \"AX-023\", \"b_tags\": [\"fiction\", \"poetry\", \"scroll\", \"vellum\"]}, {\"a_id\": \"AX-026\", \"b_tags\": [\"atlas\", \"manual\", \"poetry\", \"score\"]}, {\"a_id\": \"AX-027\", \"b_tags\": [\"fiction\", \"folio\", \"poetry\", \"scroll\"]}, {\"a_id\": \"AX-028\", \"b_tags\": [\"thought\", \"essay\", \"poetry\", \"score\"]}, {\"a_id\": \"AX-029\", \"b_tags\": [\"thought\", \"essay\", \"poetry\", \"score\"]}, {\"a_id\": \"AX-030\", \"b_tags\": [\"codex\", \"essay\", \"score\", \"vellum\"]}, {\"a_id\": \"AX-031\", \"b_tags\": [\"thought\", \"essay\", \"poetry\", \"score\"]}, {\"a_id\": \"AX-032\", \"b_tags\": [\"atlas\", \"fiction\", \"folio\", \"vellum\"]}, {\"a_id\": \"AX-033\", \"b_tags\": [\"atlas\", \"fiction\", \"folio\", \"vellum\"]}, {\"a_id\": \"AX-034\", \"b_tags\": [\"atlas\", \"fiction\", \"folio\", \"vellum\"]}, {\"a_id\": \"AX-035\", \"b_tags\": [\"atlas\", \"fiction\", \"folio\", \"vellum\"]}, {\"a_id\": \"AX-036\", \"b_tags\": [\"atlas\", \"fiction\", \"folio\", \"vellum\"]}, {\"a_id\": \"AX-037\", \"b_tags\": [\"atlas\", \"fiction\", \"folio\", \"vellum\"]}, {\"a_id\": \"AX-038\", \"b_tags\": [\"atlas\", \"fiction\", \"folio\", \"vellum\"]}, {\"a_id\": \"AX-039\", \"b_tags\": [\"atlas\", \"fiction\", \"folio\", \"vellum\"]}, {\"a_id\": \"AX-040\", \"b_tags\": [\"atlas\", \"fiction\", \"folio\", \"vellum\"]}, {\"a_id\": \"AX-041\", \"b_tags\": [\"atlas\", \"fiction\", \"folio\", \"vellum\"]}, {\"a_id\": \"001\", \"b_tags\": [\"fiction\", \"manual\", \"score\", \"scroll\"]}, {\"a_id\": \"AX-001\", \"b_tags\": [\"fiction\", \"manual\", \"score\", \"scroll\"]}, {\"a_id\": \"AX-002\", \"b_tags\": [\"drama\", \"poetry\", \"quire\", \"score\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"fiction\", \"folio\", \"vellum\"]}, {\"a_id\": \"001\", \"b_tags\": [\"fiction\", \"manual\", \"score\", \"scroll\"]}, {\"a_id\": \"AX-005\", \"b_tags\": [\"atlas\", \"fiction\", \"poetry\", \"scroll\"]}, {\"a_id\": \"AX-006\", \"b_tags\": [\"atlas\", \"fiction\", \"folio\", \"manual\"]}, {\"a_id\": \"AX-011\", \"b_tags\": [\"codex\", \"drama\", \"quire\", \"vellum\"]}, {\"a_id\": \"AX-012\", \"b_tags\": [\"codex\", \"drama\", \"folio\", \"vellum\"]}, {\"a_id\": \"AX-014\", \"b_tags\": [\"drama\", \"fiction\", \"folio\", \"manual\"]}, {\"a_id\": \"AX-015\", \"b_tags\": [\"erased\", \"fiction\", \"manual\", \"score\", \"vellum\"]}, {\"a_id\": \"AX-017\", \"b_tags\": [\"codex\", \"essay\", \"score\", \"vellum\"]}, {\"a_id\": \"AX-021\", \"b_tags\": [\"atlas\", \"codex\", \"folio\", \"vellum\"]}, {\"a_id\": \"AX-023\", \"b_tags\": [\"fiction\", \"poetry\", \"scroll\", \"vellum\"]}, {\"a_id\": \"AX-026\", \"b_tags\": [\"atlas\", \"manual\", \"poetry\", \"score\"]}, {\"a_id\": \"AX-027\", \"b_tags\": [\"fiction\", \"folio\", \"poetry\", \"scroll\"]}, {\"a_id\": \"AX-028\", \"b_tags\": [\"thought\", \"essay\", \"thought\", \"score\"]}, {\"a_id\": \"AX-029\", \"b_tags\": [\"thought\", \"essay\", \"thought\", \"score\"]}, {\"a_id\": \"AX-030\", \"b_tags\": [\"codex\", \"essay\", \"score\", \"vellum\"]}, {\"a_id\": \"AX-031\", \"b_tags\": [\"thought\", \"essay\", \"thought\", \"score\"]}, {\"a_id\": \"001\", \"b_tags\": [\"fiction\", \"manual\", \"score\", \"scroll\"]}, {\"a_id\": \"AX-001\", \"b_tags\": [\"fiction\", \"001\", \"score\", \"scroll\"]}, {\"a_id\": \"AX-",
+"model": "google/gemma-4-12b-qat",
+"usage": {
+"in": 605,
+"out": 1500
+}
+},
 "3d05dcb9d3683786ccbe21ca": {
 "content": "{\"answer\": [{\"news_id\": \"NEWS-002\", \"shipment_ids\": [\"SHP-0008\"]}, {\"news_id\": \"NEWS-001\", \"shipment_ids\": [\"SHP-0004\"]}]}",
 "model": "google/gemma-4-12b-qat",
@@ -309,6 +381,14 @@
 "usage": {
 "in": 243,
 "out": 78
+}
+},
+"409e23bfa6f650f8816212f4": {
+"content": "{\n  \"answer\": [\n    {\"a_id\": \"AX-001\", \"b_tags\": [\"codex\", \"fiction\", \"poetry\", \"vellum\"]},\n    {\"a_id\": \"AX-003\", \"b_tags\": [\"drama\", \"folio\", \"quire\", \"scroll\"]},\n    {\"a_id\": \"AX-004\", \"b_tags\": [\"codex\", \"fiction\", \"folio\", \"poetry\"]},\n    {\"a_id\": \"AX-005\", \"b_tags\": [\"codex\", \"manual\", \"poetry\", \"vellum\"]},\n    {\"a_id\": \"AX-010\", \"b_tags\": [\"codex\", \"manual\", \"score\", \"scroll\"]},\n    {\"a_id\": \"AX-011\", \"b_tags\": [\"drama\", \"manual\", \"poetry\", \"score\"]},\n    {\"a_id\": \"AX-012\", \"b_tags\": [\"atlas\", \"fiction\", \"folio\", \"scroll\"]},\n    {\"a_id\": \"AX-016\", \"b_tags\": [\"atlas\", \"essay\", \"manual\", \"poetry\"]},\n    {\"a_id\": \"AX-019\", \"b_tags\": [\"codex\", \"folio\", \"manual\", \"quire\"]},\n    {\"a_id\": \"AX-020\", \"b_tags\": [\"codex\", \"fiction\", \"poetry\", \"scroll\"]},\n    {\"a_id\": \"AX-021\", \"b_tags\": [\"codex\", \"drama\", \"score\", \"vellum\"]},\n    {\"a_id\": \"AX-024\", \"b_tags\": [\"poetry\", \"quire\", \"score\", \"scroll\"]},\n    {\"a_id\": \"AX-025\", \"b_tags\": [\"codex\", \"poetry\", \"scroll\", \"vellum\"]},\n    {\"a_id\": \"AX-029\", \"b_tags\": [\"atlas\", \"drama\", \"folio\", \"score\"]}\n  ]\n}",
+"model": "qwen-3-8b-instruct",
+"usage": {
+"in": 565,
+"out": 442
 }
 },
 "424f18d0857dad69847eb360": {
@@ -359,12 +439,28 @@
 "out": 68
 }
 },
+"48ca5574d76845320cf09fb8": {
+"content": "{\"answer\": [{\"a_id\": \"AX-003\", \"b_tags\": [\"codex\", \"folio\", \"poetry\", \"score\"]}, {\"a_id\": \"AX-006\", \"b_tags\": [\"essay\", \" \" , \"poetry\", \"quire\"]}, {\"a_id\": \"AX-008\", \"b_tags\": [\"atlas\", \"poetry\", \"quire\", \"vellum\"]}, {\"a_id\": \"AX-010\", \"b_tags\": [\"fiction\", \"quire\", \"score\", \"scroll\"]}, {\"a_id\": \"AX-011\", \"b_tags\": [ \"codex\", \"folio\", \"poetry\", \"scroll\"]}, {\"a_id\": \"AX-017\", \"b_tags\": [\"atlas\", \"drama\", \"poetry\", \"vellum\"]}, {\"a_id\": \"id_001\", \"b_tags\": [\"codex\", \"quire\", \"score\", \"scroll\"]}, {\"a_id\": \"AX-0020\", \"b_tags\": [\"codex\", \"quire\", \"score\", \"scroll\"]}, {\"a_id\": \"AX-021\", \"b_tags\": [\"codex\", \"folio\", \"score\", \"vell \"] } , {\"a_id\": \"AX-022\", \"b_tags\": [\"atlas\", \"poetry\", \"score\", \"vellum\"]}, {\"a_id\": \"AX-024\", \"b_tags\": [\"atlas\", \"poetry\", \"quire\", \"vellum\"]} ]\n}",
+"model": "google/gemma-4-12b-qat",
+"usage": {
+"in": 472,
+"out": 356
+}
+},
 "49176809fddbb7a280f4be88": {
 "content": "{\n  \"answer\": [\n    {\n      \"news_id\": \"NEWS-001\",\n      \"shipment_ids\": [\n        \"SHP-0015\"\n      ]\n    },\n    {\n      \"news_id\": \"NEWS-002\",\n      \"shipment_ids\": [\n        \"SHP-0002\",\n        \"SHP-0006\",\n        \"SHP-0014\",\n        \"SHP-0019\"\n      ]\n    }\n  ]\n}",
 "model": "google/gemma-4-31b-qat",
 "usage": {
 "in": 604,
 "out": 133
+}
+},
+"49f6ad20f1951c7af6801cc5": {
+"content": "{\n    \"answer\": []\n}",
+"model": "qwen-3-8b-instruct",
+"usage": {
+"in": 3513,
+"out": 8
 }
 },
 "4aa4f10aa2e96f5eb8b4a241": {
@@ -389,6 +485,14 @@
 "usage": {
 "in": 24,
 "out": 7
+}
+},
+"4f0f78fd02fa7887cb23dfb5": {
+"content": "{\"answer\": [{\"a_id\": \"AX-001\", \"b_tags\": [\"score\", \"drama\", \"atlas\", \"folio\"]}, {\"a_id\": \"AX-002\", \"b_tags\": [\"vellum\", \"poetry\", \"drama\", \"fiction\"]}, {\"a_id\": \"AX-003\", \"b_tags\": [\"poetry\", \"1.787, 5.204, 21.999, 0.68\", \"fiction\", \"folio\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"score\", \"scroll\", \"manual\", \"codex\"]}, {\"a_id\": \"AX-005\", \"b_tags\": [\"scroll\", \"fiction\", \"atlas\", \"folio\"]}, {\"a_id\": \"AX-006\", \"b_tags\": [\"vellum\", \"score\", \"codex\", \"drama\"]}, {\"a_id\": \"AX-007\", \"b_tags\": [\"score\", \"drama\", \"fiction\", \"atlas\"]}, {\"a_id\": \"AX-008\", \"b_tags\": [\"poetry\", \"manual\", \"essay\", \"folio\"]}, {\"a_id\": \"AX-009\", \"b_tags\": [\"quire\", \"scroll\", \"essay\", \"atlas\"]}, {\"a_id\": \"AX-010\", \"b_tags\": [\"poetry\", \"score\", \"manual\", \"drama\"]}, {\"a_id\": \"AX-011\", \"b_tags\": [\"poetry\", \"quire\", \"codex\", \"essay\"]}, {\"a_id\": \"AX-012\", \"b_tags\": [\"quire\", \"scroll\", \"drama\", \"folio\"]}, {\"a_id\": \"AX-013\", \"b_tags\": [\"manual\", \"codex\", \"drama\", \"essay\"]}, {\"a_id\": \"AX-014\", \"b_tags\": [\"quire\", \"manual\", \"codex\", \"folio\"]}, {\"a_id\": \"AX-015\", \"b_tags\": [\"vellum\", \"quire\", \"drama\", \"essay\"]}, {\"a_id\": \"AX-016\", \"b_tags\": [\"vellum\", \"quire\", \"manual\", \"drama\"]}, {\"a_id\": \"AX-017\", \"b_tags\": [\"vellum\", \"score\", \"drama\", \"essay\"]}, {\"a_id\": \"AX-018\", \"b_tags\": [\"score\", \"manual\", \"codex\", \"essay\"]}, {\"a_id\": \"AX-019\", \"b_tags\": [\"vellum\", \"poetry\", \"manual\", \"codex\"]}, {\"a_id\": \"AX-020\", \"b_tags\": [\"poetry\", \"codex\", \"fiction\", \"folio\"]}, {\"a_id\": \"AX-021\", \"b_tags\": [\"poetry\", \"scroll\", \"drama\", \"atlas\"]}, {\"a_id\": \"AX-022\", \"b_tags\": [\"score\", \"drama\", \"essay\", \"atlas\"]}, {\"a_id\": \"AX-023\", \"b_tags\": [\"poetry\", \"manual\", \"essay\", \"atlas\"]}, {\"a_id\": \"AX.024\", \"b_tags\": [\"poetry\", \"quire\", \"score\", \"scroll\"]}, {\"a_id\": \"AX-025\", \"b_tags\": [\"poetry\", \"scroll\", \"codex\", \"fiction\"]}, {\"a_id\": \"AX-026\", \"b_tags\": [\"vellum\", \"poetry\", \"codex\", \"fiction\"]}, {\"a_id\": \"AX-027\", \"b_tags\": [\"vellum\", \"poetry\", \"manual\", \"drama\"]}, {\"a_id\": \"AX-028\", \"b_tags\": [\"vellum\", \"poetry\", \"scroll\", \"codex\"]}, {\"a_id\": \"AX-029\", \"b_tags\": [\"vellum\", \"codex\", \"fiction\", \"folio\"]}]}",
+"model": "google/gemma-4-12b-qat",
+"usage": {
+"in": 3528,
+"out": 907
 }
 },
 "4ff112d0bcf7e4adc02c1875": {
@@ -503,6 +607,14 @@
 "out": 78
 }
 },
+"64d2f57ac4ac5a9f8b21db40": {
+"content": "{\n  \"answer\": [\n    {\"a_id\": \"AX-003\", \"b_tags\": [\"codex\", \"folio\", \"poetry\", \"score\"]},\n    {\"a_id\": \"AX-006\", \"b_tags\": [\"essay\", \"manual\", \"poetry\", \"quire\"]},\n    {\"a_id\": \"AX-008\", \"b_tags\": [\"atlas\", \"poetry\", \"quire\", \"vellum\"]},\n    {\"a_id\": \"AX-010\", \"b_tags\": [\"fiction\", \"quire\", \"score\", \"scroll\"]},\n    {\"a_id\": \"AX-011\", \"b_tags\": [\"codex\", \"folio\", \"poetry\", \"scroll\"]},\n    {\"a_id\": \"AX-017\", \"b_tags\": [\"atlas\", \"drama\", \"poetry\", \"vellum\"]},\n    {\"a_id\": \"AX-018\", \"b_tags\": [\"codex\", \"quire\", \"score\", \"scroll\"]},\n    {\"a_id\": \"AX-020\", \"b_tags\": [\"codex\", \"quire\", \"score\", \"scroll\"]},\n    {\"a_id\": \"AX-021\", \"b_tags\": [\"codex\", \"folio\", \"score\", \"vellum\"]},\n    {\"a_id\": \"AX-022\", \"b_tags\": [\"atlas\", \"poetry\", \"score\", \"vellum\"]},\n    {\"a_id\": \"AX-024\", \"b_tags\": [\"fiction\", \"poetry\", \"quire\", \"vellum\"]}\n  ]\n}",
+"model": "qwen-3-8b-instruct",
+"usage": {
+"in": 484,
+"out": 349
+}
+},
 "64f44227ecf77197c2583140": {
 "content": "{\"answer\": [{\"news_id\": \"NEWS-002\", \"shipment_ids\": [\"SHP-0008\"]}, {\"news_id\": \"NEWS-001\", \"shipment_ids\": [\"SHP-0004\"]}]}",
 "model": "google/gemma-4-12b-qat",
@@ -517,6 +629,14 @@
 "usage": {
 "in": 602,
 "out": 86
+}
+},
+"66e519f364e69b733d955d98": {
+"content": "{\"answer\": [{\"a_id\": \"AX-001\", \"b_tags\": [\"atlas\", \"manual\", \"folio\", \"fiction\"]}, {\"a_id\": \"AX-002\", \"b_tags\": [\"score\", \"atlas\", \"drama\", \"scroll\"]}, {\"a_id\": \"AX-003\", \"b_tags\": [\"score\", \"atlas\", \"fiction\", \"poetry\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"fiction\"]}, {\"a_id\": \"AX-005\", \"b_tags\": [\"drama\", \"folio\", \"fiction\", \"codex\"]}, {\"a_id\": \"AX-006\", \"b_tags\": [\"score\", \"essay\", \"vellum\", \"codex\"]}, {\"a_id\": \"AX-007\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"codex\"]}, {\"a_id\": \"AX-008\", \"b_tags\": [\"atlas\", \"drama\", \"fiction\", \"poetry\"]}, {\"a_id\": \"AX-009\", \"b_tags\": [\"quire\", \"manual\", \"folio\", \"codex\"]}, {\"a_id\": \"AX-010\", \"b_tags\": [\"score\", \"drama\", \"manual\", \"poetry\"]}, {\"a_id\": \"AX-011\", \"b_tags\": [\"quire\", \"score\", \"drama\", \"poetry\"]}, {\"a_id\": \"AX-012\", \"b_tags\": [\"score\", \"atlas\", \"essay\", \"poetry\"]}, {\"a_id\": \"AX-013\", \"b_tags\": [\"quire\", \"drama\", \"folio\", \"fiction\"]}, {\"a_id\": \"AX-014\", \"b_tags\": [\"folio\", \"scroll\", \"fiction\", \"poetry\"]}, {\"a_id\": \"AX-015\", \"b_tags\": [\"score\", \"manual\", \"vellum\", \"fiction\"]}, {\"a_id\": \"AX-016\", \"b_tags\": [\"drama\", \"manual\", \"folio\", \"fiction\"]}, {\"a_id\": \"AX-016\", \"b_tags\": [\"score\", \"essay\", \"vellum\", \"codex\"]}, {\"a_id\": \"AX-017\", \"b_tags\": [\"score\", \"essay\", \"vellum\", \"codex\"]}, {\"a_id\": \"AX-018\", \"b_tags\": [\"atlas\", \"manual\", \"folio\", \"poetry\"]}, {\"a_id\": \"AX-019\", \"b_tags\": [\"atlas\", \"essay\", \"drama\", \"scroll\"]}, {\"a_id\": \"AX-020\", \"b_tags\": [\"scroll\", \"vellum\", \"fiction\", \"poetry\"]}, {\"a_id\": \"AX-021\", \"b_tags\": [\"score\", \"manual\", \"scroll\", \"fiction\"]}, {\"a_id\": \"AX-022\", \"b_tags\": [\"quire\", \"drama\", \"vellum\", \"codex\"]}, {\"a_id\": \"AX-023\", \"b_tags\": [\"quire\", \"score\", \"essay\", \"drama\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"fiction\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"fiction\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"fiction\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"AX-004\", \"b_tags_id_004\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"fiction\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"fiction\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"fiction\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"tag_004\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"fiction\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"fiction\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"fiction\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"scroll\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"fiction\"]}, {\"a_id\": \"004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"fiction\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"ved_004\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"fiction\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"fiction\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"fiction\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"fiction\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"fiction\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"fiction\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"fiction\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"atlas\", \"fiction\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"fiction\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"folio\", \"vellum\", \"fiction\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas",
+"model": "google/gemma-4-12b-qat",
+"usage": {
+"in": 3554,
+"out": 1500
 }
 },
 "66e9cc1faf53e8f29d14de05": {
@@ -549,6 +669,14 @@
 "usage": {
 "in": 184,
 "out": 42
+}
+},
+"69e8623f6e273cf9f0ea73d9": {
+"content": "{\"answer\": [{\"a_id\": \"AX-001\", \"b_tags\": [\"quire\", \"score\", \"codex\", \"scroll\"]}, {\"a_id\": \"AX-003\", \"b_tags\": [\"score\", \"manual\", \"vellum\", \"poetry\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"score\", \"fiction\", \"drama\", \"manual\"]}, {\"a_id\": \"AX-005\", \"b_tags\": [\"quire\", \"fiction\", \"vellum\", \"poetry\"]}, {\"a_id\": \"AX-006\", \"b_tags\": [\"quire\", \"score\", \"drama\", \"atlas\"]}, {\"a_id\": \"AX-007\", \"b_tags\": [\"quire\", \"score\", \"folio\", \"fiction\"]}, {\"a_id\": \"AX-008\", \"b_tags\": [\"folio\", \"atlas\", \"essay\", \"vellum\"]}, {\"a_id\": \"AX-009\", \"b_tags\": [\"score\", \"atlas\", \"vellum\", \"poetry\"]}, {\"a_id\": \"AX-010\", \"b_tags\": [\"score\", \"scroll\", \"vellum\", \"poetry\"]}, {\"a_id\": \"AX-011\", \"b_tags\": [\"score\", \"fiction\", \"drama\", \"essay\"]}, {\"a_id\": \"AX-012\", \"b_tags\": [\"quire\", \"fiction\", \"drama\", \"scroll\"]}, {\"a_id\": \"AX-013\", \"b_tags\": [\"score\", \"codex\", \"folio\", \"vellum\"]}, {\"a_id\": \"AX-014\", \"b_tags\": [\"fiction\", \"drama\", \"scroll\", \"poetry\"]}, {\"a_id\": \"AX-015\", \"b_tags\": [\"quire\", \"folio\", \"fiction\", \"scroll\"]}, {\"a_id\": \"AX-016\", \"b_tags\": [\"quire\", \"score\", \"codex\", \"scroll\"]}, {\"a_id\": \"AX-017\", \"b_tags\": [\"score\", \"folio\", \"manual\", \"poetry\"]}, {\"a_id\": \"AX-018\", \"b_tags\": [\"quire\", \"folio\", \"scroll\", \"poetry\"]}, {\"a_id\": \"AX-019\", \"b_tags\": [\"drama\", \"atlas\", \"vellum\", \"poetry\"]}, {\"a_id\": \"AX-020\", \"b_tags\": [\"folio\", \"atlas\", \"vellum\", \"poetry\"]}, {\"a_id\": \"AX-021\", \"b_tags\": [\"codex\", \"folio\", \"scroll\", \"poetry\"]}, {\"a_id\": \"AX-022\", \"b_tags\": [\"quire\", \"fiction\", \"drama\", \"vellum\"]}, {\"a_id\": \"AX-023\", \"b_tags\": [\"quire\", \"drama\", \"manual\", \"poetry\"]}, {\"a_id\": \"AX-024\", \"b_tags\": [\"folio\", \"manual\", \"atlas\", \"poetry\"]}, {\"a_id\": \"AX-025\", \"b_tags\": [\"quire\", \"manual\", \"atlas\", \"poetry\"]}, {\"a_id\": \"AX-026\", \"b_tags\": [\"quire\", \"fiction\", \"atlas\", \"poetry\"]}, {\"a_id\": \"AX-027\", \"b_tags\": [\"score\", \"codex\", \"folio\", \"poetry\"]}, {\"a_id\": \"000\", \"b_tags\": [\"folio\", \"fiction\", \"drama\", \"scroll\"]}, {\"a_id\": \"AX-000\", \"b_tags\": [\"folio\", \"fiction\", \"drama\", \"scroll\"]}, {\"a_id\": \"AX-028\", \"b_tags\": [\"quire\", \"manual\", \"essay\", \"poetry\"]}, {\"a_id\": \"AX-029\", \"b_tags\": [\"quire\", \"score\", \"fiction\", \"scroll\"]}, {\"a_id\": \"AX-030\", \"b_tags\": [\"fiction\", \"drama\", \"vellum\", \"poetry\"]}, {\"a_id\": \"AX-031\", \"b_tags\": [\"scroll\", \"manual\", \"vellum\", \"poetry\"]}, {\"a_id\": \"AX-032\", \"b_tags\": [\"quire\", \"atlas\", \"vellum\", \"poetry\"]}, {\"a_id\": \"AX-033\", \"b_tags\": [\"quire\", \"folio\", \"scroll\", \"essay\"]}, {\"a_id\": \"AX-034\", \"b_tags\": [\"fiction\", \"manual\", \"atlas\", \"vellum\"]}]}",
+"model": "google/gemma-4-12b-qat",
+"usage": {
+"in": 3508,
+"out": 1050
 }
 },
 "6a385a3ae271f83f6439ba12": {
@@ -647,6 +775,14 @@
 "out": 99
 }
 },
+"7e69df7a83b7bea3a57e88e9": {
+"content": "{\"answer\": [{\"a_id\": \"AX-000\", \"b_tags\": [\"drama\", \"essay\", \"poetry\", \"scroll\"]}, {\"a_id\": \"AX-008\", \"b_tags\": [\"drama\", \"folio\", \"poetry\", \"scroll\"]}, {\"a_id\": \"AX-010\", \"b_tags\": [\"atlas\", \"codex\", \"fiction\", \"folio\"]}, {\"a_id\": \"AX-011\", \"b_tags\": [\"essay\", \"manual\", \"quire\", \"score\"]}, {\"a_id\": \"AX-012\", \"b_tags\": [\"atlas\", \"folio\", \"poetry\", \"quire\"]}, {\"a_id\": \"AX-014\", \"b_tags\": [\"codex\", \"fiction\", \"folio\", \"vellum\"]}, {\"a_id\": \"AX-020\", \"b_tags\": [\"essay\", \"poetry\", \"quire\", \"score\"]}, {\"a_id\": \"axis-021\", \"b_tags\": [\"fiction\", \"score\", \"scroll\", \"vellum\"]}, {\"a_id\": \"AX-022\", \"b_tags\": [\"codex\", \"drama\", \"quire\", \"scroll\"]}, {\"a_id\": \"AX-023\", \"b_tags\": [\"atlas\", \"essay\", \"manual\", \"score\"]}, {\"a_id\": \"AX-025\", \"b_tags\": [\"codex\", \"fiction\", \"manual\", \"quire\"]}, {\"a_id\": \"AX-026\", \"b_tags\": [\"atlas\", \"fiction\", \"manual\", \"score\"]}]}",
+"model": "google/gemma-4-12b-qat",
+"usage": {
+"in": 494,
+"out": 361
+}
+},
 "8122e8da62faa49966cee431": {
 "content": "{\n  \"answer\": [\n    {\n      \"news_id\": \"NEWS-001\",\n      \"shipment_ids\": [\"SHP-0008\", \"SHP-0024\"]\n    },\n    {\n      \"news_id\": \"NEWS-002\",\n      \"shipment_ids\":\n      [\"SHP-0011\"]\n    }\n  ]\n}",
 "model": "google/gemma-4-31b-qat",
@@ -661,6 +797,14 @@
 "usage": {
 "in": 243,
 "out": 106
+}
+},
+"81da459fdf0211de6b5795cd": {
+"content": "{\n    \"answer\": []\n}",
+"model": "qwen-3-8b-instruct",
+"usage": {
+"in": 3528,
+"out": 8
 }
 },
 "82b21335e0a93be59da0d845": {
@@ -685,6 +829,14 @@
 "usage": {
 "in": 525,
 "out": 79
+}
+},
+"851b976ce164f7a20a3a6d55": {
+"content": "{\n    \"answer\": []\n}",
+"model": "qwen-3-8b-instruct",
+"usage": {
+"in": 3497,
+"out": 8
 }
 },
 "8554ddcc59646cc623c2bda7": {
@@ -719,6 +871,14 @@
 "out": 133
 }
 },
+"89cc18e9b9899a415cc8a34a": {
+"content": "{\n  \"answer\": [\n    {\"a_id\": \"AX-003\", \"b_tags\": [\"codex\", \"fiction\", \"poetry\", \"scroll\"]},\n    {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"codex\", \"folio\", \"poetry\"]},\n    {\"a_id\": \"AX-005\", \"b_tags\": [\"atlas\", \"poetry\", \"score\", \"vellum\"]},\n    {\"a_id\": \"AX-007\", \"b_tags\": [\"atlas\", \"folio\", \"poetry\", \"quire\"]},\n    {\"a_id\": \"AX-009\", \"b_tags\": [\"essay\", \"fiction\", \"poetry\", \"scroll\"]},\n    {\"a_id\": \"AX-010\", \"b_tags\": [\"atlas\", \"manual\", \"score\", \"scroll\"]},\n    {\"a_id\": \"AX-011\", \"b_tags\": [\"atlas\", \"essay\", \"manual\", \"score\"]},\n    {\"a_id\": \"AX-012\", \"b_tags\": [\"codex\", \"essay\", \"fiction\", \"manual\"]},\n    {\"a_id\": \"AX-016\", \"b_tags\": [\"essay\", \"folio\", \"manual\", \"scroll\"]},\n    {\"a_id\": \"AX-020\", \"b_tags\": [\"atlas\", \"folio\", \"manual\", \"score\"]},\n    {\"a_id\": \"AX-022\", \"b_tags\": [\"essay\", \"poetry\", \"quire\", \"score\"]},\n    {\"a_id\": \"AX-023\", \"b_tags\": [\"atlas\", \"drama\", \"fiction\", \"scroll\"]}\n  ]\n}",
+"model": "qwen-3-8b-instruct",
+"usage": {
+"in": 507,
+"out": 375
+}
+},
 "8b6dc158a283b4d70871ef81": {
 "content": "{\n  \"answer\": [\n    {\n      \"news_id\": \"NEWS-001\",\n      \"shipment_ids\": [\"SHP-0015\"]\n    },\n    {\n      \"news_id\": \"NEWS-002\",\n      \"shipment_ids\": [\"SHP-0002\", \"SHP-0006\", \"SHP-0014\", \"SHP-0019\"]\n    }\n  ]\n}",
 "model": "qwen-3-8b-instruct",
@@ -749,6 +909,30 @@
 "usage": {
 "in": 580,
 "out": 97
+}
+},
+"90ebd7c24bbd45b32450b9c6": {
+"content": "{\n    \"answer\": []\n}",
+"model": "qwen-3-8b-instruct",
+"usage": {
+"in": 3510,
+"out": 8
+}
+},
+"92a7a6768942efb372d6680d": {
+"content": "{\"answer\": [{\"a_id\": \"AX-003\", \"b_tags\": [\"codex\", \"fiction\", \"poetry\", \"scroll\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"codex\", \"folio\", \"poetry\"]}, {\"a_id\": \"AX-005\", \"b_tags\": [\"atlas\", \"poetry\", \"score\", \"vellum\"]}, {\"a_id\": \"AX-007\", \"b_tags\": [\"atlas\", \"folio\", \"poetry\", \"quire\"]}, {\"a_id\": \"shared_id\", \"b_tags\": [\"essay\", \"fiction\", \"poetry\", \"scroll\"]}, {\"a_id\": \"AX-010\", \"b_tags\": [\"atlas\", \"manual\", \"score\", \"scroll\"]}, {\"a_id\": \"AX-011\", \"b_tags\":\n    [\"atlas\", \"essay\", \"manual\", \"score\"]}, {\"a_id\": \"AX-012\", \"b_tags\": [\"codex\", \"essay\", \"fiction\", \"manual\"]}, {\"a_id\": \"AX-016\", \"b_tags\": [\"atlas\", \"folio\", \"manual\", \"scroll\"]}, {\"a_id\": \"AX-020\", \"b_tags\": [\"atlas\", \"folio\", \"manual\", \"score\"]}, {\"a_id\": \"AX-022\", \"b_tags\": [\"essay\", \"poetry\", \"quire\", \"score\"]}, {\"a_id\": \"AX-023\", \"b_tags\": [\"atlas\", \"drama\", \"fiction\", \"scroll\"]}\n    ]}",
+"model": "google/gemma-4-12b-qat",
+"usage": {
+"in": 492,
+"out": 368
+}
+},
+"93dfd83377d18468a78cf94c": {
+"content": "{\"answer\": [{\"a_id\": \"AX-000\", \"b_tags\": [\"atlas\", \"codex\", \"essay\", \"vellum\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"codex\", \"essay\", \"folio\"]}, {\"a_id\": \"AX-005\", \"b_tags\": [\"atlas\", \"drama\", \"manual\", \"scroll\"]}, {\"a_id\": \"AX-007\", \"b_tags\": [\"atlas\", \"fiction\", \"folio\", \"score\"]}, {\"a_id\": \"AX-011\", \"b_tags\": [\"atlas\", \"drama\", \"folio\", \"manual\", \"vellum\"]}, {\"a_id\": \"AX-014\", \"b_tags\": [\"AX-014\", \"codex\", \"drama\", \"poetry\", \"vellum\"]}, {\"a_id\": \"AX-016\", \"b_tags\": [\"atlas\", \"6004\", \"manual\", \"score\"]}, {\"a_id\": \"AX-018\", \"b_tags\": [\"codex\", \"poetry\", \"score\", \"vellum\"]}, {\"a_id\": \"AX-020\", \"b_tags\": [\"codex\", \"essay\", \"fiction\", \"vellum\"]}, {\"a_id\": \"AX-024\", \"b_tags\": [\"codex\", \"manual\", \"score\", \"scroll\"]}, {\"a_id\": \"AX-027\", \"b_tags\": [\"essay\", \"fiction\", \"folio\", \"poetry\"]}, {\"a_id\": \"AX-029\", \"b_tags\": [\"drama\", \"essay\", \"poetry\", \"scroll\"]}]}",
+"model": "google/gemma-4-12b-qat",
+"usage": {
+"in": 499,
+"out": 386
 }
 },
 "94b6e80092c7f359d4a65424": {
@@ -813,6 +997,14 @@
 "usage": {
 "in": 184,
 "out": 67
+}
+},
+"9b996e526e83942da970f27b": {
+"content": "{\n  \"answer\": [\n    {\"a_id\": \"AX-000\", \"b_tags\": [\"atlas\", \"poetry\", \"score\", \"scroll\"]},\n    {\"a_id\": \"AX-001\", \"b_tags\": [\"atlas\", \"codex\", \"folio\", \"score\"]},\n    {\"a_id\": \"AX-002\", \"b_tags\": [\"drama\", \"fiction\", \"quire\", \"vellum\"]},\n    {\"a_id\": \"AX-008\", \"b_tags\": [\"codex\", \"folio\", \"poetry\", \"quire\"]},\n    {\"a_id\": \"AX-011\", \"b_tags\": [\"codex\", \"fiction\", \"scroll\", \"vellum\"]},\n    {\"a_id\": \"AX-014\", \"b_tags\": [\"essay\", \"folio\", \"scroll\", \"vellum\"]},\n    {\"a_id\": \"AX-015\", \"b_tags\": [\"codex\", \"manual\", \"quire\", \"score\"]},\n    {\"a_id\": \"AX-016\", \"b_tags\": [\"fiction\", \"score\", \"scroll\", \"vellum\"]},\n    {\"a_id\": \"AX-017\", \"b_tags\": [\"essay\", \"folio\", \"quire\", \"score\"]},\n    {\"a_id\": \"AX-019\", \"b_tags\": [\"poetry\", \"quire\", \"scroll\", \"vellum\"]},\n    {\"a_id\": \"AX-024\", \"b_tags\": [\"atlas\", \"essay\", \"folio\", \"manual\"]},\n    {\"a_id\": \"AX-031\", \"b_tags\": [\"codex\", \"drama\", \"fiction\", \"vellum\"]}\n  ]\n}",
+"model": "qwen-3-8b-instruct",
+"usage": {
+"in": 507,
+"out": 376
 }
 },
 "9c793436a01bab57af767d87": {
@@ -903,6 +1095,14 @@
 "out": 113
 }
 },
+"ac4f4ce2ee7b9e2676e488e5": {
+"content": "{\"answer\": [{\"a_id\": \"AX-001\", \"b_tags\": [\"quire\", \"folio\", \"drama\", \"poetry\"]}, {\"a_id\": \"AX-002\", \"b_tags\": [\"quire\", \"drama\", \"atlas\", \"codex\"]}, {\"a_id\": \"AX-003\", \"b_tags\": [\"manual\", \"quire\", \"score\", \"codex\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"quire\", \"poetry\", \"score\", \"codex\"]}, {\"a_id\": \"AX-005\", \"b_tags\": [\"manual\", \"vellum\", \"poetry\", \"atlas\"]}, {\"a_id\": \"AX-006\", \"b_tags\": [\"drama\", \"vellum\", \"score\", \"codex\"]}, {\"a_id\": \"AX-007\", \"b_tags\": [\"manual\", \"poetry\", \"score\", \"codex\"]}, {\"a_id\": \"AX-008\", \"b_tags\": [\"quire\", \"essay\", \"fiction\", \"codex\"]}, {\"a_id\": \"AX-009\", \"b_tags\": [\"manual\", \"drama\", \"atlas\", \"codex\"]}, {\"a_id\": \"AX-010\", \"b_tags\": [\"manual\", \"quire\", \"poetry\", \"codex\"]}, {\"a_id\": \"AX-011\", \"b_tags\": [\"manual\", \"drama\", \"vellum\", \"fiction\"]}, {\"a_id\": \"AX-012\", \"b_tags\": [\"manual\", \"scroll\", \"essay\", \"poetry\"]}, {\"a_id\": \"AX-013\", \"b_tags\": [\"quire\", \"essay\", \"drama\", \"vellum\"]}, {\"a_id\": \"AX-014\", \"b_tags\": [\"manual\", \"quire\", \"atlas\", \"fiction\"]}, {\"a_id\": \"AX-015\", \"b_tags\": [\"manual\", \"scroll\", \"drama\", \"poetry\"]}, {\"a_id\": \"AX-016\", \"b_tags\": [\"manual\", \"scroll\", \"quire\", \"codex\"]}, {\"a_id\": \"AX-001\", \"b_tags\": [\"quire\", \"vellum\", \"score\", \"fiction\"]}, {\"a_id\": \"AX-002\", \"b_tags\": [\"quire\", \"drama\", \"atlas\", \"codex\"]}, {\"a_id\": \"AX-003\", \"b_tags\": [\"manual\", \"quire\", \"score\", \"codex\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"quire\", \"poetry\", \"score\", \"codex\"]}, {\"a_id\": \"AX-005\", \"b_tags\": [\"manual\", \"vellum\", \"poetry\", \"atlas\"]}, {\"a_id\": \"AX-006\", \"b_tags\": [\"drama\", \"vellum\", \"score\", \"codex\"]}, {\"a_id\": \"AX-007\", \"b_tags\": [\"manual\", \"poetry\", \"score\", \"codex\"]}, {\"a_id\": \"AX-008\", \"b_tags\": [\"quire\", \"essay\", \"fiction\", \"codex\"]}, {\"a_id\": \"AX-009\", \"b_tags\": [\"manual\", \"drama\", \"atlas\", \"codex\"]}, {\"a_id\": \"AX-001\", \"b_tags\": [\"manual\", \"quire\", \"poetry\", \"codex\"]}, {\"a_id\": \"AX-002\", \"b_tags\": [\"manual\", \"quire\", \"poetry\", \"codex\"]}, {\"a_id\": \"AX-003\", \"b_tags\": [\"manual\", \"drama\", \"vellum\", \"fiction\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"manual\", \"scroll\", \"essay\", \"poetry\"]}, {\"a_id\": \"AX-005\", \"b_tags\": [\"quire\", \"essay\", \"drama\", \"vellum\"]}, {\"a_id\": \"AX-006\", \"b_tags\": [\"manual\", \"quire\", \"atlas\", \"fiction\"]}, {\"a_id\": \"AX-007\", \"b_tags\": [\"manual\", \"scroll\", \"drama\", \"poetry\"]}, {\"a_id\": \"AX-008\", \"b_tags\": [\"manual\", \"scroll\", \"quire\", \"codex\"]}, {\"a_id\": \"AX-009\", \"b_tags\": [\"quire\", \"vellum\", \"score\", \"fiction\"]}, {\"a_id\": \"AX-010\", \"b_tags\": [\"essay\", \"vellum\", \"poetry\", \"atlas\"]}, {\"a_id\": \"AX-001\", \"b_tags\": [\"quire\", \"folio\", \"drama\", \"score\"]}, {\"a_id\": \"AX-002\", \"b_tags\": [\"drama\", \"vellum\", \"poetry\", \"atlas\"]}, {\"a_id\": \"AX-003\", \"b_tags\": [\"scroll\", \"drama\", \"score\", \"codex\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"quire\", \"essay\", \"vellum\", \"codex\"]}, {\"a_id\": \"AX-005\", \"b_tags\": [\"vellum\", \"poetry\", \"fiction\", \"codex\"]}, {\"a_id\": \"AX-006\", \"b_tags\": [\"scroll\", \"essay\", \"poetry\", \"atlas\"]}, {\"a_id\": \"AX-007\", \"b_tags\": [\"scroll\", \"folio\", \"poetry\", \"fiction\"]}, {\"a_id\": \"AX-008\", \"b_tags\": [\"poetry\", \"score\", \"fiction\", \"codex\"]}, {\"a_id\": \"AX-009\", \"b_tags\": [\"scroll\", \"folio\", \"poetry\", \"score\"]}, {\"a_id\": \"AX-010\", \"b_tags\": [\"quire\", \"folio\", \"essay\", \"drama\"]}, {\"a_id\": \"AX-011\", \"b_tags\": [\"quire\", \"vellum\", \"score\", \"fiction\"]}, {\"a_id\": \"AX-012\", \"b_tags\": [\"quire\", \"essay\", \"vellum\", \"codex\"]}, {\"a_id\": \"000\", \"b_tags\": [\"quire\", \"essay\", \"vellum\", \"codex\"]}, {\"a_id\": \"AX-013\", \"b_tags\": [\"vellum\", \"poetry\", \"fiction\", \"codex\"]}, {\"a_id\": \"AX-014\", \"b_tags\": [\"scroll\", \"essay\", \"poetry\", \"atlas\"]}, {\"a_id",
+"model": "google/gemma-4-12b-qat",
+"usage": {
+"in": 3534,
+"out": 1500
+}
+},
 "aef489b8a72c4f66999f3d3c": {
 "content": "{\n  \"answer\": [\n    {\n      \"news_id\": \"NEWS-002\",\n      \"shipment_ids\": [\n        \"SHP-0008\",\n        \"SHP-0016\"\n      ]\n    }\n  ]\n}",
 "model": "google/gemma-4-31b-qat",
@@ -919,6 +1119,14 @@
 "out": 113
 }
 },
+"b16ffb93103c07521d52c350": {
+"content": "{\n  \"answer\": [\n    {\"a_id\":\"AX-000\",\"b_tags\":[\"atlas\",\"codex\",\"essay\",\"vellum\"]},\n    {\"a_id\":\"AX-004\",\"b_tags\":[\"atlas\",\"codex\",\"essay\",\"folio\"]},\n    {\"a_id\":\"AX-005\",\"b_tags\":[\"atlas\",\"drama\",\"manual\",\"scroll\"]},\n    {\"a_id\":\"AX-007\",\"b_tags\":[\"atlas\",\"fiction\",\"folio\",\"score\"]},\n    {\"a_id\":\"AX-011\",\"b_tags\":[\"drama\",\"folio\",\"manual\",\"vellum\"]},\n    {\"a_id\":\"AX-014\",\"b_tags\":[\"codex\",\"drama\",\"poetry\",\"vellum\"]},\n    {\"a_id\":\"AX-016\",\"b_tags\":[\"atlas\",\"fiction\",\"manual\",\"score\"]},\n    {\"a_id\":\"AX-018\",\"b_tags\":[\"codex\",\"poetry\",\"score\",\"vellum\"]},\n    {\"a_id\":\"AX-020\",\"b_tags\":[\"codex\",\"essay\",\"fiction\",\"vellum\"]},\n    {\"a_id\":\"AX-024\",\"b_tags\":[\"codex\",\"manual\",\"score\",\"scroll\"]},\n    {\"a_id\":\"AX-027\",\"b_tags\":[\"essay\",\"fiction\",\"folio\",\"poetry\"]},\n    {\"a_id\":\"AX-029\",\"b_tags\":[\"drama\",\"essay\",\"poetry\",\"scroll\"]}\n  ]\n}",
+"model": "qwen-3-8b-instruct",
+"usage": {
+"in": 510,
+"out": 309
+}
+},
 "b189f0c0de21209ec300557f": {
 "content": "{\n  \"answer\": [\n    {\n      \"news_id\": \"NEWS-002\",\n      \"shipment_ids\": [\n        \"SHP-0024\"\n      ]\n    },\n    {\n      \"news_id\": \"NEWS-001\",\n      \"shipment_ids\": [\n        \"SHP-0017\",\n        \"SHP-0012\"\n      ]\n    }\n  ]\n}",
 "model": "google/gemma-4-31b-qat",
@@ -933,6 +1141,14 @@
 "usage": {
 "in": 521,
 "out": 50
+}
+},
+"b83b99b491668f6e73c63d05": {
+"content": "{\n  \"answer\": [\n    {\"a_id\": \"AX-002\", \"b_tags\": [\"atlas\", \"fiction\", \"manual\", \"quire\"]},\n    {\"a_id\": \"AX-003\", \"b_tags\": [\"fiction\", \"folio\", \"poetry\", \"scroll\"]},\n    {\"a_id\": \"AX-008\", \"b_tags\": [\"drama\", \"poetry\", \"score\", \"scroll\"]},\n    {\"a_id\": \"AX-010\", \"b_tags\": [\"codex\", \"manual\", \"poetry\", \"score\"]},\n    {\"a_id\": \"AX-011\", \"b_tags\": [\"folio\", \"poetry\", \"score\", \"scroll\"]},\n    {\"a_id\": \"AX-014\", \"b_tags\": [\"fiction\", \"quire\", \"score\", \"vellum\"]},\n    {\"a_id\": \"AX-015\", \"b_tags\": [\"atlas\", \"essay\", \"poetry\", \"scroll\"]},\n    {\"a_id\": \"AX-016\", \"b_tags\": [\"essay\", \"manual\", \"poetry\", \"scroll\"]},\n    {\"a_id\": \"AX-017\", \"b_tags\": [\"codex\", \"manual\", \"quire\", \"score\"]},\n    {\"a_id\": \"AX-018\", \"b_tags\": [\"atlas\", \"drama\", \"poetry\", \"vellum\"]},\n    {\"a_id\": \"AX-022\", \"b_tags\": [\"codex\", \"manual\", \"quire\", \"scroll\"]},\n    {\"a_id\": \"AX-024\", \"b_tags\": [\"atlas\", \"drama\", \"fiction\", \"vellum\"]},\n    {\"a_id\": \"AX-025\", \"b_tags\": [\"codex\", \"drama\", \"fiction\", \"poetry\"]},\n    {\"a_id\": \"AX-027\", \"b_tags\": [\"codex\", \"drama\", \"score\", \"vellum\"]},\n    {\"a_id\": \"AX-028\", \"b_tags\": [\"codex\", \"essay\", \"fiction\", \"quire\"]}\n  ]\n}",
+"model": "qwen-3-8b-instruct",
+"usage": {
+"in": 590,
+"out": 471
 }
 },
 "bc0a1d67a308b9272522eda7": {
@@ -1031,6 +1247,14 @@
 "out": 100
 }
 },
+"cd8185046853450172f986d6": {
+"content": "{\"answer\": [{\"a_id\": \"AX-001\", \"b_tags\": [\"fiction\", \"quire\", \"folio\", \"poetry\"]}, {\"a_id\": \"AX-002\", \"b_tags\": [\"fiction\", \"vellum\", \"score\", \"folio\"]}, {\"a_id\": \"AX-003\", \"b_tags\": [\"fiction\", \"vellum\", \"drama\", \"quire\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"scroll\", \"codex\", \"drama\", \"quire\"]}, {\"a_id\": \"AX-005\", \"b_tags\": [\"codex\", \"score\", \"drama\", \"poetry\"]}, {\"a_id\": \"AX-006\", \"b_tags\": [\"codex\", \"atlas\", \"folio\", \"poetry\"]}, {\"a_id\": \"AX-007\", \"b_tags\": [\"manual\", \"atlas\", \"score\", \"folio\"]}, {\"a_id\": \"AX-008\", \"b_tags\": [\"manual\", \"essay\", \"atlas\", \"score\"]}, {\"a_id\": \"AX-009\", \"b_tags\": [\"fiction\", \"scroll\", \"atlas\", \"drama\"]}, {\"a_id\": \"AX-010\", \"b_tags\": [\"scroll\", \"manual\", \"atlas\", \"score\"]}, {\"a_id\": \"AX-011\", \"b_tags\": [\"fiction\", \"scroll\", \"codex\", \"poetry\"]}, {\"a_id\": \"AX-012\", \"b_tags\": [\"atlas\", \"quire\", \"folio\", \"poetry\"]}, {\"a_id\": \"000\", \"b_tags\": [\"codex\", \"score\", \"quire\", \"folio\"]}, {\"a_id\": \"AX-013\", \"b_tags\": [\"scroll\", \"essay\", \"vellum\", \"codex\"]}, {\"a_id\": \"AX-014\", \"b_tags\": [\"manual\", \"vellum\", \"drama\", \"folio\"]}, {\"a_id\": \"000\", \"b_tags\": [\"fiction\", \"scroll\", \"essay\", \"poetry\"]}, {\"a_id\": \"AX-015\", \"b_tags\": [\"fiction\", \"scroll\", \"essay\", \"poetry\"]}, {\"a_id\": \"AX-016\", \"b_tags\": [\"vellum\", \"score\", \"drama\", \"poetry\"]}, {\"a_id\": \"AX-017\", \"b_tags\": [\"fiction\", \"manual\", \"vellum\", \"score\"]}, {\"a_id\": \"AX-018\", \"b_tags\": [\"fiction\", \"scroll\", \"manual\", \"atlas\"]}, {\"a_id\": \"AX-019\", \"b_tags\": [\"vellum\", \"atlas\", \"score\", \"poetry\"]}, {\"a_id\": \"AX-020\", \"b_tags\": [\"scroll\", \"essay\", \"score\", \"quire\"]}, {\"a_id\": \"AX-021\", \"b_tags\": [\"essay\", \"atlas\", \"drama\", \"quire\"]}, {\"a_id\": \"AX-022\", \"b_tags\": [\"codex\", \"atlas\", \"score\", \"drama\"]}, {\"a_id\": \"AX-023\", \"b_tags\": [\"scroll\", \"manual\", \"essay\", \"folio\"]}, {\"a_id\": \"AX-024\", \"b_tags\": [\"fiction\", \"manual\", \"essay\", \"codex\"]}, {\"a_id\": \"AX-025\", \"b_tags\": [ \"fiction\", \"scroll\", \"codex\", \"poetry\"]}, {\"a_id\": \"AX-026\", \"b_tags\": [\"codex\", \"drama\", \"quire\", \"poetry\"]}, {\"a_id\": \"AX-027\", \"b_tags\": [\"vellum\", \"atlas\", \"drama\", \"poetry\"]}, {\"a_id\": \"AX-028\", \"b_tags\": [\"essay\", \"score\", \"quire\", \"poetry\"]}, {\"a_id\": \"AX-029\", \"b_tags\": [\"vellum\", \"codex\", \"score\", \"poetry\"]}, {\"a_id\": \"AX-030\", \"b_tags\": [\"scroll\", \"essay\", \"codex\", \"poetry\"]}, {\"a_id\": \"AX-000\", \"b_tags\": [\"codex\", \"score\", \"quire\", \"folio\"]}, {\"a_id\": \"AX-018\", \"b_tags\": [\"fiction\", \"scroll\", \"manual\", \"atlas\"]}, {\"a_id\": \"AX-020\", \"b_tags\": [\"scroll\", \"essay\", \"score\", \"quire\"]}, {\"a_id\": \"AX-021\", \"b_tags\": [\"essay\", \"atlas\", \"drama\", \"quire\"]}, {\"a_id\": \"AX-022\", \"b_tags\": [\"codex\", \"atlas\", \"score\", \"drama\"]}, {\"a_id\": \"AX-023\", \"b_tags\": [\"scroll\", \"manual\", \"essay\", \"folio\"]}, {\"a_id\": \"AX-024\", \"b_tags\": [\"fiction\", \"manual\", \"essay\", \"codex\"]}, {\"a_id\": \"AX-025\", \"b_tags\": [\"fiction\", \"scroll\", \"codex\", \"poetry\"]}, {\"a_id\": \"AX-026\", \"b_tags\": [\"codex\", \"drama\", \"quire\", \"poetry\"]}, {\"a_id\": \"AX-027\", \"b_tags\": [\"vielum\", \"atlas\", \"drama\", \"poetry\"]}, {\"a_id\": \"AX-028\", \"b_tags\": [\"essay\", \"score\", \"quire\", \"poetry\"]}, {\"a_id\": \"AX-000\", \"b_tags\": [\"codex\", \"score\", \"quire\", \"folio\"]}, {\"a_id\": \"AX-000\", \"b_tags\": [\"codex\", \"score\", \"quire\", \"folio\"]}, {\"a_id\": \"AX-000\", \"b_tags\": [\"codex\", \"score\", \"quire\", \"folio\"]}, {\"a_id\": \"AX-000\", \"b_tags\": [\"codex\", \"score\", \"quire\", \"scroll\"]}, {\"a_id\": \"AX-000\", \"b_tags\": [\"codex\", \"score\", \"quire\", \"scroll\"]}, {\"a_id\": \"AX-000\", \"b_tags\": [\"codex\", \"score\", \"quire\", \"scroll\"]}, {\"a_id\": \"AX-000\", \"b_tags\": [\"codex\", \"score\", \"quire\", \"scroll\"]}, {\"a_id\": \"AX-000\", \"",
+"model": "google/gemma-4-12b-qat",
+"usage": {
+"in": 3530,
+"out": 1500
+}
+},
 "ce05c8f20a0b81f8708b0763": {
 "content": "{\"answer\": [{\"news_id\": \"NEWS-002\", \"shipment_ids\": [\"SHP-0014\", \"SHP-0019\"]}]}",
 "model": "google/gemma-4-12b-qat",
@@ -1111,6 +1335,14 @@
 "out": 49
 }
 },
+"e14ffef878e185bd523552dd": {
+"content": "{\n  \"answer\": [\n    {\"a_id\": \"AX-001\", \"b_tags\": [\"fiction\", \"manual\", \"score\", \"scroll\"]},\n    {\"a_id\": \"AX-002\", \"b_tags\": [\"drama\", \"poetry\", \"quire\", \"score\"]},\n    {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"fiction\", \"folio\", \"vellum\"]},\n    {\"a_id\": \"AX-005\", \"b_tags\": [\"atlas\", \"fiction\", \"poetry\", \"scroll\"]},\n    {\"a_id\": \"AX-006\", \"b_tags\": [\"atlas\", \"fiction\", \"folio\", \"manual\"]},\n    {\"a_id\": \"AX-011\", \"b_tags\": [\"codex\", \"drama\", \"quire\", \"vellum\"]},\n    {\"a_id\": \"AX-012\", \"b_tags\": [\"codex\", \"drama\", \"folio\", \"vellum\"]},\n    {\"a_id\": \"AX-014\", \"b_tags\": [\"drama\", \"fiction\", \"folio\", \"manual\"]},\n    {\"a_id\": \"AX-015\", \"b_tags\": [\"fiction\", \"manual\", \"score\", \"vellum\"]},\n    {\"a_id\": \"AX-017\", \"b_tags\": [\"codex\", \"essay\", \"score\", \"vellum\"]},\n    {\"a_id\": \"AX-021\", \"b_tags\": [\"atlas\", \"codex\", \"folio\", \"vellum\"]},\n    {\"a_id\": \"AX-023\", \"b_tags\": [\"fiction\", \"poetry\", \"scroll\", \"vellum\"]},\n    {\"a_id\": \"AX-026\", \"b_tags\": [\"atlas\", \"manual\", \"poetry\", \"score\"]},\n    {\"a_id\": \"AX-027\", \"b_tags\": [\"fiction\", \"folio\", \"poetry\", \"scroll\"]},\n    {\"a_id\": \"AX-028\", \"b_tags\": [\"atlas\", \"essay\", \"poetry\", \"score\"]}\n  ]\n}",
+"model": "qwen-3-8b-instruct",
+"usage": {
+"in": 619,
+"out": 471
+}
+},
 "e183f31303ad9c90d2ed2c1b": {
 "content": "{\n  \"answer\": [\n    {\n      \"news_id\": \"NEWS-002\",\n      \"shipment_ids\": [\"SHP-0015\", \"SHP-0019\"]\n    }\n  ]\n}",
 "model": "qwen-3-8b-instruct",
@@ -1157,6 +1389,14 @@
 "usage": {
 "in": 601,
 "out": 86
+}
+},
+"e6904abfe03cf9c5ac808ce6": {
+"content": "{\"answer\": [{\"a_id\": \"AX-000\", \"b_tags\": [\"atlas\", \"poetry\", \"score\", \"scroll\"]}, {\"a_id\": \"AX-001\", \"b_tags\": [\"atlas\", \" \" , \"folio\", \"score\"]}, {\"a_id\": \"AX-002\", \"b_tags\": [\"drama\", \"fiction\", \"quire\", \"vellum\"]}, {\"a_id\": \"AX-008\", \"b_tags\": [\"codex\", \"folio\", \"poetry\", \"quire\"]}, {\"a_id\": \"the_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_idid_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_context_id_id_id_id_id_id_id_id_id_id_context_id_id_id_id_id_id_id_id_id_id_id_context_id_id_id_id_id_id_id_id_context_id_id_id_id_id_id_context_id_id_id_id_id_context_id_id_id_id_context_id_id_id_id_context_id_id_id_context_id_id_id_context_id_id_context_id_id_context_id_id_context_id_id_context_id_id_context_id_id_context_id_d_id_id_context_id_d_id_context_id_d_id_context_id_d_id_context_id_d_id_context_id_d_id_context_id_d_id_context_id_d_id_context_id_d_id_context_id_d_id_context_id_d_id_context_id_d_id_context_id_d_id_context_id_d_id_context_id_d_id",
+"model": "google/gemma-4-12b-qat",
+"usage": {
+"in": 499,
+"out": 1500
 }
 },
 "e938be2f5c077cdcd72e6fad": {
@@ -1213,6 +1453,22 @@
 "usage": {
 "in": 552,
 "out": 88
+}
+},
+"fd42f6f1da565ab779281c5b": {
+"content": "{\n  \"answer\": [\n    {\"a_id\": \"AX-000\", \"b_tags\": [\"drama\", \"essay\", \"poetry\", \"scroll\"]},\n    {\"a_id\": \"AX-008\", \"b_tags\": [\"drama\", \"folio\", \"poetry\", \"scroll\"]},\n    {\"a_id\": \"AX-010\", \"b_tags\": [\"atlas\", \"codex\", \"fiction\", \"folio\"]},\n    {\"a_id\": \"AX-011\", \"b_tags\": [\"essay\", \"manual\", \"quire\", \"score\"]},\n    {\"a_id\": \"AX-012\", \"b_tags\": [\"atlas\", \"folio\", \"poetry\", \"quire\"]},\n    {\"a_id\": \"AX-014\", \"b_tags\": [\"codex\", \"fiction\", \"folio\", \"vellum\"]},\n    {\"a_id\": \"AX-020\", \"b_tags\": [\"essay\", \"poetry\", \"quire\", \"score\"]},\n    {\"a_id\": \"AX-021\", \"b_tags\": [\"fiction\", \"score\", \"scroll\", \"vellum\"]},\n    {\"a_id\": \"AX-022\", \"b_tags\": [\"codex\", \"drama\", \"quire\", \"scroll\"]},\n    {\"a_id\": \"AX-023\", \"b_tags\": [\"atlas\", \"essay\", \"manual\", \"score\"]},\n    {\"a_id\": \"AX-025\", \"b_tags\": [\"codex\", \"fiction\", \"manual\", \"quire\"]},\n    {\"a_id\": \"AX-026\", \"b_tags\": [\"atlas\", \"fiction\", \"manual\", \"score\"]}\n  ]\n}",
+"model": "qwen-3-8b-instruct",
+"usage": {
+"in": 504,
+"out": 374
+}
+},
+"fd76447082f1b4f98e42ff28": {
+"content": "{\"answer\": [{\"a_id\": \"AX-002\", \"b_tags\": [\"atlas\", \"fiction\", \"manual\", \"quire\"]}, {\"a_id\": \"AX-003\", \"b_tags\": [\"fiction\", \"folio\", \"poetry\", \"scroll\"]}, {\"a_id\": \"AX-008\", \"b_tags\": [\"drama\", \"poetry\", \"score\", \"scroll\"]}, {\"a_id\": \"PT-010\", \"b_tags\": [\"codex\", \"PT-010\", \"PT-010\", \"PT-010\"]}, {\"a_id\": \"AX-010\", \"b_tags\": [\"codex\", \"manual\", \"poetry\", \"score\"]}, {\"a_id\": \"AX-011\", \"b_tags\": [\"folio\", \"poetry\", \"score\", \"scroll\"]}, {\"a_id\": \"AX-014\", \"b_tags\": [\"fiction\", \"quire\", \"score\", \"vellum\"]}, {\"a_id\": \"AX-015\", \"b_tags\": [ \"atlas\", \"essay\", \"poetry\", \"scroll\"]}, {\"a_id\": \"AX-016\", \"b_tags\": [\"essay\", \"manual\", \"poetry\", \"scroll\"]}, {\"a_id\": \"AX-017\", \"b_tags\": [\"codex\", \"manual\", \"quire\", \"score\"]}, {\"a_id\": \"AX-018\", \"b_tags\": [\"atlas\", \"drama\", \"poetry\", \"vellum\"]}, {\"a_id\": \"AX-022\", \"b_tags\": [\"PT-010\", \"PT-010\", \"PT-010\", \"PT-011\"]}, {\"a_id\": \"AX-024\", \"b_tags\": [\"atlas\", \"drama\", \"fiction\", \"vellum\"]}, {\"a_id\": \"AX-025\", \"b_tags\": [\"codex\", \"drama\", \"fiction\", \"poetry\"]}, {\"a_id\": \"AX-027\", \"b_tags\": [\"codex\", \"A-027\", \"score\", \"vellum\"]}, {\"a_id\": \"AX-028\", \"b_tags\": [\"codex\", \"essay\", \"fiction\", \"quire\"]}, {\"a_id\": \"AX-029\", \"b_tags\": [\"PT-010\", \"PT-010\", \"PT-011\", \"PT-012\"]}, {\"a_id\": \"AX-030\", \"b_tags\": [\"PT-010\", \"PT-010\", \"PT-011\", \"PT-012\"]}, {\"a_id\": \"AX-031\", \"b_tags\": [\"PT-010\", \"PT-011\", \"PT-012\", \"PT-013\"]}, {\"a_id\": \"AX-032\", \"b_tags\": [\"PT-010\", \"PT-011\", \"PT-012\", \"PT-013\"]}, {\"a_id\": \"id_001\", \"b_tags\": [\"PT-010\", \"PT-011\", \"PT-012\", \"PT-013\"]}, {\"a_id\": \"AX-033\", \"b_tags\": [\"PT-010\", \"PT-011\", \"PT-012\", \"PT-013\"]}, {\"a_id\": \"AX-034\", \"b_tags\": [\"thought_001\", \"thought_002\", \"thought_001\", \"thought_002\"]}, {\"a_id\": \"AX-035\", \"b_tags\": [\"thought_001\", \"thought_002\", \"thought_001\", \"thought_002\"]}, {\"a_id\": \"PT-010\", \"b_tags\": [\"PT-010\", \"PT-010\", \"PT-011\", \"PT-011\"]}, {\"a_id\": \"AX-036\", \"b_tags\": [\"thought_001\", \"thought_002\", \"thought_010\", \"thought_002\"]}, {\"a_id\": \"AX-037\", \"b_tags\": [\"thought_001\", \"thought_002\", \"thought_010\", \"thought_002\"]}, {\"a_id\": \"AX-038\", \"b_tags\": [\"thought_001\", \"thought_002\", \"thought_010\", \"thought_002\"]}, {\"a_id\": \"AX-039\", \"b_tags\": [\"thought_001\", \"thought_002\", \"thought_010\", \"thought_002\"]}, {\"a_id\": \"AX-040\", \"b_tags\": [\"thought_001\", \"thought_002\", \"thought_010\", \"thought_002\"]}, {\"a_id\": \"AX-041\", \"b_tags\": [\"thought_001\", \"thought_002\", \"thought_010\", \"thought_002\"]}, {\"a_id\": \"AX-042\", \"b_tags\": [\"typo_001\", \"typo_002\", \"typo_001\", \"typo_002\"]}, {\"a_id\": \"AX-042\", \"b_tags\": [\"typo_001\", \"typo_002\", \"typo_001\", \"typo_002\"]}, {\"a_id\": \"AX-043\", \"b_tags\": [\"typo_001\", \"typo_000\", \"typo_001\", \"typo_000\"]}, {\"a_id\": \"AX-044\", \"b_tags\": [\"typo_001\", \"typo_000\", \"typo_001\", \"typo_000\"]}, {\"a_id\": \"PT-010\", \"b_tags\": [\"typo_001\", \"PT-010\", \"typo_001\", \"typo_000\"]}, {\"a_id\": \"AX-045\", \"b_tags\": [\"typo_001\", \"typo_000\", \"typo_001\", \"typo_000\"]}, {\"a_id\": \"AX-046\", \"b_tags\": [\"typo",
+"model": "google/gemma-4-12b-qat",
+"usage": {
+"in": 576,
+"out": 1500
 }
 },
 "ff7848d8408dceb34da5c691": {

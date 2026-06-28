@@ -222,11 +222,16 @@ def _json_schema_block(schema: dict) -> dict:
 
 
 def structured_complete(system: str, user: str, schema: dict, model: str | None = None, *,
-                        use_fixture: bool = True, allow_live: bool = True) -> dict:
+                        use_fixture: bool = True, allow_live: bool = True, max_tokens: int = 700) -> dict:
     """Generic structured-output completion with token instrumentation + a frozen fixture cache.
 
     Returns {ok, content (raw JSON str), usage {in,out}, model, cached} or {ok: False, error}. With a
     fixture hit, NO live call is made (deterministic re-runs). Set allow_live=False to require fixtures.
+
+    ``max_tokens`` caps the completion (default 700 — fits the logistics task; raise it for tasks with a
+    larger structured answer so the JSON is not truncated). NOTE: max_tokens is NOT part of the fixture key
+    (which hashes model/system/user/schema), so two calls that differ ONLY in max_tokens share a cache entry
+    — re-populate with use_fixture=False to refresh after changing it.
     """
     mdl = model or resolve_model()
     key = _fix_key(mdl, system, user, schema)
@@ -239,7 +244,7 @@ def structured_complete(system: str, user: str, schema: dict, model: str | None 
     payload = {
         "model": mdl,
         "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
-        "temperature": 0, "max_tokens": 700,
+        "temperature": 0, "max_tokens": max_tokens,
         "response_format": {"type": "json_schema", "json_schema": _json_schema_block(schema)},
     }
     try:

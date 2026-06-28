@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
+from .benchmark_split import run_split_ablation
 from .data_package_split import generate_split, public_view
 from .split_gate import run_split_gate
 
@@ -23,3 +24,11 @@ def split_gate(seeds: int = 40) -> dict:
     (non-leaky), a z-scored semantic matcher recovers (solvable), twins are sparse. Honest: known-truth
     but CONSTRUCTED coupling — external validity raised, not closed."""
     return run_split_gate([f"sp-{i}" for i in range(max(1, min(seeds, 100)))])   # clamp: bounded public GET
+
+
+@split_router.get("/ablation")
+def split_ablation() -> dict:
+    """Axiom-gain on the split substrate (§11b): naive-RAG (raw both-domain records) vs axiom-RAG (the
+    deterministic twin resolver pre-joined) on a cross-domain coreference task. Fixtures only — the
+    resolver accuracy (LLM-free) is reported too (it bounds axiom-RAG quality)."""
+    return run_split_ablation()
