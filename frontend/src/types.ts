@@ -351,6 +351,22 @@ export interface AxiomProtocol {
   honest_verdict: string;
 }
 
+// Coupling external validity on REAL paired data (§8j): a coupling-strength spectrum — near-duplicate vs genuine cross-aspect.
+export interface NexusRealCouplingPoint {
+  mean_cross_corr: number;
+  same_base_diag_corr?: number;
+  raw_value_match_auc: number;
+  semantic_zscore_auc: number;
+  resolver_top1_acc: number;
+  resolver_mutual_acc: number;
+}
+export interface NexusRealCoupling {
+  n: number;
+  chance_top1: number;
+  same_feature_near_duplicate: NexusRealCouplingPoint;
+  disjoint_feature_cross_aspect: NexusRealCouplingPoint;
+}
+
 // §6c channel-blind discriminability gate (nexus): oracle recovers, naive baselines ~chance ⇒ difficulty well-posed.
 export interface NexusGate {
   seeds: number;

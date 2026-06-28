@@ -1,7 +1,7 @@
 import { Component, Suspense, lazy, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
-import { fetchNexusAlign, fetchNexusGate, fetchNexusView } from "./api";
-import type { NexusAlign, NexusGate, NexusView as NexusViewData, NexusUnit } from "./types";
+import { fetchNexusAlign, fetchNexusGate, fetchNexusRealCoupling, fetchNexusView } from "./api";
+import type { NexusAlign, NexusGate, NexusRealCoupling, NexusView as NexusViewData, NexusUnit } from "./types";
 
 // the heavy three.js galaxy is a lazy chunk — it never enters the main bundle, and we fall back to the SVG
 // when WebGL is unavailable (DESIGN_visual_fusion §5: the 2D form is the accessibility/no-WebGL fallback).
@@ -261,15 +261,17 @@ function NexusViz() {
 function NexusSummary() {
   const [gate, setGate] = useState<NexusGate | null>(null);
   const [view, setView] = useState<NexusViewData | null>(null);
+  const [realc, setRealc] = useState<NexusRealCoupling | null>(null);
   const [error, setError] = useState("");
   useEffect(() => {
     let cancelled = false;
-    Promise.all([fetchNexusGate(), fetchNexusView(SEEDS[0])])
-      .then(([g, v]) => { if (!cancelled) { setGate(g); setView(v); } })
+    Promise.all([fetchNexusGate(), fetchNexusView(SEEDS[0]), fetchNexusRealCoupling()])
+      .then(([g, v, rc]) => { if (!cancelled) { setGate(g); setView(v); setRealc(rc); } })
       .catch((e) => !cancelled && setError(String(e)));
     return () => { cancelled = true; };
   }, []);
   const a2 = (x: number) => x.toFixed(2);
+  const a3 = (x: number) => x.toFixed(3);
   return (
     <div className="pr-ag-plain">
       <p className="pr-ag-plain-lead">
@@ -309,15 +311,23 @@ function NexusSummary() {
         </p>
       </div>
       <div className="pr-ag-plain-card is-caveat">
-        <h4>③ 外部效度 · 决定性翻车(瓶颈已从度量挪到 substrate)</h4>
+        <h4>③ 外部效度 · 两面都用真实数据测过(诚实结论)</h4>
         <p>
-          承重披露:上面的耦合是<b>设计的潜变量</b>(已知真值但构造)。把 substrate 的可观测边缘<b>校准到真实数据</b>
-          (sklearn breast_cancer,变异系数 ~14× 高于手设值)后,<b>3-way 收敛塌回判不定</b>——之前的胜利部分靠「手设的不真实低噪声」。
-          如实报告(可经 <code>/api/nexus_xdom/calibrate</code> 复现)。
+          <b>(a) 边缘校准 → 收敛翻车:</b>把 substrate 的可观测边缘<b>校准到真实数据</b>(breast_cancer,变异系数 ~14× 高于手设)后,
+          <b>3-way 收敛塌回判不定</b>——之前的胜利部分靠「手设的不真实低噪声」(可经 <code>/api/nexus_xdom/calibrate</code> 复现)。
+        </p>
+        <p>
+          <b>(b) 耦合换真实 → 信号衰减:</b>把跨域耦合从设计潜变量换成<b>真实配对数据</b>(同一肿瘤的两特征视图),沿强度谱实测{realc ? "" : "中…"}
+          {realc && (
+            <> ——收敛信号随「越真越跨切面」单调衰减:近重复 softball 语义 AUC <b>{a2(realc.same_feature_near_duplicate.semantic_zscore_auc)}</b>
+              (对齐 corr ≈{realc.same_feature_near_duplicate.same_base_diag_corr ?? "—"})→ <b>真·跨切面</b> AUC <b>{a2(realc.disjoint_feature_cross_aspect.semantic_zscore_auc)}</b>、
+              top-1 <b>{a3(realc.disjoint_feature_cross_aspect.resolver_top1_acc)}</b>(≈随机 {a3(realc.chance_top1)}，唯一解析基本不可能)。
+              即合成的 ~0.99 <b>严重高估真实跨域耦合强度</b>。</>
+          )}
         </p>
         <p className="pr-ag-plain-analogy">
-          ▸ 选型含义:<b>度量本身严谨</b>(受控合成上能区分 nexus vs 巧合),但 <b>substrate 外部效度未闭合</b>;
-          任何「野外跨域发现」须自带真实校准。本地、确定性,非生产证据。
+          ▸ 选型含义:<b>度量本身严谨</b>(受控合成上能区分 nexus vs 巧合),且<b>两面外部效度都用真实数据探过</b>;
+          但真实<b>跨切面</b>耦合既弱又难唯一解析 ⇒ 任何「野外跨域发现」须自带真实校准,本地、确定性,<b>非生产证据</b>。
         </p>
       </div>
     </div>

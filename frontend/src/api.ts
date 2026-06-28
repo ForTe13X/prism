@@ -6,6 +6,7 @@ import type {
   LlmHealth,
   NexusAlign,
   NexusGate,
+  NexusRealCoupling,
   NexusView,
   PolicyRequest,
   PolicyResult,
@@ -87,6 +88,9 @@ export const fetchNexusAlign = (seed: string) =>
 
 // §6c channel-blind gate: oracle recoverable + naive baselines ~chance (pooled over the gate seeds).
 export const fetchNexusGate = () => getJSON<NexusGate>("/api/nexus_xdom/gate");
+
+// Coupling external validity on REAL paired data (§8j): the near-duplicate↔genuine cross-aspect spectrum.
+export const fetchNexusRealCoupling = () => getJSON<NexusRealCoupling>("/api/nexus_xdom/real_coupling");
 
 // Axiom-gain: the full cross-model protocol (mean±CI token saving + quality + Pareto + build break-even).
 export const fetchAxiomProtocol = (sourceId: string) =>
