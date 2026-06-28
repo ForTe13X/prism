@@ -348,6 +348,19 @@ export interface AxiomProtocol {
   honest_verdict: string;
 }
 
+// §6c channel-blind discriminability gate (nexus): oracle recovers, naive baselines ~chance ⇒ difficulty well-posed.
+export interface NexusGate {
+  seeds: number;
+  n_candidates: number;
+  n_positives: number;
+  prevalence: number;
+  oracle_auc: number;
+  time_auc: number;
+  depth_auc: number;
+  string_auc: number;
+  gate_pass: boolean;
+}
+
 // Cross-domain coreference ablation on the split substrate — structured foundation ENABLES an impossible-from-raw task.
 export interface SplitCondition {
   model: string;

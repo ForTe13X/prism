@@ -5,6 +5,7 @@ import type {
   Graph,
   LlmHealth,
   NexusAlign,
+  NexusGate,
   NexusView,
   PolicyRequest,
   PolicyResult,
@@ -83,6 +84,9 @@ export const fetchNexusView = (seed: string) =>
 // Sinkhorn alignment for one package: the residual + transport snapshots the animated collision scrubs.
 export const fetchNexusAlign = (seed: string) =>
   getJSON<NexusAlign>(`/api/nexus_xdom/align?seed=${encodeURIComponent(seed)}`);
+
+// §6c channel-blind gate: oracle recoverable + naive baselines ~chance (pooled over the gate seeds).
+export const fetchNexusGate = () => getJSON<NexusGate>("/api/nexus_xdom/gate");
 
 // Axiom-gain: the full cross-model protocol (mean±CI token saving + quality + Pareto + build break-even).
 export const fetchAxiomProtocol = (sourceId: string) =>

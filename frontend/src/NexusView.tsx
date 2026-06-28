@@ -1,7 +1,7 @@
 import { Component, Suspense, lazy, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
-import { fetchNexusAlign, fetchNexusView } from "./api";
-import type { NexusAlign, NexusView as NexusViewData, NexusUnit } from "./types";
+import { fetchNexusAlign, fetchNexusGate, fetchNexusView } from "./api";
+import type { NexusAlign, NexusGate, NexusView as NexusViewData, NexusUnit } from "./types";
 
 // the heavy three.js galaxy is a lazy chunk — it never enters the main bundle, and we fall back to the SVG
 // when WebGL is unavailable (DESIGN_visual_fusion §5: the 2D form is the accessibility/no-WebGL fallback).
@@ -53,7 +53,7 @@ function pos(idx: number, n: number, side: "A" | "B") {
   return { x, y };
 }
 
-export default function NexusView() {
+function NexusViz() {
   const [seed, setSeed] = useState(SEEDS[0]);
   const [data, setData] = useState<NexusViewData | null>(null);
   const [error, setError] = useState("");
@@ -250,6 +250,87 @@ export default function NexusView() {
           )}
         </div>
       )}
+    </div>
+  );
+}
+
+// Architect / PM register summary of the nexus arc — same honesty, decision framing. Live-fetches the fast
+// §6c gate (~1s) + a per-package scorecard (instant); the 10s convergence + the Track-1 collapse are reported
+// as RECORDED deterministic results with reproducibility pointers (kept off the blocking path on purpose).
+function NexusSummary() {
+  const [gate, setGate] = useState<NexusGate | null>(null);
+  const [view, setView] = useState<NexusViewData | null>(null);
+  const [error, setError] = useState("");
+  useEffect(() => {
+    let cancelled = false;
+    Promise.all([fetchNexusGate(), fetchNexusView(SEEDS[0])])
+      .then(([g, v]) => { if (!cancelled) { setGate(g); setView(v); } })
+      .catch((e) => !cancelled && setError(String(e)));
+    return () => { cancelled = true; };
+  }, []);
+  const a2 = (x: number) => x.toFixed(2);
+  return (
+    <div className="pr-ag-plain">
+      <p className="pr-ag-plain-lead">
+        命题:把「真·跨域 nexus」与「时间巧合」区分开,靠的是<b>收敛效度</b>(≥2/3 条<b>读不同存储、互相独立</b>的渠道同意),
+        而非任何单一信号。下面是这条线的诚实账本 + 边界;星系可视化与对齐回放见右侧「🌌 可视化」。
+      </p>
+      {error && <p className="pr-error">加载失败:{error}（先启动后端 :8200）</p>}
+      <div className="pr-ag-plain-card is-caveat">
+        <h4>① 先量「笨 baseline」,让它杀前提(诚实负结果)</h4>
+        <p>
+          <b>M0:</b>真桥按构造即「时间同现」⇒ 时间戳是充分统计量,单靠 Δframe 就近满分(time-coincidence AUC ~0.94–0.99)。
+          <b>这是个让度量难堪的负结果,照实写下</b>——意味着「时间」不能作为发现依据。<b>M1:</b>时间无关的语义透镜(L4)AUC=0.36(<b>低于随机</b>),也照报。
+        </p>
+        <p className="pr-ag-plain-analogy">
+          ▸ 架构含义:朴素信号要么是<b>充分统计量(等于作弊)</b>、要么<b>低于随机</b>;任何「真发现」必须靠<b>多条独立渠道收敛</b>,不能信单通道。
+        </p>
+      </div>
+      <div className="pr-ag-plain-card">
+        <h4>② §6c 难度门 + 三渠道收敛(在合成 substrate 上,可证伪)</h4>
+        <p>
+          channel-blind 难度门(实测,{gate ? `${gate.seeds} seed 池化` : "加载中"}):oracle(见 latent)recover <b>AUC {gate ? a2(gate.oracle_auc) : "…"}</b>,
+          朴素 baseline(time/depth/string)~随机(<b>{gate ? `${a2(gate.time_auc)}/${a2(gate.depth_auc)}/${a2(gate.string_auc)}` : "…"}</b>)
+          ⇒ 难度<b>良定义</b>、{gate?.gate_pass ? "门通过" : "—"}。三条独立渠道(shape=时序、fingerprint=SQL 直方图、relational=tags;两两相关仅 0.13–0.19):
+          <b>2-way 收敛 margin 的 CI 跨 0.05(判不定)</b>;加入第三条独立渠道后,<b>3-way margin +0.073、CI 整段 &gt;0.05 ⇒ 稳过</b>;
+          反「reverse-trap」控制(同功率但相关的 placebo 渠道<b>不</b>过线)证明胜在<b>独立性而非功率</b>。
+          {view?.scorecard && <> 当前包计分板:候选桥 {view.scorecard.candidates}、真桥(≥2/3 渠道)<b>{view.scorecard.high}</b>、实际耦合 {view.scorecard.true_couplings}。</>}
+        </p>
+        <p className="pr-ag-plain-analogy">
+          ▸ 含义:在<b>受控合成</b>上,度量能把「3 条独立证据同时指向」与「时间巧合 / 单通道」分开——这是「收敛效度是戏」批评的<b>真修复</b>。
+          诚实限定:各渠道的<b>功率</b>是工程构造(常量带可见性调参),而<b>独立性与 margin-vs-floor 未调、是可证伪的部分</b>。
+          (3-way 数值确定性,可经 <code>/api/nexus_xdom/channels</code> 复现。)
+        </p>
+      </div>
+      <div className="pr-ag-plain-card is-caveat">
+        <h4>③ 外部效度 · 决定性翻车(瓶颈已从度量挪到 substrate)</h4>
+        <p>
+          承重披露:上面的耦合是<b>设计的潜变量</b>(已知真值但构造)。把 substrate 的可观测边缘<b>校准到真实数据</b>
+          (sklearn breast_cancer,变异系数 ~14× 高于手设值)后,<b>3-way 收敛塌回判不定</b>——之前的胜利部分靠「手设的不真实低噪声」。
+          如实报告(可经 <code>/api/nexus_xdom/calibrate</code> 复现)。
+        </p>
+        <p className="pr-ag-plain-analogy">
+          ▸ 选型含义:<b>度量本身严谨</b>(受控合成上能区分 nexus vs 巧合),但 <b>substrate 外部效度未闭合</b>;
+          任何「野外跨域发现」须自带真实校准。本地、确定性,非生产证据。
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export default function NexusView() {
+  const [tab, setTab] = useState<"summary" | "viz">("summary"); // accessible architect/PM summary first
+  return (
+    <div>
+      <nav className="pr-ag-subtabs" role="tablist" aria-label="nexus 子标签">
+        <button role="tab" aria-selected={tab === "summary"} className={tab === "summary" ? "pr-ag-subtab is-active" : "pr-ag-subtab"} onClick={() => setTab("summary")}>
+          📋 摘要 · 架构/PM 视角
+        </button>
+        <button role="tab" aria-selected={tab === "viz"} className={tab === "viz" ? "pr-ag-subtab is-active" : "pr-ag-subtab"} onClick={() => setTab("viz")}>
+          🌌 可视化（星系碰撞 + 对齐回放）
+        </button>
+      </nav>
+      {tab === "summary" ? <NexusSummary /> : <NexusViz />}
     </div>
   );
 }
