@@ -25,6 +25,32 @@ views + relations        选控件(仪表/趋势/徽章/…)        (UI = f(spec
 
 在 UI 右上角「领域」下拉切换,即可看到**零代码**换出完全不同的驾驶舱——这就是"领域无关"的证明。
 
+## 全景 · 给架构师 / PM 的诚实框定
+
+**定位(诚实在先):Prism 是一个 for-fun / 学习沙盒**——成功判据是「还在玩、还在学吗?」,**不是** PMF / 简历 / 产品指标。但它**拒绝撒谎**:每个数字随结论挂诚实 caveat,负结果和胜利一样大声报。下面是架构师 / PM 30 秒能读完的账本。
+
+**它由两半组成:**
+1. **领域无关语义驾驶舱** —— 整个 UI(tab / 面板 / 控件)是一份**语义 spec 的纯函数**;换 spec 零代码换一套驾驶舱(见上)。数据**确定性合成**(哈希种子、无随机 / 无时钟、逐帧可复现)。
+2. **一条诚实的研究线** —— 命题:在 LLM 前置一层**确定性语义地基**(跨源实体解析 + 预联结,规则式、build 成本 ≈ 0),能否同质量省 token、并解锁裸 RAG 做不了的跨源任务?驾驶舱里两个 lab tab(**⚖ axiom-gain** / **✦ 跨域 nexus**)各带「📋 架构 / PM 摘要」子标签,把下面的账本**活在界面里**(数字从 API 实时取,不会和后端漂移)。
+
+**研究结果账本(稳 / 负 / 修 / 开):**
+
+| 类别 | 结论 | 复现 |
+| --- | --- | --- |
+| **稳(CI 牢)** | 结构地基对裸 RAG:**输入 token 省 ~61%**(跨 3 模型 × 4 脏度 × 8 seed、每格 bootstrap 95% CI **12/12 显著**);质量不降(min ΔF1 +0.07,8/12 格显著更高);成本 × 质量 Pareto 前沿**由 axiom 独占** | `GET /api/axiomgain/logistics_demo/protocol` · [RESEARCH §11c](docs/RESEARCH_axiom_gain.md) |
+| **稳(使能)** | 跨域共指:同一实体在两系统经变体改写、无共享键 ⇒ 裸 RAG 得分 **≈0**(认不出),确定性 resolver 预解析后 **→0.66**、token 省 ~85% —— **从 0 到能做** | `GET /api/split/ablation` · [DESIGN §11b](docs/DESIGN_data_package.md) |
+| **诚实负** | 学习式别名词典 **+0.000** held-out F1 ⇒ 摊销**永不回本(N\*=∞)**——增益全在「免 build 的结构」,**别为学词典单独投训练** | [RESEARCH §11b](docs/RESEARCH_axiom_gain.md) |
+| **决定性诚实负** | 把合成 substrate 的可观测边缘**校准到真实数据**(变异系数 ~14× 高于手设)后,nexus 三渠道收敛**塌回判不定**——之前的胜利部分靠「数据太干净」 | `GET /api/nexus_xdom/calibrate` · [METRIC §8g](docs/METRIC_nexus_reality.md) |
+| **已修诚实漏洞** | 星系「发光 = 已验证」原用相对 top-decile,零耦合对也强行点亮 ~8;换成**绝对显著阈 + FDR(CACE)**后零对**熄灭**(8.27→0.03)、精度 0.66→0.96 | `GET /api/nexus_xdom/fdr_check` · [METRIC §8h](docs/METRIC_nexus_reality.md) |
+| **开放(不声称已补)** | substrate 的**外部效度**未闭合(跨域耦合是构造的设计潜变量);任何「野外跨域发现」须自带真实校准 | [OBSERVER §11/§12](docs/OBSERVER_NOTES.md) |
+
+**焊死的纪律(贯穿全仓):**
+- **确定性** —— sha256 种子,无 `random` / 无时钟,逐字节可复现;LLM 调用走**冻结 fixture**,跑分不碰 live 模型。
+- **clean-room** —— 只用本仓自有代码;无任何既有项目 / 雇主 IP。
+- **诚实是方向盘,不是叠甲** —— synthetic / 未实测的值永远标注;sim 永远带不确定带;判不定就报判不定(不四舍五入成显著);连可视化的**亮度都随置信度走**(零信号就熄灭,不只随点估大小)。
+
+**边界(随结论挂):小规模 + 合成数据**(非生产证据);本地模型 $=0 ⇒ 成本轴仅真实 token、未折美元;研究线测的是「结构地基在**受控合成**跨源上的价值」,**不是**「野外能发现真 nexus」。研究方法学锚:[`METRIC_nexus_reality.md`](docs/METRIC_nexus_reality.md) · [`RESEARCH_axiom_gain.md`](docs/RESEARCH_axiom_gain.md) · 旁观诚实审计:[`OBSERVER_NOTES.md`](docs/OBSERVER_NOTES.md)。
+
 ## 架构
 
 | 层 | 技术 | 职责 |
@@ -106,6 +132,7 @@ npm run dev            # http://127.0.0.1:5173
 - 后端 `backend/app/axiom_layer.py`(clean-room 异常锚定 canonical 解析)+ `benchmark.py`(token 插桩 + **冻结 fixture** 可复现)+ `GET /api/axiomgain/{id}`(从 fixture 出报告,无需 live 模型)。
 - **首跑结果**(4 held-out seeds × {qwen3-8b, gemma-12b} × {dirt 0,0.6}):**axiom-RAG 质量≥naive 且输入 token≈40%**;**增益随脏度增长**(gemma 在 dirt0.6:naive 0.53 → axiom 0.87)。即 RESEARCH 的 H1 + §6b robustness 在首跑成立。
 - **诚实**:axiom 层算法式(无训练 ⇒ build≈0、摊销平凡);小规模首跑(无多 seed CI / $ 定价 / 多场景);naive 给真原始多源(非稻草人)。完整研究见 [`docs/RESEARCH_axiom_gain.md`](docs/RESEARCH_axiom_gain.md) §11。
+- **此后已升级为完整结果**(见顶部「研究结果账本」):**跨模型矩阵 + 每格 95% CI**(`/api/axiomgain/{id}/protocol`,token 省 ~61%、12/12 显著、Pareto 独占、学习字典 N\*=∞)· split-substrate **跨域共指使能**(`/api/split/ablation`,裸 RAG ≈0 → resolver 后 0.66)· real-data 校准的**决定性诚实塌缩**(Track 1,METRIC §8g)· §13 发光 **CACE/FDR** 修复(零耦合对熄灭,METRIC §8h)。全部活在驾驶舱 **⚖ axiom-gain** / **✦ 跨域 nexus** 两个 lab tab 的「📋 架构 / PM 摘要」子标签里(数字实时取自 API)。
 
 ## 预留 TODO(v0 之后)
 
