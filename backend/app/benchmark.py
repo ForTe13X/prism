@@ -68,14 +68,14 @@ def _parse(content: str) -> dict:
     return out
 
 
-def _ask(context: str, model: str | None, allow_live: bool) -> dict:
+def _ask(context: str, model: str | None, allow_live: bool, timeout: int = 90) -> dict:
     user = f"{task_question()}\n\n【上下文】\n{context}"
-    return llm_client.structured_complete(_SYSTEM, user, _ANSWER_SCHEMA, model, allow_live=allow_live)
+    return llm_client.structured_complete(_SYSTEM, user, _ANSWER_SCHEMA, model, allow_live=allow_live, timeout=timeout)
 
 
 def run_ablation(source_id: str = "logistics_demo", *, seeds: list[str] | None = None,
                  models: list[str] | None = None, dirts: list[float] | None = None,
-                 allow_live: bool = False) -> dict:
+                 allow_live: bool = False, timeout: int = 90) -> dict:
     man = _manifest()  # reproduce the fixtured config without probing a live model
     seeds = seeds or man.get("seeds") or [f"ho-{i}" for i in range(4)]  # held-out (algorithmic layer ⇒ no train leak)
     models = models or man.get("models") or [llm_client.resolve_model()]
@@ -92,7 +92,7 @@ def run_ablation(source_id: str = "logistics_demo", *, seeds: list[str] | None =
                 obs = observation_view(pkg)
                 truth = oracle_solve(pkg, "explain_delays")
                 for cond, ctx in (("naive", naive_context(obs)), ("axiom", axiom_context(obs))):
-                    r = _ask(ctx, model, allow_live)
+                    r = _ask(ctx, model, allow_live, timeout=timeout)
                     if not r.get("ok"):
                         return {"ok": False, "error": f"LLM call failed ({r.get('error')}); run with allow_live to populate fixtures"}
                     cached_all = cached_all and r.get("cached", False)

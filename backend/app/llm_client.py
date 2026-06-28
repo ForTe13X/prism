@@ -222,7 +222,8 @@ def _json_schema_block(schema: dict) -> dict:
 
 
 def structured_complete(system: str, user: str, schema: dict, model: str | None = None, *,
-                        use_fixture: bool = True, allow_live: bool = True, max_tokens: int = 700) -> dict:
+                        use_fixture: bool = True, allow_live: bool = True, max_tokens: int = 700,
+                        timeout: int = _TIMEOUT) -> dict:
     """Generic structured-output completion with token instrumentation + a frozen fixture cache.
 
     Returns {ok, content (raw JSON str), usage {in,out}, model, cached} or {ok: False, error}. With a
@@ -248,8 +249,12 @@ def structured_complete(system: str, user: str, schema: dict, model: str | None 
         "response_format": {"type": "json_schema", "json_schema": _json_schema_block(schema)},
     }
     try:
-        resp = _post("/chat/completions", payload)
-        content = _extract_json((resp.get("choices") or [{}])[0].get("message", {}).get("content") or "")
+        resp = _post("/chat/completions", payload, timeout=timeout)
+        _msg = (resp.get("choices") or [{}])[0].get("message", {})
+        _raw = _msg.get("content") or ""
+        if not _raw.strip():  # some reasoning models (e.g. qwen3.6 in LM Studio) route the json_schema answer
+            _raw = _msg.get("reasoning_content") or ""  # into reasoning_content, leaving content empty
+        content = _extract_json(_raw)
         usage = resp.get("usage") or {}
         u = {"in": int(usage.get("prompt_tokens", 0)), "out": int(usage.get("completion_tokens", 0))}
         rmodel = resp.get("model", mdl)

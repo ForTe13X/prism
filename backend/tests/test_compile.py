@@ -125,7 +125,7 @@ def test_json_schema_block_normalizes_bare_and_passes_wrapper() -> None:
 def test_structured_complete_payload_always_names_the_json_schema(monkeypatch) -> None:
     # the actual 400-fix: whatever a caller passes, the outgoing payload's json_schema has a `name`.
     captured: dict = {}
-    def fake_post(path, payload):
+    def fake_post(path, payload, timeout=90):
         captured["payload"] = payload
         return {"choices": [{"message": {"content": '{"x":"ok"}'}}], "usage": {"prompt_tokens": 1, "completion_tokens": 1}, "model": "m"}
     monkeypatch.setattr(llm_client, "_post", fake_post)

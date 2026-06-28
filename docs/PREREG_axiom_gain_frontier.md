@@ -70,13 +70,36 @@ CIs** ⇒ a tiny wobble would flip that pair to a tie. The monotone flag is **ca
   endpoint (breaks the `$=0` local-only property — disclose the $ if used) **or** the largest local model
   that is verified to load safely. Until one is run, H2 stays **registered-but-untested** — that is the
   honest state, not a result.
-- **Probe log (2026-06-28, this machine).** The one clean local candidate genuinely more-capable than
-  gemma-31b — `qwen3.6-35b-a3b` (35B MoE, 3B active) — **failed to load+respond within the client's 90s HTTP
-  timeout on two consecutive attempts** (the 35B MoE keeps all params resident, ≈18–20GB, just over the
-  dense-31b envelope ⇒ swaps). No freeze (calls returned cleanly), but **not usable under a bounded timeout**.
-  The bigger models (122B/397B) are off-limits (freeze risk); the rest are ≤ gemma-31b (not more capable). So
-  on **this** hardware the frontier point stays **registered-but-untested** — recorded honestly, not skipped.
-  A frontier API or a bigger-RAM host would close it; the registration above stands unchanged for that run.
+- **Probe log (2026-06-28, this machine).** The **Q8_0** `unsloth/qwen3.6-35b-a3b` (≈42 GB at a 256K context)
+  exceeded VRAM ⇒ <0.18 tok/s (CPU-bound), unusable. The user pointed to the **Q4_K_M** build
+  `qwen/qwen3.6-35b-a3b` (~18–20 GB) which loads + runs at ~5.5 tok/s. Two harness fixes were needed first:
+  (a) qwen3.6 is a **reasoning model** and LM Studio routes its json_schema answer into `reasoning_content`,
+  leaving `content` empty (F1 0 for everything) — `llm_client` now falls back to `reasoning_content` when
+  `content` is blank; (b) a `timeout` pass-through for the slow model. With those, the registered ablation ran.
+
+## Result of the registered test (RUN 2026-06-28, `qwen/qwen3.6-35b-a3b`, 8 seeds × 4 dirt)
+
+| model (↑ capability) | naive F1 | quality gain ΔF1 | token saving |
+|---|---|---|---|
+| gemma-12b | 0.620 | 0.166 | 0.608 |
+| **qwen3.6-35b-a3b (new)** | **0.741** | **0.175** | 0.634 |
+| qwen-8b | 0.759 | 0.157 | 0.627 |
+| gemma-31b | 0.807 | 0.108 | 0.608 |
+
+- **H2a — directionally SUPPORTED, strict monotonicity REFUTED.** Across 4 models `Spearman(capability, gain)
+  = −0.80` (gain still falls with capability), but the new point is **off the monotone line** (gain 0.175 at
+  capability 0.741, *above* gemma-12b's 0.166). So "monotone non-increasing" is **false**; the weaker
+  directional claim holds. *This is the value of the pre-registration: monotone was predicted, the data says
+  "negative-but-not-monotone," and that is what's reported.*
+- **The candidate was NOT actually a frontier point.** Its naive F1 (0.741) lands **mid-axis, below
+  gemma-31b's 0.807** — a 35B MoE with 3B active is **not** more task-competent than 31B dense here. So the
+  registered Confirm rule (*"the frontier point's ΔF1 ≤ gemma-31b's 0.108"*) was **not exercised** — we added
+  an interior point, not a higher-capability one. **The genuine frontier regime (naive F1 > 0.81) remains
+  registered-but-untested** (needs a model that is actually more capable on this task).
+- **H2b — CONFIRMED.** The new model's token saving (0.634) keeps the spread structural-flat (0.025 < 0.05);
+  the ~61% headline is model-independent, as predicted.
+- **No grid pruned.** The off-line point is kept and reported (it would have been tempting to drop it to
+  preserve "monotone −1.0"); that would violate DON'T #4.
 - **No silent grid-pruning (DON'T #4/§15).** If the frontier cell shows *no* gain, it is **kept and reported**
   (a confirmed H2a, the predicted outcome) — never deleted to preserve a prettier headline.
 - **Win either way.** Confirm ⇒ a real cross-capability result (the structural 61% survives; the quality

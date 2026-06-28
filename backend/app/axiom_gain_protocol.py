@@ -190,16 +190,25 @@ def run_protocol(source_id: str = "logistics_demo", *, models: list[str] | None 
     h2_gains = [r["quality_gain"] for r in h2_rows]
     h2_saves = [r["token_saving"] for r in h2_rows]
     save_spread = round(max(h2_saves) - min(h2_saves), 4) if h2_saves else 0.0
+    # Spearman rank corr(capability, gain): the DIRECTIONAL H2a measure (robust to a single off-monotone point;
+    # the monotone bool is brittle). h2_rows is already ascending in capability ⇒ cap rank = position i.
+    spearman = None
+    n = len(h2_rows)
+    if n >= 3 and len(set(h2_gains)) == n:
+        grank = {g: i for i, g in enumerate(sorted(h2_gains))}
+        d2 = sum((i - grank[h2_gains[i]]) ** 2 for i in range(n))
+        spearman = round(1 - 6 * d2 / (n * (n * n - 1)), 3)
     h2 = {
         "capability_proxy": "per-model mean naive-RAG F1 (task competence WITHOUT the axiom layer)",
         "by_capability_ascending": h2_rows,
+        "spearman_capability_gain": spearman,                  # H2a direction: < 0 ⇒ gain shrinks with capability
         "quality_gain_monotone_decreasing": all(h2_gains[i] >= h2_gains[i + 1] for i in range(len(h2_gains) - 1)),
         "token_saving_spread": save_spread,
         "token_saving_is_structural_flat(<0.05)": save_spread < 0.05,
-        "note": ("H2a: quality gain ↓ as capability ↑ (a capable model needs the pre-resolution less). H2b: token "
-                 "saving is structural (context size) ⇒ ~model-independent. The 61% headline survives any model; "
-                 "what shrinks is the QUALITY benefit. Pre-registered for a frontier point (PREREG_axiom_gain_"
-                 "frontier.md); the current models are 8B–31B local — the trend here is observed, not pre-registered."),
+        "note": ("H2a: quality gain ↓ as capability ↑ (a capable model needs the pre-resolution less) — read the "
+                 "SPEARMAN (directional), not the brittle monotone bool. H2b: token saving is structural (context "
+                 "size) ⇒ ~model-independent; the 61% headline survives any model, only the QUALITY benefit shrinks. "
+                 "Pre-registered (PREREG_axiom_gain_frontier.md); the frontier RUN added qwen3.6-35b-a3b — see §11d."),
     }
 
     # §5 build-amortization break-even (structural gain build-free; learned dict adds ~0 F1 ⇒ N*=∞)

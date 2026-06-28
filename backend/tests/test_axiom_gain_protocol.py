@@ -5,7 +5,7 @@ dominant on cost×quality, and the §5 build break-even stays the honest negativ
 guaranteed-cached subset so it is deterministic regardless of any background fixture population."""
 from __future__ import annotations
 
-from backend.app.axiom_gain_protocol import run_protocol
+from backend.app.axiom_gain_protocol import PROTO_MODELS, run_protocol
 
 # the subset that has been frozen in fixtures since the first DP2 run — guaranteed cached, fast, deterministic
 SUB = {"models": ["qwen-3-8b-instruct", "google/gemma-4-12b-qat"],
@@ -65,6 +65,20 @@ def test_h2_capability_vs_gain_axis():
     # token saving is structural (context size) ⇒ ~model-independent (flat spread)
     assert h2["token_saving_is_structural_flat(<0.05)"] is True
     assert isinstance(h2["quality_gain_monotone_decreasing"], bool)  # the H2a flag is present + reproducible
+
+
+def test_h2_frontier_run_directional_not_monotone():
+    # PREREG H2, RUN: adding the 4th model (qwen3.6-35b-a3b) keeps the DIRECTIONAL trend (Spearman < 0) but
+    # BREAKS strict monotonicity — and it isn't actually a frontier point (naive F1 below gemma-31b). Honest
+    # result reported, not pruned. Deterministic from the committed fixtures.
+    h2 = run_protocol(models=PROTO_MODELS + ["qwen/qwen3.6-35b-a3b"])["h2_capability_vs_gain"]
+    rows = {r["model"]: r for r in h2["by_capability_ascending"]}
+    assert "qwen/qwen3.6-35b-a3b" in rows
+    assert h2["spearman_capability_gain"] is not None and h2["spearman_capability_gain"] < -0.5  # direction holds
+    assert h2["quality_gain_monotone_decreasing"] is False                       # ...but the 4th point breaks monotone
+    # the candidate is NOT actually more capable than gemma-31b on this task (so it didn't probe the frontier)
+    assert rows["qwen/qwen3.6-35b-a3b"]["capability_naive_f1"] < rows["google/gemma-4-31b-qat"]["capability_naive_f1"]
+    assert h2["token_saving_is_structural_flat(<0.05)"] is True                   # H2b: token saving stays flat
 
 
 def test_build_amortization_is_the_honest_negative():
