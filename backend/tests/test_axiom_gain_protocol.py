@@ -53,6 +53,20 @@ def test_gain_grows_with_dirtiness_endpoint():
         assert "monotonic_increasing" in rob and "peak_dirt" in rob   # the honest trend fields exist
 
 
+def test_h2_capability_vs_gain_axis():
+    # PREREG H2: ordering models by capability (naive-RAG F1), the QUALITY gain shrinks while the TOKEN saving
+    # stays structural-flat. On the existing 8B–31B matrix the trend is observed (not pre-registered).
+    r = _run()
+    h2 = r["h2_capability_vs_gain"]
+    rows = h2["by_capability_ascending"]
+    assert [round(rows[i]["capability_naive_f1"], 4) for i in range(len(rows))] == sorted(
+        round(x["capability_naive_f1"], 4) for x in rows)            # rows are ascending in capability
+    assert "naive-RAG F1" in h2["capability_proxy"]
+    # token saving is structural (context size) ⇒ ~model-independent (flat spread)
+    assert h2["token_saving_is_structural_flat(<0.05)"] is True
+    assert isinstance(h2["quality_gain_monotone_decreasing"], bool)  # the H2a flag is present + reproducible
+
+
 def test_build_amortization_is_the_honest_negative():
     # §5: structural axioms are build-free; the learned dictionary adds ~0 held-out F1 ⇒ never amortizes
     r = _run()

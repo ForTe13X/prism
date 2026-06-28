@@ -174,6 +174,34 @@ def run_protocol(source_id: str = "logistics_demo", *, models: list[str] | None 
              "caveat": ("single within-family pair; point comparison of cell-mean averages, NO CI on the "
                         "difference ⇒ DIRECTIONAL only, not significance-tested.")}
 
+    # H2 (PREREG_axiom_gain_frontier.md): does the QUALITY gain shrink as the model gets more capable, while
+    # the TOKEN saving (structural ⇒ context-size-bound) stays flat? Capability proxy = per-model mean naive-RAG
+    # F1 (task competence WITHOUT the axiom layer). This is the cross-capability axis the registered frontier
+    # point extends; here it is computed on whatever models are in the matrix.
+    h2_rows = []
+    for m in models:
+        cells = [c for c in matrix if c["model"] == m]
+        if cells:
+            h2_rows.append({"model": m,
+                            "capability_naive_f1": round(_mean([c["naive_f1"] for c in cells]), 4),
+                            "quality_gain": round(_mean([c["quality_delta_mean"] for c in cells]), 4),
+                            "token_saving": round(_mean([c["token_saving_mean"] for c in cells]), 4)})
+    h2_rows.sort(key=lambda r: r["capability_naive_f1"])  # ascending capability
+    h2_gains = [r["quality_gain"] for r in h2_rows]
+    h2_saves = [r["token_saving"] for r in h2_rows]
+    save_spread = round(max(h2_saves) - min(h2_saves), 4) if h2_saves else 0.0
+    h2 = {
+        "capability_proxy": "per-model mean naive-RAG F1 (task competence WITHOUT the axiom layer)",
+        "by_capability_ascending": h2_rows,
+        "quality_gain_monotone_decreasing": all(h2_gains[i] >= h2_gains[i + 1] for i in range(len(h2_gains) - 1)),
+        "token_saving_spread": save_spread,
+        "token_saving_is_structural_flat(<0.05)": save_spread < 0.05,
+        "note": ("H2a: quality gain ↓ as capability ↑ (a capable model needs the pre-resolution less). H2b: token "
+                 "saving is structural (context size) ⇒ ~model-independent. The 61% headline survives any model; "
+                 "what shrinks is the QUALITY benefit. Pre-registered for a frontier point (PREREG_axiom_gain_"
+                 "frontier.md); the current models are 8B–31B local — the trend here is observed, not pre-registered."),
+    }
+
     # §5 build-amortization break-even (structural gain build-free; learned dict adds ~0 F1 ⇒ N*=∞)
     try:
         amo = run_amortization(source_id)
@@ -204,6 +232,7 @@ def run_protocol(source_id: str = "logistics_demo", *, models: list[str] | None 
                                       "naive_on_front": len(naive_front), "axiom_dominates": axiom_dominates},
         "robustness_gain_vs_dirt": robustness,
         "model_scale_interaction": scale,
+        "h2_capability_vs_gain": h2,
         "build_amortization": amort,
         "headline": {
             "cells_evaluated": n_eval, "cells_requested": n_req,   # denominators are over EVALUATED cells
