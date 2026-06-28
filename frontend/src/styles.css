@@ -323,3 +323,48 @@ body {
 .pr-nexus-replay { display: flex; align-items: center; gap: 0.7rem; margin: 0.5rem 0; padding: 0.4rem 0.6rem; background: rgba(10,10,18,0.5); border: 1px solid #1d1d2c; border-radius: 9px; }
 .pr-nexus-replay .pr-range { flex: 1; }
 .pr-nexus-replay-meta { font-size: 0.78rem; color: #8b8ba2; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* ── Axiom-gain lab panel (Track 3 收口: the surviving line, made visible + honest) ───────────── */
+.pr-ag { display: flex; flex-direction: column; gap: 14px; }
+.pr-ag-bar-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; }
+.pr-ag-title { font-weight: 650; font-size: 15px; color: var(--ink); }
+.pr-ag-note { font-size: 12px; color: var(--muted); }
+.pr-ag-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px 16px; }
+.pr-ag-card h3 { margin: 0 0 10px; font-size: 13.5px; font-weight: 650; }
+.pr-ag-card h3 b { color: var(--accent); }
+.pr-ag-sub, .pr-ag-verdict, .pr-ag-foot { color: var(--muted); font-size: 12px; line-height: 1.55; }
+.pr-ag-sub { margin: 0 0 10px; }
+.pr-ag-verdict { margin: 10px 0 0; padding-top: 9px; border-top: 1px dashed var(--line); }
+.pr-ag-foot { margin: 0; padding: 10px 14px; background: color-mix(in srgb, var(--warn) 7%, var(--panel)); border: 1px solid color-mix(in srgb, var(--warn) 22%, var(--line)); border-radius: 9px; }
+.pr-ag-foot b { color: var(--warn); }
+
+.pr-ag-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 12px; }
+.pr-ag-chip { font-size: 12px; padding: 4px 9px; border-radius: 999px; border: 1px solid var(--line); }
+.pr-ag-chip b { font-variant-numeric: tabular-nums; }
+.pr-ag-chip.is-firm { background: color-mix(in srgb, var(--good) 9%, var(--panel)); border-color: color-mix(in srgb, var(--good) 30%, var(--line)); color: color-mix(in srgb, var(--good) 70%, var(--ink)); }
+.pr-ag-chip.is-soft { background: color-mix(in srgb, var(--warn) 8%, var(--panel)); border-color: color-mix(in srgb, var(--warn) 26%, var(--line)); color: color-mix(in srgb, var(--warn) 72%, var(--ink)); }
+
+.pr-ag-matrix { display: flex; flex-direction: column; gap: 4px; }
+.pr-ag-matrix-head, .pr-ag-row { display: grid; grid-template-columns: 168px 1fr 1fr; gap: 12px; align-items: center; }
+.pr-ag-matrix-head { font-size: 11px; color: var(--muted); padding-bottom: 4px; border-bottom: 1px solid var(--line); margin-bottom: 2px; }
+.pr-ag-cellname { font-size: 12px; font-variant-numeric: tabular-nums; }
+.pr-ag-cellbar { display: flex; align-items: center; gap: 7px; }
+.pr-ag-sig { font-size: 11px; }
+.pr-ag-sig.is-yes { color: var(--good); }
+.pr-ag-sig.is-no { color: var(--muted); }
+
+.pr-ag-bar { display: flex; align-items: center; gap: 8px; flex: 1; }
+.pr-ag-bar-label { font-size: 11.5px; color: var(--muted); min-width: 92px; font-variant-numeric: tabular-nums; }
+.pr-ag-bar-track { flex: 1; height: 9px; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.pr-ag-bar-fill { height: 100%; border-radius: 6px; }
+.pr-ag-bar-fill.is-save { background: var(--accent); }
+.pr-ag-bar-fill.is-qual { background: var(--good); }
+/* indeterminate (CI straddles 0): hatched + muted so a noisy point-estimate can't masquerade as a big win */
+.pr-ag-bar-fill.is-qual-weak { background: repeating-linear-gradient(45deg, var(--muted) 0 3px, transparent 3px 6px); opacity: 0.6; }
+.pr-ag-bar-fill.is-axiom { background: var(--good); }
+.pr-ag-bar-fill.is-naive { background: color-mix(in srgb, var(--bad) 60%, var(--muted)); }
+
+.pr-ag-splitrow { display: grid; grid-template-columns: 168px 1fr 1fr; gap: 10px; align-items: center; padding: 7px 0; border-top: 1px solid var(--line); }
+.pr-ag-splitname { font-size: 12px; font-weight: 600; display: flex; flex-direction: column; }
+.pr-ag-save { font-size: 11px; font-weight: 400; color: var(--accent); }
+.pr-ag-trunc { grid-column: 2 / 4; font-size: 11px; color: var(--warn); }

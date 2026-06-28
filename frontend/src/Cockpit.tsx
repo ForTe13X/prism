@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import AxiomGainView from "./AxiomGainView";
 import { fetchData, fetchTimeline } from "./api";
 import NexusView from "./NexusView";
 import OntologyGraph from "./OntologyGraph";
@@ -16,6 +17,8 @@ const POLICY_TAB = "__prism_policy__";
 // A spec-INDEPENDENT lab view: the cross-domain nexus metric runs on its own two domains (INFRA × LIBRARY),
 // not the current spec, so this tab shows the same experiment regardless of the selected domain.
 const NEXUS_TAB = "__prism_nexus__";
+// Another spec-independent lab view: the axiom-gain research result (structured semantic foundation vs RAG).
+const AXIOM_TAB = "__prism_axiomgain__";
 
 function EntityCard({ entity, row }: { entity: Entity; row: Row }) {
   const idAttr = entity.attributes.find((a) => a.semantic_type === "identifier");
@@ -203,7 +206,8 @@ export default function Cockpit({ spec }: { spec: Spec }) {
   const isSim = activeId === SIM_TAB;
   const isPolicy = activeId === POLICY_TAB;
   const isNexus = activeId === NEXUS_TAB;
-  const view = isGraph || isSim || isPolicy || isNexus ? undefined : spec.views.find((v) => v.id === activeId) ?? spec.views[0];
+  const isAxiom = activeId === AXIOM_TAB;
+  const view = isGraph || isSim || isPolicy || isNexus || isAxiom ? undefined : spec.views.find((v) => v.id === activeId) ?? spec.views[0];
   const hasAxis = !!timeline && timeline.frames > 1;
   const showGraphTab = spec.entities.length > 0;
   const showSimTab = spec.entities.some((e) =>
@@ -253,8 +257,13 @@ export default function Cockpit({ spec }: { spec: Spec }) {
         <button key={NEXUS_TAB} className={isNexus ? "pr-tab is-active" : "pr-tab"} onClick={() => setActiveId(NEXUS_TAB)}>
           ✦ 跨域 nexus
         </button>
+        <button key={AXIOM_TAB} className={isAxiom ? "pr-tab is-active" : "pr-tab"} onClick={() => setActiveId(AXIOM_TAB)}>
+          ⚖ axiom-gain
+        </button>
       </nav>
-      {isNexus ? (
+      {isAxiom ? (
+        <AxiomGainView />
+      ) : isNexus ? (
         <NexusView />
       ) : isPolicy && showSimTab ? (
         <PolicyView spec={spec} />

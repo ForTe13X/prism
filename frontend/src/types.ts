@@ -315,3 +315,50 @@ export interface NexusAlign {
   pairs: { a_idx: number; b_idx: number; transport: number; cost: number; real: boolean }[];
   note: string;
 }
+
+// Axiom-gain (RESEARCH_axiom_gain) — the surviving, citable line: structured semantic foundation vs bare RAG.
+export interface AxiomMatrixCell {
+  model: string;
+  dirtiness: number;
+  quality_delta_mean: number;
+  quality_delta_ci95: [number, number];
+  quality_delta_excludes_0: boolean;
+  token_saving_mean: number;
+  token_saving_excludes_0: boolean;
+  naive_f1: number;
+  axiom_f1: number;
+}
+export interface AxiomProtocol {
+  models: string[];
+  dirts: number[];
+  matrix: AxiomMatrixCell[];
+  headline: {
+    mean_input_token_saving: number;
+    token_saving_significant_cells: string;
+    quality_gain_significant_cells: string;
+    min_quality_delta: number;
+    models_monotonic_in_dirt: string;
+    axiom_pareto_dominant: boolean;
+  };
+  build_amortization: {
+    breakeven_N_dictionary: number | null;
+    structural_gain_buildfree: number;
+    learned_dictionary_gain: number;
+  };
+  honest_verdict: string;
+}
+
+// Cross-domain coreference ablation on the split substrate — structured foundation ENABLES an impossible-from-raw task.
+export interface SplitCondition {
+  model: string;
+  condition: string; // "naive-RAG" | "axiom-RAG"
+  quality_f1: number;
+  avg_in_tok: number;
+  truncated_calls: number;
+}
+export interface SplitAblation {
+  conditions: SplitCondition[];
+  gains: { model: string; quality_delta: number; input_token_saving: number }[];
+  resolver_accuracy: { link_precision: number; link_recall: number; answer_f1_mean: number };
+  honest_verdict: string;
+}

@@ -1,4 +1,5 @@
 import type {
+  AxiomProtocol,
   CompileRequest,
   CompileResult,
   Graph,
@@ -12,6 +13,7 @@ import type {
   SimResult,
   Spec,
   SpecSummary,
+  SplitAblation,
   Temporal,
 } from "./types";
 
@@ -81,3 +83,10 @@ export const fetchNexusView = (seed: string) =>
 // Sinkhorn alignment for one package: the residual + transport snapshots the animated collision scrubs.
 export const fetchNexusAlign = (seed: string) =>
   getJSON<NexusAlign>(`/api/nexus_xdom/align?seed=${encodeURIComponent(seed)}`);
+
+// Axiom-gain: the full cross-model protocol (mean±CI token saving + quality + Pareto + build break-even).
+export const fetchAxiomProtocol = (sourceId: string) =>
+  getJSON<AxiomProtocol>(`/api/axiomgain/${encodeURIComponent(sourceId)}/protocol`);
+
+// Cross-domain coreference ablation on the split substrate (naive-RAG vs resolver-axiom-RAG).
+export const fetchSplitAblation = () => getJSON<SplitAblation>("/api/split/ablation");
