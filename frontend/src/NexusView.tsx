@@ -239,11 +239,12 @@ function NexusViz() {
               <h4>诚实计分板</h4>
               <dl>
                 <div><dt>候选桥</dt><dd>{sc.candidates}</dd></div>
-                <div className="pr-hud-high"><dt>真桥（≥2/3 渠道）</dt><dd>{sc.high}</dd></div>
-                <div><dt>单渠道（异议）</dt><dd>{sc.medium}</dd></div>
+                <div className="pr-hud-high"><dt>发光真桥（过 FDR）</dt><dd>{sc.high}</dd></div>
+                <div><dt>相对高但未显著（dim）</dt><dd>{sc.medium}</dd></div>
                 <div><dt>巧合（虚影）</dt><dd>{sc.coincidence}</dd></div>
                 <div><dt>实际耦合数</dt><dd>{sc.true_couplings}</dd></div>
                 <div><dt>点亮集精度</dt><dd>{sc.high_tier_precision == null ? "—" : sc.high_tier_precision}</dd></div>
+                <div><dt>FDR q · 期望假高</dt><dd>{sc.fdr_q} · {sc.expected_false_high}</dd></div>
               </dl>
               <p className="pr-nexus-caveat">{data.caveat}</p>
             </div>
@@ -294,12 +295,17 @@ function NexusSummary() {
           ⇒ 难度<b>良定义</b>、{gate?.gate_pass ? "门通过" : "—"}。三条独立渠道(shape=时序、fingerprint=SQL 直方图、relational=tags;两两相关仅 0.13–0.19):
           <b>2-way 收敛 margin 的 CI 跨 0.05(判不定)</b>;加入第三条独立渠道后,<b>3-way margin +0.073、CI 整段 &gt;0.05 ⇒ 稳过</b>;
           反「reverse-trap」控制(同功率但相关的 placebo 渠道<b>不</b>过线)证明胜在<b>独立性而非功率</b>。
-          {view?.scorecard && <> 当前包计分板:候选桥 {view.scorecard.candidates}、真桥(≥2/3 渠道)<b>{view.scorecard.high}</b>、实际耦合 {view.scorecard.true_couplings}。</>}
+          {view?.scorecard && <> 当前包计分板:候选桥 {view.scorecard.candidates}、发光真桥(过 FDR 显著)<b>{view.scorecard.high}</b>、点亮集精度 <b>{view.scorecard.high_tier_precision ?? "—"}</b>、实际耦合 {view.scorecard.true_couplings}(期望假高≈{view.scorecard.expected_false_high})。</>}
         </p>
         <p className="pr-ag-plain-analogy">
           ▸ 含义:在<b>受控合成</b>上,度量能把「3 条独立证据同时指向」与「时间巧合 / 单通道」分开——这是「收敛效度是戏」批评的<b>真修复</b>。
-          诚实限定:各渠道的<b>功率</b>是工程构造(常量带可见性调参),而<b>独立性与 margin-vs-floor 未调、是可证伪的部分</b>。
-          (3-way 数值确定性,可经 <code>/api/nexus_xdom/channels</code> 复现。)
+          各渠道<b>功率</b>是工程构造(常量带可见性调参),<b>独立性与 margin-vs-floor 未调、可证伪</b>。
+        </p>
+        <p className="pr-ag-plain-analogy">
+          ▸ §13 修复(发光诚实):点火从「相对 top-decile」(任何对都强行点亮 ~10%,零耦合对也不熄)换成
+          <b>绝对显著阈 + Benjamini–Hochberg FDR(CACE)</b>——置换零分布(本 A × 无关 B)→ Fisher 合并 3 渠道 p → 控 FDR。
+          <b>零耦合对现在熄灭</b>(实测「高」桥 8.27→<b>0.03</b>,精度 0.66→<b>0.96</b>),「只有已验证的桥发光」终于为真;代价是 recall 降(FDR 保守)。
+          (可经 <code>/api/nexus_xdom/fdr_check</code> 复现。)
         </p>
       </div>
       <div className="pr-ag-plain-card is-caveat">

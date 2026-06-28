@@ -12,7 +12,7 @@ from .nexus_xdom_align import run_alignment, run_alignment_eval
 from .nexus_xdom_calibrate import run_calibration, run_effect_sweep
 from .nexus_xdom_eval import run_convergence
 from .nexus_xdom_gate import run_gate
-from .nexus_xdom_view import bridge_view
+from .nexus_xdom_view import bridge_view, fdr_extinction_check
 
 nexus_router = APIRouter(prefix="/api/nexus", tags=["nexus"])
 # Phase-B cross-domain substrate lives under its own prefix (it is a different, two-domain experiment).
@@ -72,8 +72,17 @@ def xdom_channels() -> dict:
 @nexus_xdom_router.get("/view")
 def xdom_view(seed: str = "xe-0") -> dict:
     """Per-bridge nexus_confidence for ONE coupled package — the data the galaxy-collision visual renders.
-    Only top-of-both-channels bridges light (high); the rest are ghosts (honest sparsity)."""
+    GLOW = Fisher-combined p over BH-FDR (absolute significance + multiple-comparison control, §13 fix);
+    only FDR-significant bridges light (high), the rest are ghosts — a zero-coupling pair extinguishes."""
     return bridge_view(seed)
+
+
+@nexus_xdom_router.get("/fdr_check")
+def xdom_fdr_check(seeds: int = 30) -> dict:
+    """OBSERVER §13 verification: the glow must EXTINGUISH on a zero-coupling pair. Tiers the real package
+    vs a zero pair (this A × an unrelated B) over N seeds — the fix works iff zero-pair high ≈ 0 while real
+    high > 0 (the old relative top-decile gave ~8.27 for BOTH)."""
+    return fdr_extinction_check([f"xe-{i}" for i in range(max(1, min(seeds, 60)))])
 
 
 @nexus_xdom_router.get("/align")

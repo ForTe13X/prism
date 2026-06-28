@@ -294,6 +294,9 @@ export interface NexusView {
     coincidence: number;
     true_couplings: number;
     high_tier_precision: number | null;
+    fdr_q: number;
+    null_samples: number;
+    expected_false_high: number;
   };
   caveat: string;
 }
