@@ -221,6 +221,39 @@
 - **边界(诚实)**:现 substrate 只埋 1 个 pairwise nexus ⇒ 这实验只能压测**零对/多重比较**这一侧,**测不了 N-way 涌现结构**(§10 超图梦那种"多域 collide 融出新空间")——那需要 [`DESIGN_data_package §11`](DESIGN_data_package.md) 的 split-from-shared-latent 生成器(已埋共享 latent → 才有真 N-way 耦合可测)。两条线在这里接上了。
 - **给在建会话的一句话**:N 域不会"涌现新魔法",先会**淹没在假阳性里**;**上 N 域前必须先把 CACE/绝对阈接进 live tiering**,否则 demo 一加域就满屏假 nexus。这是个**可操作的前置条件**,不是劝退。
 
+## 14. 旁观复检 · 他们对 §11/§13 的回应(12-agent fan-out,每条都亲跑代码,2026-06-28 晚)
+巡检 `a47543f→30dc53b`(12 提交)。建造会话**直接、实质地回应了我的 §11 和 §13**:实现了 split-from-shared-latent substrate(§11)、修了 §13 的多重比较漏(CACE/绝对阈+FDR)、把 split 接进 axiom-gain、在**真实**数据上攻耦合外部效度、加了说人话/PM 总结页。我对 6 个工作面各派一个 agent **读 diff + 用 SPI venv 亲跑代码复现 load-bearing claim**,再各派一个**对抗 skeptic 重跑试图证伪"它诚实"**。**5/6 面的"诚实"判定在 skeptic 重跑下站住**;一面翻成 mixed(我已亲手独立确认)。
+
+| 工作面 | 复现结论 | 诚实判定 |
+|---|---|---|
+| §13 fix(CACE/FDR 熄灭) | 真修复(非装样子),但头条数字 construct-swap | **mixed(medium)** |
+| 真实配对数据耦合外部效度(乳腺癌 569) | 真数据、真退化、报成"退化非翻盘",反而 under-claim | honest(low) |
+| split-from-shared-latent substrate | 独立红队全在 chance、确定性、无 LLM、GT 诚实 | honest(low) |
+| split→axiom-gain 消融 | 公平对决、表面不可桥经验证、自曝自修缺陷 | honest(low) |
+| 说人话/PM 页 + README ledger | nexus 只列"决定性诚实负"、数字 live-wired 不漂移 | honest(low) |
+| 测试套件 | 209 passed/0 skip,塌缩锁成**通过**测试 | honest(low) |
+
+### 唯一要 escalate 的:§13 fix 的"8.27→0.03"是 construct-swap(我已亲验)
+新规则用"本 A × 无关 B"的独立 cross-pair 当零对 null,Fisher 合并 p 过 BH-FDR。我亲手把三种构造各过一遍新 `_tier_bridges`(30 seed):
+
+```
+real pair       : 4.267 high
+cross-pair ZERO : 0.000 high   ← "熄灭"的 after 在这
+rewire   ZERO   : 4.267 high  precision 0.000   ← §13 我实测的那个控制:不熄
+```
+
+- **头条把两种零对拼了**:"8.27"是我 §13 用的 **rewire 控制**(观测逐字节不变、只打乱真值标签),"0.03"是 **cross-pair**。诚实的同构造前后是 **cross-pair 7.17→0.00**(依然是巨大真胜),根本不需要拼——拼了反而虚增幅度。
+- **更要紧的区分,目前零层披露**:rewire(信号物理仍在、只乱标签)在新规则下**不熄(4.27,precision 0),而且这是对的**——rewire 不是"无 nexus 对",是"有耦合但标签随机的对";它该用的工具是 **AUC/§8e**(rewire AUC 塌 0.46 已证),不是 extinction。**两个控制测两种失效**:cross-pair 测"无关域对会不会假亮"(extinction 是对的工具)、rewire 测"分数排不排得对真值"(AUC 是对的工具)。fix 真正且正确地解决了前者(N 域多重比较),没解决也不需解决后者。
+- **统计辩护成立**(N 域尺度上无关域对确实不共享 latent ⇒ cross-pair 就是正确的无-nexus 模型),所以这是 mixed 不是 overclaim。但头条该 (a) 报同构造 cross-pair 7.17→0.00,且 (b) 补一句"rewire 控制下新规则不熄、那是 AUC 的活不是 extinction 的活"——否则把我 §13 的 8.27 当成"现已熄灭"的读者会过读。**这是给在建会话的一条具体修正,不是翻案:fix 本身是真的、对的。**
+
+### 低severity 备注(都不翻判定,记给在建会话顺手收)
+- **真实配对数据**是乳腺癌**单数据集多视图**(同一肿瘤的两组特征子集),不是两个独立真实跨源——code/commit/METRIC §8j 都明说了,但**用户卡 ③ 的"两面外部效度都用真实数据测过"把这层边界省了**;因卡 ③ 整体框成"退化+非生产证据",是 under-claim 不是 over,故 low。
+- **NexusSummary 卡 ②**(合成 3-way"稳过")是唯一没标 `is-caveat` 的卡、视觉占主导;停在卡 ②没看到卡 ③的人会瞬时过读(scope 已内联在卡 ②头、塌缩就在同组件下一张)。
+- **ExecSummary/NexusSummary 散文零单测**:数字 live-wired 不会漂,但定性 caveat 没回归锁,将来一次"软化"编辑 CI 不会拦。
+
+### 总评
+**这是整条弧里诚实度与质量都很高的一批**,且是**对我两条笔记的直接负责**:split substrate 我独立红队打不穿(自写攻击全 chance,两个早期 HIGH 漏自曝+修+回归测试),axiom-gain 消融是公平对决(两臂同模型/同 schema、表面匹配全 chance、resolver 上界 0.662 诚实封顶、naive qwen 诚实交白卷 `{"answer":[]}`),209 测试全绿且**把塌缩锁成一条通过的回归测试**(`VERDICT_COLLAPSES`)。**nexus 仍正确地待在"封顶探索"位**(别用 split substrate 去复活它——那 substrate 全部可恢复信号只在一条数值通道、是 coreference 基准不是 nexus 收敛难度测试),**axiom-gain 仍是正确的重心**。唯一动作项是上面那条 §13 头条的同构造化 + 双控制区分。
+
 ---
 
 *—— 旁观者笔记结束。这是一个视角;建造的人说了算。*
