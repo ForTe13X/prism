@@ -289,8 +289,12 @@ function NexusSummary() {
           ▸ 架构含义:朴素信号要么是<b>充分统计量(等于作弊)</b>、要么<b>低于随机</b>;任何「真发现」必须靠<b>多条独立渠道收敛</b>,不能信单通道。
         </p>
       </div>
-      <div className="pr-ag-plain-card">
+      <div className="pr-ag-plain-card is-caveat">
         <h4>② §6c 难度门 + 三渠道收敛(在合成 substrate 上,可证伪)</h4>
+        <p className="pr-ag-plain-analogy">
+          ⚠ 天花板:这是<b>受控合成 substrate</b>,可恢复信号集中在<b>单一数值通道</b> ⇒ 共指基准、<b>非</b>收敛难度测试;
+          真实校准下<b>会塌</b>(见 ③)。这张胜利卡永不脱离它的天花板单独读。
+        </p>
         <p>
           channel-blind 难度门(实测,{gate ? `${gate.seeds} seed 池化` : "加载中"}):oracle(见 latent)recover <b>AUC {gate ? a2(gate.oracle_auc) : "…"}</b>,
           朴素 baseline(time/depth/string)~随机(<b>{gate ? `${a2(gate.time_auc)}/${a2(gate.depth_auc)}/${a2(gate.string_auc)}` : "…"}</b>)
@@ -306,7 +310,8 @@ function NexusSummary() {
         <p className="pr-ag-plain-analogy">
           ▸ §13 修复(发光诚实):点火从「相对 top-decile」(任何对都强行点亮 ~10%,零耦合对也不熄)换成
           <b>绝对显著阈 + Benjamini–Hochberg FDR(CACE)</b>——置换零分布(本 A × 无关 B)→ Fisher 合并 3 渠道 p → 控 FDR。
-          <b>零耦合对现在熄灭</b>(实测「高」桥 8.27→<b>0.03</b>,精度 0.66→<b>0.96</b>),「只有已验证的桥发光」终于为真;代价是 recall 降(FDR 保守)。
+          <b>无关域对现在熄灭</b>(<b>同构造</b>实测:无关 A×B 的「高」桥 7.17→<b>0.03</b>,真桥精度 0.66→<b>0.96</b>);
+          而 <b>rewire 控制</b>(同观测、只乱真值标签)新规则下仍 ~4.27 <b>不熄、且应当不熄</b>——那是 <b>AUC 的活</b>(§8e,rewire AUC 0.46),非 extinction 的活。<b>两个控制测两种失效</b>。
           (可经 <code>/api/nexus_xdom/fdr_check</code> 复现。)
         </p>
       </div>
@@ -322,7 +327,7 @@ function NexusSummary() {
             <> ——收敛信号随「越真越跨切面」单调衰减:近重复 softball 语义 AUC <b>{a2(realc.same_feature_near_duplicate.semantic_zscore_auc)}</b>
               (对齐 corr ≈{realc.same_feature_near_duplicate.same_base_diag_corr ?? "—"})→ <b>真·跨切面</b> AUC <b>{a2(realc.disjoint_feature_cross_aspect.semantic_zscore_auc)}</b>、
               top-1 <b>{a3(realc.disjoint_feature_cross_aspect.resolver_top1_acc)}</b>(≈随机 {a3(realc.chance_top1)}，唯一解析基本不可能)。
-              即合成的 ~0.99 <b>严重高估真实跨域耦合强度</b>。</>
+              即合成的 ~0.99 <b>严重高估真实跨域耦合强度</b>。(真实配对数据=同一肿瘤的两特征视图——<b>单数据集多视图,非两独立真实来源</b>;更强真跨源是后续。)</>
           )}
         </p>
         <p className="pr-ag-plain-analogy">

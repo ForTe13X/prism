@@ -65,9 +65,12 @@ def xdom_gate() -> dict:
 
 @nexus_xdom_router.get("/channels")
 def xdom_channels() -> dict:
-    """Phase-B.1: the two independent channels (shape = timeseries, fingerprint = SQL attrs) + the honest
-    convergence verdict on HELD-OUT seeds. The headline is a faithful near-miss: both clear the power floor
-    and are independent with a rewire-collapse, but convergence falls just short of the +0.05 clean-2/2 bar."""
+    """3 independent channels (shape⊥fingerprint⊥relational) on held-out seeds: 3-way convergence
+    margin CI is entirely >0.05 ⇒ clears, with a rewire-collapse control (the 2-way margin straddled 0.05;
+    the third channel is what clears it). CEILING: this is the FROZEN SYNTHETIC substrate and all recoverable
+    signal lives in ONE numeric channel ⇒ a coreference benchmark, NOT a difficulty-calibrated convergence
+    test; real-data marginal calibration COLLAPSES it (§8g, /api/nexus_xdom/calibrate). A capped exploration
+    result, not a validated discovery."""
     return run_convergence()
 
 
@@ -81,9 +84,10 @@ def xdom_view(seed: str = "xe-0") -> dict:
 
 @nexus_xdom_router.get("/fdr_check")
 def xdom_fdr_check(seeds: int = 30) -> dict:
-    """OBSERVER §13 verification: the glow must EXTINGUISH on a zero-coupling pair. Tiers the real package
-    vs a zero pair (this A × an unrelated B) over N seeds — the fix works iff zero-pair high ≈ 0 while real
-    high > 0 (the old relative top-decile gave ~8.27 for BOTH)."""
+    """OBSERVER §13/§14 verification with TWO controls: the glow must EXTINGUISH on a cross-pair null
+    (this A × an unrelated B) — measured SAME-CONSTRUCTION (old relative ≈7.17 high → new FDR ≈0.03);
+    while the REWIRE control (identical observations, labels permuted) correctly STAYS lit (~4.27, precision
+    ≈0) — that is an AUC failure mode (§8e), not a no-nexus pair, so extinction is the wrong tool for it."""
     return fdr_extinction_check([f"xe-{i}" for i in range(max(1, min(seeds, 60)))])
 
 

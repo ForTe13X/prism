@@ -41,7 +41,7 @@ views + relations        选控件(仪表/趋势/徽章/…)        (UI = f(spec
 | **稳(使能)** | 跨域共指:同一实体在两系统经变体改写、无共享键 ⇒ 裸 RAG 得分 **≈0**(认不出),确定性 resolver 预解析后 **→0.66**、token 省 ~85% —— **从 0 到能做** | `GET /api/split/ablation` · [DESIGN §11b](docs/DESIGN_data_package.md) |
 | **诚实负** | 学习式别名词典 **+0.000** held-out F1 ⇒ 摊销**永不回本(N\*=∞)**——增益全在「免 build 的结构」,**别为学词典单独投训练** | [RESEARCH §11b](docs/RESEARCH_axiom_gain.md) |
 | **决定性诚实负** | 把合成 substrate 的可观测边缘**校准到真实数据**(变异系数 ~14× 高于手设)后,nexus 三渠道收敛**塌回判不定**——之前的胜利部分靠「数据太干净」 | `GET /api/nexus_xdom/calibrate` · [METRIC §8g](docs/METRIC_nexus_reality.md) |
-| **已修诚实漏洞** | 星系「发光 = 已验证」原用相对 top-decile,零耦合对也强行点亮 ~8;换成**绝对显著阈 + FDR(CACE)**后零对**熄灭**(8.27→0.03)、精度 0.66→0.96 | `GET /api/nexus_xdom/fdr_check` · [METRIC §8h](docs/METRIC_nexus_reality.md) |
+| **已修诚实漏洞** | 星系「发光 = 已验证」原用相对 top-decile,**无关域对**也强行点亮 ~7;换成**绝对显著阈 + FDR(CACE)**后(同构造)**熄灭 7.17→0.03**、真桥精度 0.66→0.96。rewire 控制(同观测乱标签)新规则下不熄=AUC 失效(§8e),非 extinction——两控制测两失效 | `GET /api/nexus_xdom/fdr_check` · [METRIC §8h](docs/METRIC_nexus_reality.md) |
 | **开放(不声称已补)** | substrate 的**外部效度**未闭合(跨域耦合是构造的设计潜变量);任何「野外跨域发现」须自带真实校准 | [OBSERVER §11/§12](docs/OBSERVER_NOTES.md) |
 
 **焊死的纪律(贯穿全仓):**

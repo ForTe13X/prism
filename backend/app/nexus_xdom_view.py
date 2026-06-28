@@ -25,7 +25,7 @@ from .data_package_xdom import generate_xdom
 from .nexus_chan_fingerprint import fingerprint_score
 from .nexus_chan_relational import relational_score
 from .nexus_chan_shape import shape_score
-from .nexus_xdom_substrate import candidate_bridges_xdom
+from .nexus_xdom_substrate import candidate_bridges_xdom, rewired_coupling
 
 FIRE_FRAC = 0.10   # the RELATIVE per-channel top-fraction (now only feeds the dim `medium` tier)
 FDR_Q = 0.10       # Benjamini–Hochberg target false-discovery rate among the GLOWING (high) bridges
@@ -153,12 +153,27 @@ def bridge_view(seed: str) -> dict:
     }
 
 
+def _old_relative_high(bridges: list) -> int:
+    """OLD rule: ≥2/3 of the per-channel relative top-decile _fires (no FDR) — for the SAME-construction
+    'before' number, so the before→after comparison is apples-to-apples on one control."""
+    sh, fp, rl = _scores(bridges)
+    votes = [a + b + c for a, b, c in zip(_fires(sh), _fires(fp), _fires(rl))]
+    return sum(1 for v in votes if v >= 2)
+
+
 def fdr_extinction_check(seeds: list[str] | None = None) -> dict:
-    """OBSERVER §13 verification: the GLOW must EXTINGUISH on a zero-coupling pair. For each seed, tier the
-    REAL package vs a ZERO pair (this A × an unrelated B). Report mean high-count + precision for both — the
-    fix works iff zero-pair high ≈ 0 while real high > 0 (the old relative rule gave ~8.27 for BOTH)."""
+    """OBSERVER §13/§14 verification with TWO controls measuring TWO failure modes (no construct-swap):
+      * CROSS-PAIR zero (this A × an UNRELATED B) — a genuine no-nexus pair; the glow MUST extinguish. The
+        before→after is measured SAME-CONSTRUCTION (old relative rule vs new FDR on the SAME cross-pair),
+        so the headline is honest (~7.17 → ~0.00), not a swap of the rewire number for the cross-pair one.
+      * REWIRE zero (identical observations, only the truth labels permuted) — the coupling signal is still
+        physically there, so this is an AUC failure mode (§8e, rewire AUC ≈0.46), NOT a no-nexus pair. It
+        stays lit (~4.27, precision ≈0) under the new rule AND SHOULD: extinction is the wrong tool for it.
+    """
     seeds = seeds or [f"xe-{i}" for i in range(30)]
-    real_high, real_prec, zero_high = [], [], []
+    real_high, real_prec = [], []
+    cross_new, cross_old = [], []          # extinction control (unrelated A×B), SAME-construction before/after
+    rewire_new, rewire_prec = [], []       # AUC control (identical obs, labels permuted) — should stay lit
     for sd in seeds:
         gA = generate_xdom(sd)
         null = _null_pools(sd)
@@ -168,19 +183,35 @@ def fdr_extinction_check(seeds: list[str] | None = None) -> dict:
         real_high.append(len(rhi))
         if rhi:
             real_prec.append(sum(rb[i]["y"] for i in rhi) / len(rhi))
-        # zero pair: this A × an unrelated B (no coupling) — must extinguish
+        # cross-pair zero: this A × an unrelated B — the no-nexus pair; NEW (FDR) vs OLD (relative)
         gB = generate_xdom(f"{sd}~zero")
         zx = {"A": gA["A"], "B": gB["B"], "coupling": [], "seed": sd}
         zb, _ = candidate_bridges_xdom(zx)
         _, zt = _tier_bridges(zb, null, FDR_Q)
-        zero_high.append(sum(1 for t in zt if t == "high"))
+        cross_new.append(sum(1 for t in zt if t == "high"))
+        cross_old.append(_old_relative_high(zb))
+        # rewire zero: identical observations, only labels permuted — the AUC failure mode (§8e)
+        wb, _ = candidate_bridges_xdom(gA, coupling=rewired_coupling(gA))
+        _, wt = _tier_bridges(wb, null, FDR_Q)
+        whi = [i for i, t in enumerate(wt) if t == "high"]
+        rewire_new.append(len(whi))
+        if whi:
+            rewire_prec.append(sum(wb[i]["y"] for i in whi) / len(whi))
     n = len(seeds)
+    avg = lambda xs: round(sum(xs) / len(xs), 3) if xs else None  # noqa: E731
     return {
         "seeds": n, "fdr_q": FDR_Q,
-        "real_pair_mean_high": round(sum(real_high) / n, 3),
-        "real_pair_high_precision": round(sum(real_prec) / len(real_prec), 3) if real_prec else None,
-        "zero_pair_mean_high": round(sum(zero_high) / n, 3),
-        "extinguishes_on_zero": (sum(zero_high) / n) < 1.0,
-        "verdict": ("FDR tiering EXTINGUISHES the glow on zero-coupling pairs (real high > 0, zero high ≈ 0) — "
-                    "the §13 multiple-comparison leak is closed; the old relative top-decile gave ~8.27 for BOTH."),
+        "real_pair_mean_high": avg(real_high), "real_pair_high_precision": avg(real_prec),
+        # extinction control (unrelated domains), measured SAME-CONSTRUCTION:
+        "cross_pair_old_mean_high": avg(cross_old), "cross_pair_new_mean_high": avg(cross_new),
+        "extinguishes_on_cross_pair": (sum(cross_new) / n) < 1.0,
+        # AUC control (rewire): SHOULD stay lit — extinction is the wrong tool here:
+        "rewire_new_mean_high": avg(rewire_new), "rewire_high_precision": avg(rewire_prec),
+        "verdict": (
+            "Extinction is measured SAME-CONSTRUCTION on the cross-pair null (unrelated A×B): "
+            f"old relative rule ≈{avg(cross_old)} high → new FDR ≈{avg(cross_new)} high ⇒ extinguishes. "
+            f"The REWIRE control (identical observations, labels permuted) stays ≈{avg(rewire_new)} high at "
+            f"precision ≈{avg(rewire_prec)} under the new rule — AND SHOULD: rewire keeps the coupling signal "
+            "and only randomizes truth, so it is an AUC failure mode (§8e, rewire AUC ≈0.46), not a no-nexus "
+            "pair; extinction is the wrong tool for it. Two controls, two failure modes."),
     }

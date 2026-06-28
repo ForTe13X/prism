@@ -35,14 +35,26 @@ def test_fdr_glow_is_high_precision():
     assert sc["expected_false_high"] == round(0.1 * sc["high"], 2)
 
 
-def test_glow_extinguishes_on_zero_coupling_pairs():
-    # OBSERVER §13: the load-bearing fix. A zero-coupling pair (this A × an unrelated B) must light ≈ nothing,
-    # while a real pair lights > 0 — the old relative top-decile gave ~8.27 for BOTH (precision = prevalence).
+def test_glow_extinguishes_on_cross_pair():
+    # OBSERVER §13: the load-bearing fix. A cross-pair (this A × an unrelated B) must light ≈ nothing, while
+    # a real pair lights > 0 — the old relative top-decile gave ~7.17 for the cross-pair (precision = prevalence).
     r = fdr_extinction_check([f"xe-{i}" for i in range(20)])
     assert r["real_pair_mean_high"] > 1.0                     # real pairs still light a handful
-    assert r["zero_pair_mean_high"] < 0.5                     # zero pairs EXTINGUISH (≈0, not ~8)
-    assert r["extinguishes_on_zero"] is True
+    assert r["cross_pair_new_mean_high"] < 0.5               # cross-pair EXTINGUISHES (≈0, not ~7)
+    assert r["extinguishes_on_cross_pair"] is True
     assert r["real_pair_high_precision"] >= 0.85              # and the surviving glow is clean
+
+
+def test_two_controls_measure_two_failures():
+    # OBSERVER §14: the headline must be SAME-CONSTRUCTION (no construct-swap). Two controls, two failure modes:
+    # cross-pair (no-nexus) EXTINGUISHES; rewire (identical obs, labels permuted) STAYS lit — it's an AUC
+    # failure mode (§8e), not a no-nexus pair, so extinction is the WRONG tool for it.
+    r = fdr_extinction_check([f"xe-{i}" for i in range(20)])
+    assert r["cross_pair_new_mean_high"] < 0.5               # 无关域对熄灭 (extinction control works)
+    assert r["cross_pair_old_mean_high"] > 3.0               # same-construction 'before' was genuinely high (real fix)
+    assert r["rewire_new_mean_high"] > r["cross_pair_new_mean_high"] + 2.0   # rewire STAYS lit (AUC failure)
+    assert (r["rewire_high_precision"] or 0.0) < 0.1         # ...and almost all of it is false (precision ≈ 0)
+    assert "rewire" in r["verdict"].lower() and "auc" in r["verdict"].lower()  # both controls DISCLOSED
 
 
 def test_layout_entities_present():
@@ -63,4 +75,4 @@ def test_deterministic_and_api():
     body = r.json()
     assert "bridges" in body and "scorecard" in body and "caveat" in body
     fc = client.get("/api/nexus_xdom/fdr_check?seeds=8")
-    assert fc.status_code == 200 and fc.json()["extinguishes_on_zero"] is True
+    assert fc.status_code == 200 and fc.json()["extinguishes_on_cross_pair"] is True
