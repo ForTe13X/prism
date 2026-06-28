@@ -137,3 +137,36 @@ so a small honest sample).
 - **Win either way.** Confirm ⇒ a real cross-capability result (the structural 61% survives; the quality
   benefit concentrates where it should — on weaker models). Refute ⇒ a surprising, more-valuable finding
   (capable models *also* benefit). Both are reported.
+
+## API corroboration point — deepseek-v4-pro (Ark, frozen 2026-06-28) — H2b MEASURED, capability TIED
+
+With a real commercial **API** available (Volcengine Ark `deepseek-v4-pro-260425`, a large frontier-*tier*
+model — though, as it turns out, not more *task-competent* here), the registered grid (8 seeds × 4 dirt) was
+run live once and **frozen into fixtures** (reproducible offline at serve-time $0).
+The headline expectation — "an API model will be a higher-capability point" — **did NOT hold over the full
+grid**, and that negative is reported as loudly as a win:
+
+| model (full grid) | capability (naive F1) | quality gain ΔF1 | token saving |
+|---|---|---|---|
+| gemma-4-31b-qat (local) | 0.8075 | 0.1082 | 0.6084 |
+| **deepseek-v4-pro (API)** | **0.8083** | **0.1074** | **0.6349** |
+
+- **Capability is TIED, not higher.** deepseek's full-grid naive F1 (0.8083) is within **0.001** of gemma-31b
+  (0.8075) — a wash, not a frontier. The per-dirt profile differs (deepseek is *more* robust at heavy dirt
+  d0.9 = 0.762 vs 0.708, but *weaker* at moderate dirt d0.3/0.6), netting a tie. **A 4-seed dirt-0.6 pilot
+  showed 0.872 and looked frontier — the full 8-seed grid (0.758 at d0.6) corrected it.** Honest lesson: a
+  small favourable slice overstated the edge; the registered grid is the number.
+- **What it IS (still valuable): cross-model corroboration + a MEASURED H2b.** A completely different model
+  (frontier API, different architecture) at the *same* task-competence shows the *same* quality gain
+  (0.1074 ≈ gemma-31b's 0.1082) ⇒ H2a is not a local-model artefact. And the ~63% token saving is **measured
+  from real API `prompt_tokens`** (not LM-Studio-local counts), so the structural H2b saving holds on a
+  commercial API. Over the 5-point axis Spearman(capability, gain) = **−0.90**.
+- **Honesty caveats (loud).** (1) `$≠0` to PRODUCE (a one-time paid Ark run); $0 to SERVE (frozen fixtures).
+  (2) deepseek supports **no** `response_format` (neither json_schema nor json_object), so it used
+  **prompt-JSON** + `_extract_json` — a disclosed construction difference vs the strict-schema local rows
+  (the task prompt embeds the JSON shape, so F1/capability are measured identically and remain comparable).
+  (3) It is a **reasoning model** and is **non-deterministic run-to-run** even at temperature 0 (the pilot and
+  the freeze returned different per-cell F1) — the **frozen fixture pins ONE sampled run** for reproducibility,
+  same as every other model here. (4) It is flagged per-row (`provenance.source = ark-api`) and **never merged
+  silently** into the $0/strict-schema local series. The genuine *frontier* (extreme-capability) point remains
+  the browser GPT-5.5 one (naive F1 0.95, gain ≈0); deepseek corroborates the *middle* of the curve.

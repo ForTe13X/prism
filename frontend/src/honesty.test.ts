@@ -41,4 +41,13 @@ describe("caveat-text tripwire", () => {
     expect(axiomRendered).toContain("内点、非更强模型"); // qwen3.6 wobble is RENDERED + disclosed, not pruned (DON'T #4)
     expect(axiomRendered).toContain("推断"); // the flat-line's frontier continuation is inference (drawn dashed), not measured
   });
+
+  it("the deepseek API corroboration point discloses its $≠0-freeze + prompt-JSON provenance", () => {
+    // deepseek is a REPRODUCIBLE point at gemma-31b's (TIED) capability, produced from a one-time PAID API freeze
+    // with prompt-JSON (no strict schema) — those construction differences must ride with it, never silently merged
+    expect(axiomRendered).toContain("付费冻结"); // $≠0 to produce (serve-time $0), not a free-local point
+    expect(axiomRendered).toContain("prompt-JSON"); // no response_format ⇒ different construction vs strict-schema locals
+    expect(axiomRendered).toContain("response_format"); // names WHY (the model supports none)
+    expect(axiomRendered).toContain("实测"); // the win: H2b token saving is MEASURED on a real API, not inferred
+  });
 });

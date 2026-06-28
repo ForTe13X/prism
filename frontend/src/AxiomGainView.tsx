@@ -176,6 +176,15 @@ function CapGain({ p }: { p: AxiomProtocol }) {
           <circle key={`q${r.model}`} cx={x(r.capability_naive_f1)} cy={y(r.quality_gain)} r={3.8}
             className={qualFilled(r.model) ? "pr-ag-h2-qualdot is-firm" : "pr-ag-h2-qualdot is-weak"} />
         ))}
+        {/* API points (deepseek) are REPRODUCIBLE ⇒ full-contrast (accent, not muted); deepseek lands ~ON
+            gemma-31b (tied capability), so an accent RING + "API" tag keep it visible as a distinct model at
+            the same spot — disclosure of provenance, not a confidence de-emphasis, and NO dishonest x-jitter */}
+        {rows.filter((r) => r.provenance.source !== "local").map((r) => (
+          <g key={`api${r.model}`}>
+            <circle cx={x(r.capability_naive_f1)} cy={y(r.quality_gain)} r={6} className="pr-ag-h2-apiring" />
+            <text x={x(r.capability_naive_f1)} y={y(r.quality_gain) + 17} className="pr-ag-h2-apilabel" textAnchor="middle">API</text>
+          </g>
+        ))}
         {/* Tier-2 frontier — MUTED hollow diamond + dashed projection; token UNMEASURED ⇒ a dashed "未测" tick */}
         {fm && fm.reproducible === false && last && (
           <g className="pr-ag-h2-frontier-g">
@@ -193,18 +202,28 @@ function CapGain({ p }: { p: AxiomProtocol }) {
       <div className="pr-ag-h2-legend">
         <span><i className="sw tok" /> token 省(H2b 结构性·~flat)</span>
         <span><i className="sw qual" /> 质量 ΔF1(H2a 随能力↓ · 实心=该模型全格 CI&gt;0)</span>
+        <span><span className="pr-ag-h2-ringmark">○</span> deepseek(真实 API·可复现·能力与 gemma-31b 持平)</span>
         <span><i className="sw front" /> ◇ GPT-5.5 前沿(Tier-2·浏览器抓取·不可复现·token 未测)</span>
       </div>
 
       {/* H2b flat-line caveat — adjacent to the very claim it qualifies (the solid flat blue line) */}
-      <p className="pr-ag-h2-bnote">▸ “省 token 近 flat”由上下文体量决定(axiom 上下文 ≈ naive 的 40%),但仅在 <b>3–4 个本地同族模型 + 单一合成 logistics 基底</b>上验证,非通用「模型无关」证明;前沿点 token <b>未测</b>,其 flat 延续为<b>推断</b>(画作虚线)。</p>
+      <p className="pr-ag-h2-bnote">▸ “省 token 近 flat”由上下文体量决定(axiom 上下文 ≈ naive 的 40%),但仅在 <b>本地同族模型 + 单一合成 logistics 基底</b>上验证,非通用「模型无关」证明;最右<b>浏览器</b>前沿点 token <b>未测</b>,其 flat 延续为<b>推断</b>(画作虚线)。</p>
+
+      {/* API-point disclosure — deepseek is a REPRODUCIBLE point at gemma-31b's (TIED) capability, with a $≠0-freeze / prompt-JSON provenance */}
+      {rows.some((r) => r.provenance.source !== "local") && (
+        <p className="pr-ag-h2-apinote">▸ <b>deepseek-v4-pro</b> 是真实 API 上的<b>独立点</b>:全网格 naive F1(~0.808)与本地 gemma-31b <b>基本持平、并非更强</b>(dirt 0.6 单切片曾高估其优势)。它是顶端的<b>跨模型佐证</b>——另一族模型在同等任务胜任度上给出<b>同样的增益</b>(~0.107),且 ~63% 省 token 由<b>真实 API token 计数实测</b>(非推断)。由一次性付费 Ark 跑冻结入 fixture(serve 时 <b>$0、可复现</b>);因模型<b>不支持 response_format</b>,用 prompt-JSON 构造(与本地 strict-schema 行的<b>构造差异,已披露</b>)。</p>
+      )}
 
       {/* data backstop table — the exact numbers + rank order, zero implied regression line */}
       <div className="pr-ag-matrix pr-ag-h2-matrix">
         <div className="pr-ag-matrix-head"><span>模型(按能力升序)</span><span>能力 naive-F1</span><span>质量增益 ΔF1(/{QSCALE.toFixed(2)};CI&gt;0?)</span><span>token 省</span></div>
         {rows.map((r) => (
           <div className="pr-ag-row" key={r.model}>
-            <span className="pr-ag-cellname">{shortModel(r.model)}</span>
+            <span className="pr-ag-cellname">{shortModel(r.model)}
+              {r.provenance.source !== "local" && (
+                <span className="pr-ag-h2-apibadge" title="一次性付费 API 冻结(serve 时 $0、可复现)·prompt-JSON(模型不支持 response_format)">API·付费冻结·prompt-JSON</span>
+              )}
+            </span>
             <span className="pr-ag-cellnum">{r.capability_naive_f1.toFixed(3)}</span>
             <div className="pr-ag-cellbar">
               <Bar frac={r.quality_gain / QSCALE} kind={qualFilled(r.model) ? "qual" : "qual-weak"} label={`+${r.quality_gain.toFixed(3)}`} />

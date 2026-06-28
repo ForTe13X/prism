@@ -47,6 +47,19 @@ def _frontier_confirms(frontier_gain: float, rows: list) -> bool:
     return bool(rows and frontier_gain <= rows[-1]["quality_gain"])
 
 
+def _provenance(model: str) -> dict:
+    """Per-model provenance for the H2 axis. Most rows are LOCAL ($0, strict json-schema). deepseek-v4-pro is an
+    INDEPENDENT real-API point whose full-grid task-competence is TIED with gemma-31b (naive F1 ~0.808 vs 0.8075)
+    — a cross-model corroboration, NOT a higher-capability / frontier point — FROZEN from a one-time paid Ark run
+    (reproducible from fixtures at serve-time $0) and produced with prompt-JSON (the model supports no
+    response_format). Surfaced per-row so the visual can badge + caveat it, never silently mixing a $≠0 /
+    prompt-JSON point into the $0 strict-schema set (the capability proxy + F1 are still measured identically,
+    so the point is comparable, with a caveat)."""
+    if model == "deepseek-v4-pro-260425":
+        return {"source": "ark-api", "cost": "paid-freeze", "structured": "prompt-json", "reproducible": True}
+    return {"source": "local", "cost": "free", "structured": "json-schema", "reproducible": True}
+
+
 def _mean(xs: list[float]) -> float:
     return sum(xs) / len(xs) if xs else 0.0
 
@@ -197,7 +210,8 @@ def run_protocol(source_id: str = "logistics_demo", *, models: list[str] | None 
             h2_rows.append({"model": m,
                             "capability_naive_f1": round(_mean([c["naive_f1"] for c in cells]), 4),
                             "quality_gain": round(_mean([c["quality_delta_mean"] for c in cells]), 4),
-                            "token_saving": round(_mean([c["token_saving_mean"] for c in cells]), 4)})
+                            "token_saving": round(_mean([c["token_saving_mean"] for c in cells]), 4),
+                            "provenance": _provenance(m)})
     h2_rows.sort(key=lambda r: r["capability_naive_f1"])  # ascending capability
     h2_gains = [r["quality_gain"] for r in h2_rows]
     h2_saves = [r["token_saving"] for r in h2_rows]

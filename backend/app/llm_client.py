@@ -45,18 +45,47 @@ def _base() -> str:
     return os.environ.get("PRISM_LLM_BASE", "http://127.0.0.1:1234/v1").rstrip("/")
 
 
+def _headers(extra: dict | None = None) -> dict:
+    # local LM Studio needs no key; a remote OpenAI-compatible endpoint (e.g. Volcengine Ark) needs a Bearer
+    # token — supplied out-of-band via PRISM_LLM_KEY so no secret is ever committed.
+    h = {"Content-Type": "application/json", **(extra or {})}
+    key = os.environ.get("PRISM_LLM_KEY")
+    if key:
+        h["Authorization"] = f"Bearer {key}"
+    return h
+
+
 def _post(path: str, payload: dict, timeout: int = _TIMEOUT) -> dict:
     req = urllib.request.Request(
         _base() + path, data=json.dumps(payload).encode("utf-8"),
-        headers={"Content-Type": "application/json"}, method="POST",
+        headers=_headers(), method="POST",
     )
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         return json.loads(resp.read().decode("utf-8"))
 
 
 def _get(path: str, timeout: int = 5) -> dict:
-    with urllib.request.urlopen(_base() + path, timeout=timeout) as resp:
+    req = urllib.request.Request(_base() + path, headers=_headers(), method="GET")
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
         return json.loads(resp.read().decode("utf-8"))
+
+
+def _chat_post(payload: dict, timeout: int) -> dict:
+    """POST /chat/completions; if the provider rejects response_format with a 400 (some models — e.g. Ark's
+    deepseek-v4-pro — support NO response_format, neither json_schema nor json_object), retry ONCE without it.
+    The task prompt already embeds the JSON shape, so _extract_json still recovers the answer — a prompt-JSON
+    fallback (a disclosed construction difference vs strict-schema models, not a silent one)."""
+    try:
+        return _post("/chat/completions", payload, timeout=timeout)
+    except urllib.error.HTTPError as e:
+        body = ""
+        try:
+            body = e.read().decode("utf-8", "replace")
+        except Exception:  # noqa: BLE001 — best-effort body read to decide the fallback
+            pass
+        if e.code == 400 and "response_format" in body and "response_format" in payload:
+            return _post("/chat/completions", {k: v for k, v in payload.items() if k != "response_format"}, timeout=timeout)
+        raise
 
 
 def list_models() -> list[str]:
@@ -249,7 +278,7 @@ def structured_complete(system: str, user: str, schema: dict, model: str | None 
         "response_format": {"type": "json_schema", "json_schema": _json_schema_block(schema)},
     }
     try:
-        resp = _post("/chat/completions", payload, timeout=timeout)
+        resp = _chat_post(payload, timeout)
         _msg = (resp.get("choices") or [{}])[0].get("message", {})
         _raw = _msg.get("content") or ""
         if not _raw.strip():  # some reasoning models (e.g. qwen3.6 in LM Studio) route the json_schema answer

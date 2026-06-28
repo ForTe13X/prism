@@ -39,12 +39,36 @@
 "out": 70
 }
 },
+"037e646c0d9c641bad3e189b": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0024\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0011\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 488,
+"out": 719
+}
+},
+"049895ed4d9337ada417d1f7": {
+"content": "{\n  \"answer\": [\n    {\n      \"news_id\": \"NEWS-001\",\n      \"shipment_ids\": [\"SHP-0008\", \"SHP-0024\"]\n    },\n    {\n      \"news_id\": \"NEWS-002\",\n      \"shipment_ids\": [\"SHP-0011\"]\n    }\n  ]\n}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 447,
+"out": 1190
+}
+},
 "04a4f2c6f8a402c0960d8dd5": {
 "content": "{\"answer\": [{\"news_id\": \"NEWS-002\", \"shipment_ids\": [\"SHP-0008\", \"SHP-0016\"]}]}",
 "model": "google/gemma-4-12b-qat",
 "usage": {
 "in": 185,
 "out": 42
+}
+},
+"069cc63ac69fba87307f9f36": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0011\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0023\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 448,
+"out": 1193
 }
 },
 "072935a6c8601c5443ad86ac": {
@@ -61,6 +85,14 @@
 "usage": {
 "in": 251,
 "out": 87
+}
+},
+"0765f66588984105986ab492": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0008\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 418,
+"out": 1042
 }
 },
 "082b0a037d158b84ab76ee26": {
@@ -183,6 +215,14 @@
 "out": 88
 }
 },
+"1a33cd7d13d8f59521236ef6": {
+"content": "{\n  \"answer\": [\n    {\n      \"news_id\": \"NEWS-006\",\n      \"shipment_ids\": []\n    },\n    {\n      \"news_id\": \"NEWS-004\",\n      \"shipment_ids\": []\n    },\n    {\n      \"news_id\": \"NEWS-002\",\n      \"shipment_ids\": [\"SHP-0024\"]\n    },\n    {\n      \"news_id\": \"NEWS-001\",\n      \"shipment_ids\": [\"SHP-0012\", \"SHP-0011\"]\n    }\n  ]\n}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 444,
+"out": 1534
+}
+},
 "1a497f2b37b8ecb91b4fcf1d": {
 "content": "{\n  \"answer\": [\n    {\n      \"news_id\": \"NEWS-002\",\n      \"shipment_ids\": [\n        \"SHP-0022\"\n      ]\n    },\n    {\n      \"news_id\": \"NEWS-001\",\n      \"shipment_ids\": [\n        \"SHP-0008\"\n      ]\n    }\n  ]\n}",
 "model": "google/gemma-4-31b-qat",
@@ -271,6 +311,14 @@
 "out": 700
 }
 },
+"23c20071a9dd727452c8c46e": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-003\",\"shipment_ids\":[]},{\"news_id\":\"NEWS-004\",\"shipment_ids\":[]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0008\",\"SHP-0021\",\"SHP-0024\"]},{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0004\"]},{\"news_id\":\"NEWS-007\",\"shipment_ids\":[]},{\"news_id\":\"NEWS-005\",\"shipment_ids\":[]},{\"news_id\":\"NEWS-006\",\"shipment_ids\":[]},{\"news_id\":\"NEWS-008\",\"shipment_ids\":[]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 468,
+"out": 1279
+}
+},
 "23faa9b8d321b07c18525ae4": {
 "content": "{\"answer\": [{\"news_id\": \"NEWS-001\", \"shipment_ids\": [\"SHP-0008\", \"SHP-0011\", \"SHP-0013\"]}]}",
 "model": "google/gemma-4-12b-qat",
@@ -309,6 +357,14 @@
 "usage": {
 "in": 579,
 "out": 53
+}
+},
+"28f545d2583f15edcecda89e": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0011\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0023\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 445,
+"out": 1002
 }
 },
 "29900743e2b39afbe299666f": {
@@ -375,6 +431,30 @@
 "out": 47
 }
 },
+"2f0feb5c275365f58115ddc6": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0023\"]},{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0007\",\"SHP-0011\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 182,
+"out": 316
+}
+},
+"2f2711127475e26dd09ef1a7": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0008\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0011\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 510,
+"out": 1085
+}
+},
+"2f882e79582a5b55630e7f78": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0020\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0008\",\"SHP-0016\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 444,
+"out": 1304
+}
+},
 "31f3c9fef476bb6958ddca8f": {
 "content": "{\"answer\": [{\"a_id\": \"AX-003\", \"b_tags\": [\"bmc\", \"core\", \"rack\", \"zone\"]}, {\"a_id\": \"AX-005\", \"b_tags\": [\"bmc\", \"tor\", \"rack\", \"zone\"]}, {\"a_id\": \"AX-007\", \"b_tags\": [\"bmc\", \"leaf\", \"psu\", \"pdu\"]}, {\"a_id\": \"AX-008\", \"b_tags\": [\"leaf\", \"psu\", \"spine\", \"pdu\"]}, {\"a_id\": \"AX-010\", \"b_tags\": [\"nic\", \"core\", \"psu\", \"zone\"]}, {\"a_id\": \"AX-011\", \"b_tags\": [\"bmc\", \"blade\", \"tor\", \"rack\"]}, {\"a_id\": \"AX-012\", \"b_tags\": [\"bmc\", \"blade\", \"core\", \"rack\"]}, {\"a_id\": \"AX-013\", \"b_tags\": [\"vlan\", \"core\", \"pdu\", \"zone\"]}, {\"a_id\": \"AX-014\", \"b_tags\": [\"vlan\", \"core\", \"psu\", \"zone\"]}, {\"a_id\": \"AX-015\", \"b_tags\": [\"leaf\", \"nic\", \"psu\", \"spine\"]}, {\"a_id\": \"AX-016\", \"b_tags\": [\"bmc\", \"pdu\", \"rack\", \"zone\"]}, {\"a_id\": \"AX-017\", \"b_tags\": [\"bmc\", \"blade\", \"core\", \"zone\"]}, {\"a_id\": \"AX-018\", \"b_tags\": [\"core\", \"psu\", \"spine\", \"zone\"]}, {\"a_id\": \"AX-019\", \"b_tags\": [\"core\", \"tor\", \"spine\", \"rack\"]}, {\"a_id\": \"AX-020\", \"b_tags\": [\"bmc\", \"tor\", \"spine\", \"rack\"]}, {\"a_id\": \"axis-021\", \"b_tags\": [\"nic\", \"psu\", \"tor\", \"rack\"]}, {\"a_id\": \"AX-022\", \"b_tags\": [\"bmc\", \"leaf\", \"core\", \"pdu\"]}, {\"a_id\": \"AX-023\", \"b_tags\": [\"psu\", \"tor\", \"spine\", \"pdu\"]}, {\"a_id\": \"AX-024\", \"b_tags\": [\"bmc\", \"vlan\", \"core\", \"psu\"]}, {\"a_id\": \"AX-025\", \"b_tags\": [\"leaf\", \"nic\", \"vlan\", \"tor\"]}, {\"a_id\": \"AX-026\", \"b_tags\": [\"blade\", \"nic\", \"tor\", \"zone\"]}, {\"a_id\": \"AX-001\", \"b_tags\": [\"leaf\", \"vlan\", \"core\", \"zone\"]}, {\"a_id\": \"AX-002\", \"b_tags\": [\"psu\", \"spine\", \"rack\", \"zone\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"vlan\", \"core\", \"tor\", \"zone\"]}, {\"a_id\": \"AX-006\", \"b_tags\": [\"blade\", \"vlan\", \"psu\", \"rack\"]}, {\"a_id\": \"AX-009\", \"b_tags\": [\"blade\", \"core\", \"psu\", \"rack\"]}, {\"a_id\": \"000-AX\", \"b_tags\": [\"leaf\", \"spine\", \"pdu\", \"rack\"]}, {\"a_id\": \"AX-000\", \"b_tags\": [\"leaf\", \"spine\", \"pdu\", \"rack\"]}, {\"a_id\": \"AX-013\", \"b_tags\": [\"vlan\", \"core\", \"pdu\", \"zone\"]}, {\"a_id\": \"AX-014\", \"b_tags\": [\"000-AX\", \"000-AX\", \"000-AX\", \"000-AX\"]}, {\"a_id\": \"AX-014\", \"b_tags\": [\"vlan\", \"core\", \"psu\", \"zone\"]}, {\"a_id\": \"AX-015\", \"b_tags\": [\"leaf\", \"nic\", \"psu\", \"spine\"]}, {\"a_id\": \"AX-016\", \"b_tags\": [\"bmc\", \"pdu\", \"rack\", \"zone\"]}, {\"a_id\": \"AX-017\", \"b_tags\": [\"bmc\", \"blade\", \"core\", \"zone\"]}, {\"a_id\": \"AX-018\", \"b_tags\": [\"core\", \"psu\", \"spine\", \"zone\"]}, {\"a_id\": \"AX-019\", \"b_tags\": [\"core\", \"tor\", \"spine\", \"rack\"]}, {\"a_id\": \"AX-020\", \"b_tags\": [\"bmc\", \"tor\", \"spine\", \"rack\"]}, {\"a_id\": \"AX-021\", \"b_tags\": [\"nic\", \"psu\", \"tor\", \"rack\"]}, {\"a_id\": \"AX-022\", \"b_tags\": [\"bmc\", \"hall\", \"core\", \"pdu\"]}, {\"a_id\": \"AX-023\", \"b_tags\": [\"psu\", \"tor\", \"spine\", \"pdu\"]}, {\"a_id\": \"AX-024\", \"b_tags\": [\"bmc\", \"vlan\", \"core\", \"psu\"]}, {\"a_id\": \"AX-025\", \"b_tags\": [\"leaf\", \"nic\", \"vlan\", \"tor\"]}, {\"a_id\": \"AX-026\", \"b_tags\": [\"blade\", \"nic\", \"tor\", \"zone\"]}, {\"a_id\": \"AX-000\", \"b_tags\": [\"leaf\", \"spine\", \"pdu\", \"rack\"]}, {\"a_id\": \"AX-001\", \"b_tags\": [\"leaf\", \"vlan\", \"core\", \"zone\"]}, {\"a_id\": \"AX-002\", \"b_tags\": [\"psu\", \"spine\", \"rack\", \"zone\"]}, {\"a_id\": \"AX-003\", \"b_tags\": [\"bmc\", \"core\", \"rack\", \"zone\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"vlan\", \"core\", \"tor\", \"zone\"]}, {\"a_id\": \"AX-005\", \"b_tags\": [\"bmc\", \"tor\", \"rack\", \"zone\"]}, {\"a_id\": \"AX-006\", \"b",
 "model": "google/gemma-4-12b-qat",
@@ -405,6 +485,14 @@
 "usage": {
 "in": 3479,
 "out": 8
+}
+},
+"355ede83ec426dc101f2afc4": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0022\"]},{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0008\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 442,
+"out": 808
 }
 },
 "377da4804f6e2364e5165ac8": {
@@ -477,6 +565,14 @@
 "usage": {
 "in": 579,
 "out": 64
+}
+},
+"3d1eb9b51546e979bdb01ac8": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0008\",\"SHP-0011\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0021\",\"SHP-0017\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 554,
+"out": 1214
 }
 },
 "3f7a1d6dcff3d89dd5373042": {
@@ -567,6 +663,14 @@
 "out": 68
 }
 },
+"48b0eb6e6c0e6755184a4ed7": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0008\",\"SHP-0017\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 145,
+"out": 67
+}
+},
 "48ca5574d76845320cf09fb8": {
 "content": "{\"answer\": [{\"a_id\": \"AX-003\", \"b_tags\": [\"codex\", \"folio\", \"poetry\", \"score\"]}, {\"a_id\": \"AX-006\", \"b_tags\": [\"essay\", \" \" , \"poetry\", \"quire\"]}, {\"a_id\": \"AX-008\", \"b_tags\": [\"atlas\", \"poetry\", \"quire\", \"vellum\"]}, {\"a_id\": \"AX-010\", \"b_tags\": [\"fiction\", \"quire\", \"score\", \"scroll\"]}, {\"a_id\": \"AX-011\", \"b_tags\": [ \"codex\", \"folio\", \"poetry\", \"scroll\"]}, {\"a_id\": \"AX-017\", \"b_tags\": [\"atlas\", \"drama\", \"poetry\", \"vellum\"]}, {\"a_id\": \"id_001\", \"b_tags\": [\"codex\", \"quire\", \"score\", \"scroll\"]}, {\"a_id\": \"AX-0020\", \"b_tags\": [\"codex\", \"quire\", \"score\", \"scroll\"]}, {\"a_id\": \"AX-021\", \"b_tags\": [\"codex\", \"folio\", \"score\", \"vell \"] } , {\"a_id\": \"AX-022\", \"b_tags\": [\"atlas\", \"poetry\", \"score\", \"vellum\"]}, {\"a_id\": \"AX-024\", \"b_tags\": [\"atlas\", \"poetry\", \"quire\", \"vellum\"]} ]\n}",
 "model": "google/gemma-4-12b-qat",
@@ -605,6 +709,14 @@
 "usage": {
 "in": 251,
 "out": 87
+}
+},
+"4d3f185139f5ea923fe870c3": {
+"content": "{\n  \"answer\": [\n    {\n      \"news_id\": \"NEWS-001\",\n      \"shipment_ids\": [\"SHP-0004\"]\n    },\n    {\n      \"news_id\": \"NEWS-002\",\n      \"shipment_ids\": [\"SHP-0008\"]\n    },\n    {\n      \"news_id\": \"NEWS-003\",\n      \"shipment_ids\": []\n    },\n    {\n      \"news_id\": \"NEWS-004\",\n      \"shipment_ids\": []\n    },\n    {\n      \"news_id\": \"NEWS-005\",\n      \"shipment_ids\": []\n    },\n    {\n      \"news_id\": \"NEWS-006\",\n      \"shipment_ids\": []\n    },\n    {\n      \"news_id\": \"NEWS-007\",\n      \"shipment_ids\": []\n    },\n    {\n      \"news_id\": \"NEWS-008\",\n      \"shipment_ids\": []\n    }\n  ]\n}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 470,
+"out": 1966
 }
 },
 "4dcaba40e1762633ab3bd651": {
@@ -655,6 +767,14 @@
 "out": 97
 }
 },
+"5248503b8f45b0490c1ef279": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0015\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0006\",\"SHP-0014\",\"SHP-0019\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 599,
+"out": 1757
+}
+},
 "531a7ffa557b8d1b9a73c88b": {
 "content": "{\"answer\": [{\"news_id\": \"NEWS-002\", \"shipment_ids\": [\"SHP-0008\", \"SHP-0016\"]}]}",
 "model": "qwen/qwen3.6-35b-a3b",
@@ -669,6 +789,22 @@
 "usage": {
 "in": 576,
 "out": 70
+}
+},
+"53b08f39d589dfe0527025e3": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0008\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 520,
+"out": 567
+}
+},
+"546b6eadf47794f11b5ac7d0": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0024\"]},{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0011\",\"SHP-0012\",\"SHP-0017\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 187,
+"out": 189
 }
 },
 "54e930ef3730a273bf3cc942": {
@@ -703,6 +839,14 @@
 "out": 40
 }
 },
+"57dfdcf389504f03f2b49a53": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0008\",\"SHP-0017\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 145,
+"out": 203
+}
+},
 "58378f3080ebc8c60138d20c": {
 "content": "{\n  \"answer\": [\n    {\n      \"news_id\": \"NEWS-002\",\n      \"shipment_ids\": [\n        \"SHP-0017\"\n      ]\n    },\n    {\n      \"news_id\": \"NEWS-001\",\n      \"shipment_ids\": [\n        \"SHP-0008\"\n      ]\n    }\n  ]\n}",
 "model": "google/gemma-4-31b-qat",
@@ -733,6 +877,22 @@
 "usage": {
 "in": 604,
 "out": 77
+}
+},
+"5e04bb092b581f73333b10ee": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0015\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0002\",\"SHP-0006\",\"SHP-0014\",\"SHP-0019\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 192,
+"out": 374
+}
+},
+"5f5793fee62a821f86c82c3b": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0008\",\"SHP-0011\",\"SHP-0013\"]},{\"news_id\":\"NEWS-007\",\"shipment_ids\":[\"SHP-0017\",\"SHP-0021\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 192,
+"out": 195
 }
 },
 "5fba66d11d0e384e05f2e7a7": {
@@ -783,6 +943,14 @@
 "out": 60
 }
 },
+"6579597874ad6aaa6e5f6c0d": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0008\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 141,
+"out": 58
+}
+},
 "658dd9cee97e759fea1c1daf": {
 "content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0008\",\"SHP-0024\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0011\"]}]\n}",
 "model": "qwen/qwen3.6-35b-a3b",
@@ -813,6 +981,14 @@
 "usage": {
 "in": 647,
 "out": 111
+}
+},
+"67880d7e0b4c8efe38c2c285": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-006\",\"shipment_ids\":[]},{\"news_id\":\"NEWS-004\",\"shipment_ids\":[]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0024\"]},{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0017\",\"SHP-0012\",\"SHP-0011\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 468,
+"out": 1662
 }
 },
 "67ddbabb12b7d935b7045dd8": {
@@ -887,6 +1063,22 @@
 "out": 79
 }
 },
+"6f517816f87f23c712c8bd44": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-006\",\"shipment_ids\":[]},{\"news_id\":\"NEWS-004\",\"shipment_ids\":[]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0024\"]},{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0012\",\"SHP-0011\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 559,
+"out": 1214
+}
+},
+"6f9399afc5cb173adb6ff6c0": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0007\",\"SHP-0011\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0023\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 182,
+"out": 187
+}
+},
 "6fa0ba55433f75e6c1cbb3f8": {
 "content": "{\"answer\": [{\"news_id\": \"N1\", \"shipment_ids\": [\"S1\", \"S2\", \"S3\"]}]}",
 "model": "google/gemma-4-12b-qat",
@@ -909,6 +1101,14 @@
 "usage": {
 "in": 170,
 "out": 49
+}
+},
+"71636f9e61f6a676087935bb": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0008\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 420,
+"out": 986
 }
 },
 "73001a2b6993980e4bb70841": {
@@ -943,6 +1143,14 @@
 "out": 111
 }
 },
+"765ebc72888e19377b5f1194": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0008\",\"SHP-0011\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0017\",\"SHP-0021\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 490,
+"out": 1157
+}
+},
 "7b751f51150015e24d5d3145": {
 "content": "{\n  \"answer\": [\n    {\n      \"news_id\": \"NEWS-002\",\n      \"shipment_ids\": [\"SHP-0024\"]\n    },\n    {\n      \"news_id\": \"NEWS-001\",\n      \"shipment_ids\": [\"SHP-0011\", \"SHP-0012\"]\n    }\n  ]\n}",
 "model": "qwen-3-8b-instruct",
@@ -957,6 +1165,14 @@
 "usage": {
 "in": 526,
 "out": 70
+}
+},
+"7b8dd83f54395f9a0669b9f3": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0008\",\"SHP-0024\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0011\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 183,
+"out": 117
 }
 },
 "7dcb2446c776cad856117b1d": {
@@ -989,6 +1205,14 @@
 "usage": {
 "in": 216,
 "out": 62
+}
+},
+"80985488e0790be95212df1b": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0008\",\"SHP-0011\",\"SHP-0013\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0017\",\"SHP-0021\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 192,
+"out": 213
 }
 },
 "8122e8da62faa49966cee431": {
@@ -1103,6 +1327,14 @@
 "out": 97
 }
 },
+"8b72b2978cccc271a599d71c": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0024\"]},{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0011\",\"SHP-0012\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 182,
+"out": 143
+}
+},
 "8d1c3b0c26221a37324a90ae": {
 "content": "{\"answer\": [{\"news_id\": \"NEWS-002\", \"shipment_ids\": [\"SHP-0008\"]}]}",
 "model": "google/gemma-4-12b-qat",
@@ -1151,12 +1383,28 @@
 "out": 368
 }
 },
+"931d85016c1ebc210df6fd04": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0015\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0006\",\"SHP-0014\",\"SHP-0019\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 187,
+"out": 204
+}
+},
 "93dfd83377d18468a78cf94c": {
 "content": "{\"answer\": [{\"a_id\": \"AX-000\", \"b_tags\": [\"atlas\", \"codex\", \"essay\", \"vellum\"]}, {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"codex\", \"essay\", \"folio\"]}, {\"a_id\": \"AX-005\", \"b_tags\": [\"atlas\", \"drama\", \"manual\", \"scroll\"]}, {\"a_id\": \"AX-007\", \"b_tags\": [\"atlas\", \"fiction\", \"folio\", \"score\"]}, {\"a_id\": \"AX-011\", \"b_tags\": [\"atlas\", \"drama\", \"folio\", \"manual\", \"vellum\"]}, {\"a_id\": \"AX-014\", \"b_tags\": [\"AX-014\", \"codex\", \"drama\", \"poetry\", \"vellum\"]}, {\"a_id\": \"AX-016\", \"b_tags\": [\"atlas\", \"6004\", \"manual\", \"score\"]}, {\"a_id\": \"AX-018\", \"b_tags\": [\"codex\", \"poetry\", \"score\", \"vellum\"]}, {\"a_id\": \"AX-020\", \"b_tags\": [\"codex\", \"essay\", \"fiction\", \"vellum\"]}, {\"a_id\": \"AX-024\", \"b_tags\": [\"codex\", \"manual\", \"score\", \"scroll\"]}, {\"a_id\": \"AX-027\", \"b_tags\": [\"essay\", \"fiction\", \"folio\", \"poetry\"]}, {\"a_id\": \"AX-029\", \"b_tags\": [\"drama\", \"essay\", \"poetry\", \"scroll\"]}]}",
 "model": "google/gemma-4-12b-qat",
 "usage": {
 "in": 499,
 "out": 386
+}
+},
+"941fdd504031130bcfa4c6b2": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0024\"]},{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0011\",\"SHP-0012\",\"SHP-0017\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 187,
+"out": 145
 }
 },
 "94b6e80092c7f359d4a65424": {
@@ -1199,6 +1447,14 @@
 "out": 116
 }
 },
+"99dae6120814cd123781d044": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0015\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0002\",\"SHP-0014\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 552,
+"out": 1903
+}
+},
 "9a188a93e2b1d4e493f5748d": {
 "content": "{\n  \"answer\": [\n    {\n      \"news_id\": \"NEWS-002\",\n      \"shipment_ids\": [\"SHP-0024\"]\n    },\n    {\n      \"news_id\": \"NEWS-001\",\n      \"shipment_ids\": [\"SHP-0011\", \"SHP-0012\", \"SHP-0017\"]\n    }\n  ]\n}",
 "model": "qwen-3-8b-instruct",
@@ -1237,6 +1493,14 @@
 "usage": {
 "in": 507,
 "out": 376
+}
+},
+"9c7272833b0b2cf88879a6b8": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0015\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0002\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 552,
+"out": 1074
 }
 },
 "9c793436a01bab57af767d87": {
@@ -1279,12 +1543,28 @@
 "out": 42
 }
 },
+"a35d3ee72b30b38a0d16998f": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-003\",\"shipment_ids\":[]},{\"news_id\":\"NEWS-004\",\"shipment_ids\":[]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0008\",\"SHP-0021\",\"SHP-0024\"]},{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0004\"]},{\"news_id\":\"NEWS-006\",\"shipment_ids\":[]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 468,
+"out": 1382
+}
+},
 "a3e378559d764a4371756e94": {
 "content": "{\"answer\": [{\"news_id\": \"NEWS-001\", \"shipment_ids\": [\"SHP-0011\"]}, {\"news_id\": \"NEWS-002\", \"shipment_ids\": [\"SHP-0023\"]}]}",
 "model": "google/gemma-4-12b-qat",
 "usage": {
 "in": 588,
 "out": 68
+}
+},
+"a4ee4477c5d07feaadf40f62": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0008\",\"SHP-0011\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0021\",\"SHP-0017\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 554,
+"out": 1478
 }
 },
 "a60754d1204b93071d6c6651": {
@@ -1319,6 +1599,14 @@
 "out": 40
 }
 },
+"a9a48967fb87b9fa97a56a3f": {
+"content": "{\n  \"answer\": [\n    {\n      \"news_id\": \"NEWS-004\",\n      \"shipment_ids\": []\n    },\n    {\n      \"news_id\": \"NEWS-001\",\n      \"shipment_ids\": [\"SHP-0008\", \"SHP-0011\"]\n    },\n    {\n      \"news_id\": \"NEWS-002\",\n      \"shipment_ids\": [\"SHP-0021\"]\n    }\n  ]\n}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 490,
+"out": 1345
+}
+},
 "a9e6e146d5796f61ee0912ea": {
 "content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0011\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0023\"]}]}",
 "model": "qwen/qwen3.6-35b-a3b",
@@ -1333,6 +1621,14 @@
 "usage": {
 "in": 630,
 "out": 120
+}
+},
+"ab45741e09257ddbce1f62b6": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0020\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0008\",\"SHP-0016\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 183,
+"out": 177
 }
 },
 "ac2484cac581a4e1fed68ab6": {
@@ -1399,6 +1695,14 @@
 "out": 93
 }
 },
+"b4e822b9b7424bbb3c81aa6f": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0008\",\"SHP-0017\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0022\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 182,
+"out": 96
+}
+},
 "b7238d861ef3d817e85fa194": {
 "content": "{\"answer\": [{\"news_id\": \"NEWS-002\", \"shipment_ids\": [\"SHP-0008\", \"SHP-0017\"]}]}",
 "model": "google/gemma-4-12b-qat",
@@ -1413,6 +1717,22 @@
 "usage": {
 "in": 590,
 "out": 471
+}
+},
+"b878bb38e657f53065982283": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0008\",\"SHP-0021\",\"SHP-0024\"]},{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0004\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 188,
+"out": 134
+}
+},
+"baa367012669893a55c42dc2": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0011\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0023\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 498,
+"out": 1162
 }
 },
 "bad546c612af2855988a4f46": {
@@ -1535,12 +1855,28 @@
 "out": 115
 }
 },
+"c9b01fa2e2894b57bc612704": {
+"content": "{\n  \"answer\": [\n    {\"news_id\": \"NEWS-006\", \"shipment_ids\": []},\n    {\"news_id\": \"NEWS-004\", \"shipment_ids\": []},\n    {\"news_id\": \"NEWS-005\", \"shipment_ids\": []},\n    {\"news_id\": \"NEWS-001\", \"shipment_ids\": []},\n    {\"news_id\": \"NEWS-002\", \"shipment_ids\": [\"SHP-0008\", \"SHP-0016\"]},\n    {\"news_id\": \"NEWS-007\", \"shipment_ids\": []},\n    {\"news_id\": \"NEWS-008\", \"shipment_ids\": []},\n    {\"news_id\": \"NEWS-003\", \"shipment_ids\": []}\n  ]\n}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 552,
+"out": 1963
+}
+},
 "cad30bb4f514087a76d60d07": {
 "content": "{\n  \"answer\": [\n    {\n      \"news_id\": \"NEWS-001\",\n      \"shipment_ids\": [\n        \"SHP-0008\",\n        \"SHP-0011\",\n        \"SHP-0013\"\n      ]\n    },\n    {\n      \"news_id\": \"NEWS-002\",\n      \"shipment_ids\": [\n        \"SHP-0017\",\n        \"SHP-0021\"\n      ]\n    }\n  ]\n}",
 "model": "google/gemma-4-31b-qat",
 "usage": {
 "in": 251,
 "out": 133
+}
+},
+"cb3721c80bab20375f661161": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0024\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0011\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 178,
+"out": 163
 }
 },
 "ccc51d7dfce55463b67bf671": {
@@ -1573,6 +1909,14 @@
 "usage": {
 "in": 673,
 "out": 42
+}
+},
+"cea09d1b373058f8350424fc": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0008\",\"SHP-0016\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 146,
+"out": 67
 }
 },
 "cec68432cae9915846504a34": {
@@ -1613,6 +1957,14 @@
 "usage": {
 "in": 164,
 "out": 33
+}
+},
+"d4590974dad11191e7b9cbc8": {
+"content": "{\"answer\":[\n  {\"news_id\":\"NEWS-003\",\"shipment_ids\":[]},\n  {\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0011\"]},\n  {\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0023\"]},\n  {\"news_id\":\"NEWS-007\",\"shipment_ids\":[]},\n  {\"news_id\":\"NEWS-006\",\"shipment_ids\":[]},\n  {\"news_id\":\"NEWS-008\",\"shipment_ids\":[]}\n]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 498,
+"out": 1859
 }
 },
 "d5777e323609202aea246d83": {
@@ -1687,6 +2039,14 @@
 "out": 49
 }
 },
+"dfdafdf1d548c71469a05083": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0024\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0011\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 489,
+"out": 915
+}
+},
 "e14ffef878e185bd523552dd": {
 "content": "{\n  \"answer\": [\n    {\"a_id\": \"AX-001\", \"b_tags\": [\"fiction\", \"manual\", \"score\", \"scroll\"]},\n    {\"a_id\": \"AX-002\", \"b_tags\": [\"drama\", \"poetry\", \"quire\", \"score\"]},\n    {\"a_id\": \"AX-004\", \"b_tags\": [\"atlas\", \"fiction\", \"folio\", \"vellum\"]},\n    {\"a_id\": \"AX-005\", \"b_tags\": [\"atlas\", \"fiction\", \"poetry\", \"scroll\"]},\n    {\"a_id\": \"AX-006\", \"b_tags\": [\"atlas\", \"fiction\", \"folio\", \"manual\"]},\n    {\"a_id\": \"AX-011\", \"b_tags\": [\"codex\", \"drama\", \"quire\", \"vellum\"]},\n    {\"a_id\": \"AX-012\", \"b_tags\": [\"codex\", \"drama\", \"folio\", \"vellum\"]},\n    {\"a_id\": \"AX-014\", \"b_tags\": [\"drama\", \"fiction\", \"folio\", \"manual\"]},\n    {\"a_id\": \"AX-015\", \"b_tags\": [\"fiction\", \"manual\", \"score\", \"vellum\"]},\n    {\"a_id\": \"AX-017\", \"b_tags\": [\"codex\", \"essay\", \"score\", \"vellum\"]},\n    {\"a_id\": \"AX-021\", \"b_tags\": [\"atlas\", \"codex\", \"folio\", \"vellum\"]},\n    {\"a_id\": \"AX-023\", \"b_tags\": [\"fiction\", \"poetry\", \"scroll\", \"vellum\"]},\n    {\"a_id\": \"AX-026\", \"b_tags\": [\"atlas\", \"manual\", \"poetry\", \"score\"]},\n    {\"a_id\": \"AX-027\", \"b_tags\": [\"fiction\", \"folio\", \"poetry\", \"scroll\"]},\n    {\"a_id\": \"AX-028\", \"b_tags\": [\"atlas\", \"essay\", \"poetry\", \"score\"]}\n  ]\n}",
 "model": "qwen-3-8b-instruct",
@@ -1751,6 +2111,14 @@
 "out": 86
 }
 },
+"e45d7c1e4bc00e2bffe0e402": {
+"content": "{\n  \"answer\": [\n    {\n      \"news_id\": \"NEWS-001\",\n      \"shipment_ids\": [\"SHP-0017\", \"SHP-0012\", \"SHP-0011\"]\n    },\n    {\n      \"news_id\": \"NEWS-002\",\n      \"shipment_ids\": [\"SHP-0024\"]\n    },\n    {\n      \"news_id\": \"NEWS-004\",\n      \"shipment_ids\": []\n    },\n    {\n      \"news_id\": \"NEWS-006\",\n      \"shipment_ids\": []\n    }\n  ]\n}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 467,
+"out": 1661
+}
+},
 "e6904abfe03cf9c5ac808ce6": {
 "content": "{\"answer\": [{\"a_id\": \"AX-000\", \"b_tags\": [\"atlas\", \"poetry\", \"score\", \"scroll\"]}, {\"a_id\": \"AX-001\", \"b_tags\": [\"atlas\", \" \" , \"folio\", \"score\"]}, {\"a_id\": \"AX-002\", \"b_tags\": [\"drama\", \"fiction\", \"quire\", \"vellum\"]}, {\"a_id\": \"AX-008\", \"b_tags\": [\"codex\", \"folio\", \"poetry\", \"quire\"]}, {\"a_id\": \"the_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_idid_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_id_context_id_id_id_id_id_id_id_id_id_id_context_id_id_id_id_id_id_id_id_id_id_id_context_id_id_id_id_id_id_id_id_context_id_id_id_id_id_id_context_id_id_id_id_id_context_id_id_id_id_context_id_id_id_id_context_id_id_id_context_id_id_id_context_id_id_context_id_id_context_id_id_context_id_id_context_id_id_context_id_id_context_id_d_id_id_context_id_d_id_context_id_d_id_context_id_d_id_context_id_d_id_context_id_d_id_context_id_d_id_context_id_d_id_context_id_d_id_context_id_d_id_context_id_d_id_context_id_d_id_context_id_d_id_context_id_d_id_context_id_d_id",
 "model": "google/gemma-4-12b-qat",
@@ -1783,6 +2151,14 @@
 "out": 67
 }
 },
+"ecd5414e65e597c07ab442f0": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0008\",\"SHP-0016\"]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 543,
+"out": 1001
+}
+},
 "eebdf4a3879bc981ef447782": {
 "content": "{\n  \"answer\": [\n    {\n      \"news_id\": \"NEWS-002\",\n      \"shipment_ids\": [\n        \"SHP-0024\"\n      ]\n    },\n    {\n      \"news_id\": \"NEWS-001\",\n      \"shipment_ids\": [\n        \"SHP-0012\"\n      ]\n    }\n  ]\n}",
 "model": "google/gemma-4-31b-qat",
@@ -1813,6 +2189,14 @@
 "usage": {
 "in": 216,
 "out": 63
+}
+},
+"f286a68e4beeb46438047987": {
+"content": "{\n  \"answer\": [\n    {\n      \"news_id\": \"NEWS-003\",\n      \"shipment_ids\": []\n    },\n    {\n      \"news_id\": \"NEWS-004\",\n      \"shipment_ids\": []\n    },\n    {\n      \"news_id\": \"NEWS-002\",\n      \"shipment_ids\": [\"SHP-0008\", \"SHP-0021\"]\n    },\n    {\n      \"news_id\": \"NEWS-001\",\n      \"shipment_ids\": [\"SHP-0004\"]\n    },\n    {\n      \"news_id\": \"NEWS-007\",\n      \"shipment_ids\": []\n    },\n    {\n      \"news_id\": \"NEWS-005\",\n      \"shipment_ids\": []\n    },\n    {\n      \"news_id\": \"NEWS-006\",\n      \"shipment_ids\": []\n    },\n    {\n      \"news_id\": \"NEWS-008\",\n      \"shipment_ids\": []\n    }\n  ]\n}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 522,
+"out": 1423
 }
 },
 "f6086770e5305b9522f76541": {
@@ -1871,6 +2255,14 @@
 "out": 25
 }
 },
+"ff58429c480c58146f417e62": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-002\",\"shipment_ids\":[]},{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0008\"]},{\"news_id\":\"NEWS-008\",\"shipment_ids\":[]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 422,
+"out": 1248
+}
+},
 "ff7848d8408dceb34da5c691": {
 "content": "{\n  \"answer\": [\n    {\n      \"news_id\": \"NEWS-001\",\n      \"shipment_ids\": [\"SHP-0008\", \"SHP-0024\"]\n    },\n    {\n      \"news_id\": \"NEWS-002\",\n      \"shipment_ids\": [\"SHP-0011\"]\n    }\n  ]\n}",
 "model": "qwen-3-8b-instruct",
@@ -1885,6 +2277,14 @@
 "usage": {
 "in": 235,
 "out": 69
+}
+},
+"ffeb72b47da0d73c1c6bb770": {
+"content": "{\"answer\":[{\"news_id\":\"NEWS-001\",\"shipment_ids\":[\"SHP-0015\"]},{\"news_id\":\"NEWS-002\",\"shipment_ids\":[\"SHP-0002\",\"SHP-0006\",\"SHP-0014\",\"SHP-0019\"]},{\"news_id\":\"NEWS-004\",\"shipment_ids\":[]},{\"news_id\":\"NEWS-008\",\"shipment_ids\":[]}]}",
+"model": "deepseek-v4-pro-260425",
+"usage": {
+"in": 491,
+"out": 1849
 }
 }
 }

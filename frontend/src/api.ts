@@ -93,11 +93,12 @@ export const fetchNexusGate = () => getJSON<NexusGate>("/api/nexus_xdom/gate");
 export const fetchNexusRealCoupling = () => getJSON<NexusRealCoupling>("/api/nexus_xdom/real_coupling");
 
 // Axiom-gain: the full cross-model protocol (mean±CI token saving + quality + Pareto + build break-even).
-// `includeFrontierInterior` adds the committed qwen3.6-35b-a3b off-line point so the H2 capability axis renders
-// the honest monotonicity-breaking wobble (Spearman −0.80) instead of the prettier 3-model −1.0.
-export const fetchAxiomProtocol = (sourceId: string, includeFrontierInterior = false) =>
+// `includeH2Extra` adds the off-default H2 capability-axis points (the qwen3.6-35b-a3b interior wobble + the
+// deepseek-v4-pro independent real-API corroboration point, capability TIED with gemma-31b) so the H2 visual
+// shows the honest non-monotone wobble AND the tied-capability cross-model corroboration — never hiding either.
+export const fetchAxiomProtocol = (sourceId: string, includeH2Extra = false) =>
   getJSON<AxiomProtocol>(
-    `/api/axiomgain/${encodeURIComponent(sourceId)}/protocol${includeFrontierInterior ? "?include_frontier_interior=true" : ""}`,
+    `/api/axiomgain/${encodeURIComponent(sourceId)}/protocol${includeH2Extra ? "?include_h2_extra=true" : ""}`,
   );
 
 // Cross-domain coreference ablation on the split substrate (naive-RAG vs resolver-axiom-RAG).

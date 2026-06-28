@@ -153,14 +153,26 @@ def test_api_protocol():
     body = res.json()
     assert "matrix" in body and "headline" in body and "honest_verdict" in body
     assert "coverage" in body
-    # default H2 axis is the 3 PROTO_MODELS (the headline-driving set) — qwen3.6 NOT silently folded in
-    default_h2 = {r["model"] for r in body["h2_capability_vs_gain"]["by_capability_ascending"]}
-    assert "qwen/qwen3.6-35b-a3b" not in default_h2 and len(default_h2) == 3
-    # include_frontier_interior=true surfaces the committed off-line point so the H2 visual shows the honest
-    # wobble (Spearman > −1, strict monotone BROKEN) instead of the prettier 3-model −1.0 — never hidden (DON'T #4)
-    res2 = client.get("/api/axiomgain/logistics_demo/protocol?include_frontier_interior=true")
-    h2b = res2.json()["h2_capability_vs_gain"]
-    assert "qwen/qwen3.6-35b-a3b" in {r["model"] for r in h2b["by_capability_ascending"]}
+    # default H2 axis is the 3 PROTO_MODELS (the headline-driving set) — the extra points NOT silently folded in;
+    # every default row is a LOCAL ($0, strict-schema) provenance
+    rows0 = body["h2_capability_vs_gain"]["by_capability_ascending"]
+    default_h2 = {r["model"] for r in rows0}
+    assert "qwen/qwen3.6-35b-a3b" not in default_h2 and "deepseek-v4-pro-260425" not in default_h2 and len(default_h2) == 3
+    assert all(r["provenance"]["source"] == "local" for r in rows0)
+    # include_h2_extra=true surfaces BOTH off-default points: the qwen3.6 interior wobble (breaks strict monotone,
+    # Spearman > −1) AND the deepseek API frontier (flagged api-paid/prompt-json, never silently mixed) — DON'T #4
+    h2b = client.get("/api/axiomgain/logistics_demo/protocol?include_h2_extra=true").json()["h2_capability_vs_gain"]
+    by = {r["model"]: r for r in h2b["by_capability_ascending"]}
+    assert "qwen/qwen3.6-35b-a3b" in by and "deepseek-v4-pro-260425" in by
     assert h2b["quality_gain_monotone_decreasing"] is False           # the wobble is visible, not pruned
     assert h2b["spearman_capability_gain"] is not None and -1.0 < h2b["spearman_capability_gain"] < 0
+    # the API point is flagged (reproducible from fixtures, but $≠0-to-freeze + prompt-JSON). HONEST finding:
+    # over the FULL grid its task-competence is ~TIED with gemma-31b (NOT "more capable" — the dirt-0.6 slice
+    # alone overstated it); it is a cross-model CORROBORATION + a real-API H2b measurement, not a frontier point
+    ds = by["deepseek-v4-pro-260425"]
+    g31 = by["google/gemma-4-31b-qat"]
+    assert ds["provenance"]["source"] == "ark-api" and ds["provenance"]["structured"] == "prompt-json"
+    assert ds["provenance"]["reproducible"] is True                         # frozen ⇒ $0 to serve, reproducible
+    assert abs(ds["capability_naive_f1"] - g31["capability_naive_f1"]) < 0.03  # TIED with gemma-31b, not beyond it
+    assert 0.4 < ds["token_saving"] < 0.8                                   # the structural ~60% saving holds on a real API
     assert client.get("/api/axiomgain/nope/protocol").status_code == 404   # missing source → 404 (mirrors ablation)

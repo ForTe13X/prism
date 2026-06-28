@@ -11,11 +11,17 @@ from .data_package import load_source
 
 benchmark_router = APIRouter(prefix="/api/axiomgain", tags=["axiomgain"])
 
-# The committed interior point (RESEARCH §11d): a 35B MoE that is NOT actually more capable than 31B-dense on
-# this task (naive F1 below gemma-31b) and BREAKS strict monotonicity (its gain sits above gemma-12b's). Adding
-# it makes the H2 capability axis show the honest wobble (Spearman −0.80, not the cleaner 3-model −1.0) instead
-# of a prettier-than-reality monotone line — surfaced on request so the H2 visual never hides the off-line point.
-_FRONTIER_INTERIOR_MODEL = "qwen/qwen3.6-35b-a3b"
+# Off-default H2 capability-axis points (surfaced on request so the H2 visual never hides them, DON'T #4):
+#  - qwen3.6-35b-a3b: the committed INTERIOR point (RESEARCH §11d) — a 35B MoE NOT actually more capable than
+#    31B-dense here (naive F1 below gemma-31b), whose gain sits above gemma-12b's ⇒ BREAKS strict monotonicity
+#    (Spearman −0.80, not the prettier 3-model −1.0).
+#  - deepseek-v4-pro-260425: an INDEPENDENT real-API point (RESEARCH §11f). Over the full grid its naive F1
+#    (~0.808) is ~TIED with gemma-31b (NOT more capable — the dirt-0.6 slice alone overstated its edge), so it
+#    is a cross-model CORROBORATION at the top of the local range, not a frontier extension: a totally different
+#    model at the same task-competence shows the same gain (~0.107) and the ~63% saving holds with REAL API
+#    token counts (H2b measured on a commercial API). Frozen from a one-time paid Ark run (reproducible from
+#    fixtures at serve-time $0); flagged per-row as API/paid/prompt-JSON, never silently mixed in.
+_H2_EXTRA_MODELS = ["qwen/qwen3.6-35b-a3b", "deepseek-v4-pro-260425"]
 
 
 @benchmark_router.get("/{source_id}")
@@ -29,17 +35,20 @@ def axiom_gain(source_id: str) -> dict:
 
 
 @benchmark_router.get("/{source_id}/protocol")
-def protocol(source_id: str, include_frontier_interior: bool = False) -> dict:
+def protocol(source_id: str, include_h2_extra: bool = False) -> dict:
     """RESEARCH_axiom_gain full protocol: cross-model matrix × multi-seed mean±CI on quality gain + token
     saving + cost-per-correct Pareto frontier + gain×dirtiness robustness + §5 build break-even. Fixtures
     only (deterministic); un-cached cells are reported in `coverage`, never silently dropped.
 
-    `include_frontier_interior=true` adds the committed qwen3.6-35b-a3b interior point to the model set so the
-    H2 capability axis renders the honest monotonicity-breaking wobble (Spearman −0.80) instead of the cleaner
-    3-model −1.0 — used by the H2 "capability×gain" visual so it never hides the off-line point (DON'T #4)."""
+    `include_h2_extra=true` adds the off-default H2 capability-axis points (the qwen3.6-35b-a3b interior wobble
+    + the deepseek-v4-pro independent real-API corroboration point, capability TIED with gemma-31b) to the model
+    set so the H2 "capability×gain" visual renders the honest non-monotone wobble AND the tied-capability
+    cross-model corroboration — never hiding either (DON'T #4). The default (no param) response gains only an
+    additive per-row `provenance` field; all headline NUMBERS are unchanged, so the tabs that read it are
+    unaffected."""
     if load_source(source_id) is None:
         raise HTTPException(status_code=404, detail=f"data source not found: {source_id}")
-    models = PROTO_MODELS + [_FRONTIER_INTERIOR_MODEL] if include_frontier_interior else None
+    models = PROTO_MODELS + _H2_EXTRA_MODELS if include_h2_extra else None
     return run_protocol(source_id, models=models)
 
 

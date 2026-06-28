@@ -361,6 +361,7 @@ export interface H2CapabilityRow {
   capability_naive_f1: number;
   quality_gain: number;
   token_saving: number;
+  provenance: { source: string; cost: string; structured: string; reproducible: boolean };
 }
 export interface H2FrontierManual {
   model: string;
