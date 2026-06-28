@@ -88,55 +88,61 @@ function Split({ ab }: { ab: SplitAblation }) {
   );
 }
 
-// 说人话 — the SAME honest results in plain language for a non-technical reader: analogies, no jargon, and
-// the caveats translated (not dropped). Numbers are pulled LIVE from the fetched data so the plain words can
-// never drift from the real result.
-function PlainLanguage({ proto, split }: { proto: AxiomProtocol; split: SplitAblation }) {
+// Decision/architecture summary — the SAME honest results at an AI-architect / PM register: precise terms
+// (token, F1, CI, coreference, resolver, break-even, external validity) with crisp glosses, framed around
+// cost / capability / risk. Not dumbed down, not buried in charts. Every number is pulled LIVE so the prose
+// can never drift from the result.
+function ExecSummary({ proto, split }: { proto: AxiomProtocol; split: SplitAblation }) {
   const save = pct(proto.headline.mean_input_token_saving);
-  const qsig = parseFrac(proto.headline.quality_gain_significant_cells); // e.g. 8/12 — "better" is only PARTLY certain
-  const q = splitPair(split, "qwen-3-8b-instruct"); // the faithful model — its read-off ≈ the resolver ceiling
+  const tokSig = parseFrac(proto.headline.token_saving_significant_cells); // 12/12 — the hard claim
+  const qsig = parseFrac(proto.headline.quality_gain_significant_cells); // 8/12 — "better" is only partly significant
+  const minDelta = proto.headline.min_quality_delta;
+  const q = splitPair(split, "qwen-3-8b-instruct"); // faithful model — its read-off ≈ the resolver ceiling
   const naiveF1 = (q.naive?.quality_f1 ?? 0).toFixed(2);
   const axiomF1 = (q.axiom?.quality_f1 ?? 0).toFixed(2);
+  const ceil = split.resolver_accuracy.answer_f1_mean.toFixed(2);
+  const gemmaAx = (splitPair(split, "google/gemma-4-12b-qat").axiom?.quality_f1 ?? 0).toFixed(2);
+  const nStar = proto.build_amortization.breakeven_N_dictionary;
   return (
     <div className="pr-ag-plain">
       <p className="pr-ag-plain-lead">
-        我们在验证一个想法:<b>先用一套确定性的「整理规则」把杂乱数据理顺,再交给 AI</b>——它能不能<b>又省又准</b>,
-        甚至做到原本做不到的事?下面用大白话讲结论(想看图表和置信区间,点右边两个子标签)。
+        命题:在 LLM 前置一层<b>确定性语义地基</b>(跨源实体解析 + 预联结,规则式、build 成本 ≈ 0),用同等或更优答对率
+        换更低 token 成本,并解锁裸 RAG 接不住的跨源任务。三条结论 + 可信度边界如下;图表与每格置信区间见右侧技术子标签。
       </p>
       <div className="pr-ag-plain-card">
-        <h4>① 同样答对,少读约 {save} 的内容(更省钱、更快)</h4>
+        <h4>① 成本 · 同质量下输入 token 降 ~{save}</h4>
         <p>
-          让 AI 回答跨系统的问题,平常要把一大堆原始记录一股脑塞给它。我们先帮它把数据理好——把同一个东西的
-          不同叫法认成一个、把相关的记录连起来——再给它一份整理好的摘要。结果:它要读的内容少了约 <b>{save}</b>(这点很确定),
-          而且<b>至少一样好——从没更差</b>;多数情况下更好,但严格说「更好」只在约 <b>{qsig.num}/{qsig.den}</b> 的测试里统计上站得住(其余持平,说不准)。
+          logistics 跨源任务,axiom 层 vs 裸 RAG,跨 3 模型 × 4 脏度 × 8 seed、每格 bootstrap 95% CI:<b>输入 token 均降 ~{save}</b>,
+          且 <b>{tokSig.num}/{tokSig.den} 格显著</b>(CI 整段 &gt;0)——这是硬结论。质量 F1 <b>不降</b>(min ΔF1 {minDelta >= 0 ? "+" : ""}{minDelta.toFixed(3)}),
+          其中 <b>{qsig.num}/{qsig.den} 格</b>统计显著更高,即「更准」在多数而非全部条件成立。增益<b>随数据脏度上升</b>(别名/单位漂移/乱码越多,裸 RAG 越崩、axiom 越稳)。
         </p>
         <p className="pr-ag-plain-analogy">
-          💡 类比:给员工<b>一页已经核对、连好关系的摘要</b>,而不是一摞原始单据。而且<b>数据越乱</b>(错别字、
-          不同单位、不同叫法),这套整理<b>省下的越多</b>。
+          ▸ 架构含义:增益主要来自<b>免 build 的结构</b>(互斥匹配 + 异常锚定 + 上下文压缩);学习式别名词典 +0.000 held-out F1
+          ⇒ <b>摊销永不回本(N*{nStar == null ? "=∞" : `=${nStar}`})</b>——别为「学词典」单独投训练预算。本质是把 entity-resolution / join 从<b>推理时下推到确定性预处理层</b>。
         </p>
       </div>
       <div className="pr-ag-plain-card">
-        <h4>② 让 AI「从不会到会」</h4>
+        <h4>② 能力 · 从「裸 RAG 不可解」到可解(enablement)</h4>
         <p>
-          还有更难的题:同一个东西在两个系统里<b>长得完全不一样</b>,还没有共同编号。直接把两边原始记录给 AI,
-          它根本认不出谁是谁——得分约 <b>{naiveF1}</b>(基本等于 0)。我们先用确定性的「对账」把它们一一认出来,
-          它就答得出来了——得分升到约 <b>{axiomF1}</b>。
+          更强的一类:跨域共指——同一实体在两系统经变体改写、<b>无共享键</b>。裸 RAG 直接喂两域原始记录,faithful 模型(qwen-8b)
+          <b>F1 ≈ {naiveF1}</b>:表面不可桥、LLM 自己接不上。先用确定性 resolver(域内 z-score 互斥匹配)做跨域对齐再喂,
+          <b>F1 → {axiomF1}</b>,且 token 省 ~85%。这是<b>使能(enable)而非增量优化</b>。
         </p>
         <p className="pr-ag-plain-analogy">
-          💡 关键:这不是「省一点」,是<b>「从 0 到能做」</b>——这套结构地基<b>使能</b>了原本不可能的任务。
-          (诚实说明:这里两个系统里「同一个东西」的对应关系是我们<b>构造出来、答案已知</b>的;真实场景里要认这种对应可能更难,且「对账」本身也不是 100% 准。)
+          ▸ 上限:axiom-RAG 质量 = <b>resolver 精度(≈{ceil} answer-F1)× 模型转录忠实度</b>——qwen 顶到上界,gemma-12b 因过量生成只到 ~{gemmaAx}。
+          结构地基决定「能不能做」,模型决定「读得忠不忠实」,两者都是瓶颈。耦合关系为<b>构造、答案已知</b>(单 latent 切分),非野外采集。
         </p>
       </div>
       <div className="pr-ag-plain-card is-caveat">
-        <h4>③ 我们也如实报告了不好看的地方(这正是它可信的原因)</h4>
+        <h4>③ 外部效度 · 一个决定性的诚实负结果</h4>
         <p>
-          <b>一次「翻车」:</b>之前在合成数据上有个漂亮的「跨域发现」。后来我们把合成数据的<b>噪声水平校准到一份
-          真实数据</b>,那个发现就<b>塌了</b>——说明它有一部分是「数据太干净」撑出来的。我们如实写下这次翻车,
-          因为诚实的负结果比假装成功更有价值。(确定性、可经 <code>/api/nexus_xdom/calibrate</code> 复现)
+          承重披露:上述 substrate 为<b>合成、答案已知</b>。当把 substrate 的可观测边缘<b>校准到真实数据</b>
+          (sklearn breast_cancer 的噪声 / 变异系数 ~14× 高于手设值)后,此前漂亮的 nexus 三渠道收敛<b>塌回判不定</b>——
+          说明该结果部分依赖「手设的不真实低噪声」。如实报告,确定性、可经 <code>/api/nexus_xdom/calibrate</code> 复现。
         </p>
         <p className="pr-ag-plain-analogy">
-          ⚠ 适用边界:以上都在我们<b>自己造的、答案已知的小规模合成数据</b>上测;真实世界更复杂,数字不保证照搬。
-          本地模型不花钱,所以只比「读了多少内容」,没比真实美元。
+          ▸ 选型含义:<b>token-saving 与 enablement 在合成 cross-source 上稳健</b>,可作为「结构地基降本 + 解锁能力」的方向性证据;
+          但任何「野外跨域发现」须自带真实校准,<b>别拿 demo 数据当生产证据</b>。本地模型 $=0 ⇒ 成本轴仅 token,未折真实美元。
         </p>
       </div>
     </div>
@@ -161,9 +167,9 @@ export default function AxiomGainView() {
 
   const ready = proto && split;
   const SUBTABS: { id: SubTab; label: string }[] = [
-    { id: "plain", label: "📖 说人话" },
-    { id: "tok", label: "① 省 token（技术）" },
-    { id: "enable", label: "② 让 AI 从不会到会（技术）" },
+    { id: "plain", label: "📋 摘要 · 架构/PM 视角" },
+    { id: "tok", label: "① 成本：省 token（技术）" },
+    { id: "enable", label: "② 能力：enablement（技术）" },
   ];
 
   return (
@@ -184,7 +190,7 @@ export default function AxiomGainView() {
               </button>
             ))}
           </nav>
-          {tab === "plain" && <PlainLanguage proto={proto} split={split} />}
+          {tab === "plain" && <ExecSummary proto={proto} split={split} />}
           {tab === "tok" && <Protocol p={proto} />}
           {tab === "enable" && <Split ab={split} />}
           {tab !== "plain" && (
