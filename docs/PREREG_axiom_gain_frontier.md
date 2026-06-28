@@ -70,6 +70,13 @@ CIs** ⇒ a tiny wobble would flip that pair to a tie. The monotone flag is **ca
   endpoint (breaks the `$=0` local-only property — disclose the $ if used) **or** the largest local model
   that is verified to load safely. Until one is run, H2 stays **registered-but-untested** — that is the
   honest state, not a result.
+- **Probe log (2026-06-28, this machine).** The one clean local candidate genuinely more-capable than
+  gemma-31b — `qwen3.6-35b-a3b` (35B MoE, 3B active) — **failed to load+respond within the client's 90s HTTP
+  timeout on two consecutive attempts** (the 35B MoE keeps all params resident, ≈18–20GB, just over the
+  dense-31b envelope ⇒ swaps). No freeze (calls returned cleanly), but **not usable under a bounded timeout**.
+  The bigger models (122B/397B) are off-limits (freeze risk); the rest are ≤ gemma-31b (not more capable). So
+  on **this** hardware the frontier point stays **registered-but-untested** — recorded honestly, not skipped.
+  A frontier API or a bigger-RAM host would close it; the registration above stands unchanged for that run.
 - **No silent grid-pruning (DON'T #4/§15).** If the frontier cell shows *no* gain, it is **kept and reported**
   (a confirmed H2a, the predicted outcome) — never deleted to preserve a prettier headline.
 - **Win either way.** Confirm ⇒ a real cross-capability result (the structural 61% survives; the quality
