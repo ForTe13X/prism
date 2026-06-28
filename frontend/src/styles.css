@@ -368,3 +368,23 @@ body {
 .pr-ag-splitname { font-size: 12px; font-weight: 600; display: flex; flex-direction: column; }
 .pr-ag-save { font-size: 11px; font-weight: 400; color: var(--accent); }
 .pr-ag-trunc { grid-column: 2 / 4; font-size: 11px; color: var(--warn); }
+
+/* ── Nested analysis sub-tabs + 说人话 (plain-language for non-technical readers) ──────────────── */
+.pr-ag-subtabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+.pr-ag-subtab { font: inherit; font-size: 12.5px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--muted); cursor: pointer; }
+.pr-ag-subtab:hover { border-color: var(--accent); color: var(--ink); }
+.pr-ag-subtab.is-active { background: color-mix(in srgb, var(--accent) 12%, var(--panel)); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.pr-ag-subtab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.pr-ag-plain { display: flex; flex-direction: column; gap: 12px; max-width: 760px; }
+.pr-ag-plain-lead { margin: 0; font-size: 14px; line-height: 1.7; color: var(--ink); }
+.pr-ag-plain-card { background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--good); border-radius: 10px; box-shadow: var(--shadow); padding: 13px 16px; }
+.pr-ag-plain-card.is-caveat { border-left-color: var(--warn); }
+.pr-ag-plain-card h4 { margin: 0 0 7px; font-size: 14px; font-weight: 650; color: var(--ink); }
+.pr-ag-plain-card p { margin: 0 0 7px; font-size: 13.5px; line-height: 1.75; color: var(--ink); }
+.pr-ag-plain-card p:last-child { margin-bottom: 0; }
+.pr-ag-plain-card b { color: color-mix(in srgb, var(--good) 65%, var(--ink)); }
+.pr-ag-plain-card.is-caveat b { color: color-mix(in srgb, var(--warn) 70%, var(--ink)); }
+.pr-ag-plain-analogy { background: var(--bg); border-radius: 8px; padding: 9px 11px; font-size: 13px !important; color: var(--muted) !important; }
+.pr-ag-plain-analogy b { color: var(--ink) !important; }
+.pr-ag-plain-analogy code { font-size: 12px; background: color-mix(in srgb, var(--accent) 8%, var(--panel)); padding: 1px 4px; border-radius: 4px; }

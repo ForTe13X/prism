@@ -11,9 +11,9 @@
     {
       "name": "prism-frontend",
       "runtimeExecutable": "cmd",
-      "runtimeArgs": ["/c", "cd /d E:\\Documents\\Dev\\prism\\frontend && npm run dev"],
+      "runtimeArgs": ["/c", "cd /d E:\\Documents\\Dev\\prism\\frontend && npm run dev -- --port 4173 --host 127.0.0.1"],
       "autoPort": false,
-      "port": 5173
+      "port": 4173
     }
   ]
 }
