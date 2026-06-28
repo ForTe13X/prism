@@ -388,3 +388,36 @@ body {
 .pr-ag-plain-analogy { background: var(--bg); border-radius: 8px; padding: 9px 11px; font-size: 13px !important; color: var(--muted) !important; }
 .pr-ag-plain-analogy b { color: var(--ink) !important; }
 .pr-ag-plain-analogy code { font-size: 12px; background: color-mix(in srgb, var(--accent) 8%, var(--panel)); padding: 1px 4px; border-radius: 4px; }
+
+/* ── H2 capability×gain "money moment" (③ 剪刀叉): reproducible series BRIGHT, Tier-2 frontier MUTED ──── */
+/* prominence tracks CONFIDENCE not story-weight: the firm reproducible lines/points are full-contrast; the
+   browser-captured frontier point is hollow + dashed + dimmed so the least-certain datum is never the brightest. */
+.pr-ag-h2-chart { width: 100%; max-width: 660px; height: auto; display: block; margin: 4px 0 2px; }
+.pr-ag-h2-axis { stroke: var(--line); stroke-width: 1; }
+.pr-ag-h2-tick { fill: var(--muted); font-size: 9px; font-variant-numeric: tabular-nums; }
+.pr-ag-h2-axlabel { fill: var(--muted); font-size: 10px; }
+.pr-ag-h2-ref { stroke: var(--accent); stroke-width: 1; stroke-dasharray: 3 3; opacity: .5; vector-effect: non-scaling-stroke; }
+.pr-ag-h2-tok { fill: none; stroke: var(--accent); stroke-width: 2.4; vector-effect: non-scaling-stroke; }
+.pr-ag-h2-tokdot { fill: var(--accent); }
+.pr-ag-h2-qual { fill: none; stroke: var(--warn); stroke-width: 2.4; vector-effect: non-scaling-stroke; }
+.pr-ag-h2-qualdot.is-firm { fill: var(--warn); stroke: var(--warn); }
+.pr-ag-h2-qualdot.is-weak { fill: var(--panel); stroke: var(--warn); stroke-width: 1.4; }
+.pr-ag-h2-frontier-g { opacity: .6; }                 /* muted: the Tier-2 point is the LEAST-confident datum */
+.pr-ag-h2-proj { stroke: var(--warn); stroke-width: 1; stroke-dasharray: 5 4; opacity: .7; vector-effect: non-scaling-stroke; }
+.pr-ag-h2-proj.is-tok { stroke: var(--accent); }
+.pr-ag-h2-frontier { fill: none; stroke: var(--warn); stroke-width: 1.4; stroke-dasharray: 2 2; }
+.pr-ag-h2-frontxt { fill: var(--warn); font-size: 9px; }
+.pr-ag-h2-ghostzone { fill: color-mix(in srgb, var(--line) 30%, transparent); }
+.pr-ag-h2-ghosttext { fill: var(--muted); font-size: 8.5px; letter-spacing: .5px; }
+.pr-ag-h2-legend { display: flex; flex-wrap: wrap; gap: 10px 16px; font-size: 11px; color: var(--muted); margin: 2px 0 8px; }
+.pr-ag-h2-legend .sw { display: inline-block; width: 16px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 5px; }
+.pr-ag-h2-legend .sw.tok { background: var(--accent); }
+.pr-ag-h2-legend .sw.qual { background: var(--warn); }
+.pr-ag-h2-legend .sw.front { background: repeating-linear-gradient(90deg, var(--warn) 0 3px, transparent 3px 6px); }
+.pr-ag-h2-bnote { margin: 0 0 10px; padding: 8px 11px; background: var(--bg); border-radius: 8px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+.pr-ag-h2-bnote b { color: var(--ink); }
+.pr-ag-h2-matrix .pr-ag-matrix-head, .pr-ag-h2-matrix .pr-ag-row { grid-template-columns: 156px 76px 1fr 1fr; }
+.pr-ag-cellnum { font-size: 12px; font-variant-numeric: tabular-nums; color: var(--ink); }
+.pr-ag-tier2-rule { border: 0; border-top: 1px dashed var(--warn); margin: 8px 0; opacity: .6; }
+.pr-ag-h2-matrix .pr-ag-row.is-tier2 { color: var(--warn); opacity: .85; }
+.pr-ag-h2-ph { font-size: 11px; color: var(--warn); font-style: italic; }

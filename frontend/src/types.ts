@@ -348,7 +348,42 @@ export interface AxiomProtocol {
     structural_gain_buildfree: number;
     learned_dictionary_gain: number;
   };
+  h2_capability_vs_gain: H2CapabilityAxis;
   honest_verdict: string;
+}
+
+// PREREG H2 (capability×gain): the QUALITY gain shrinks as the model gets more capable (H2a), while the TOKEN
+// saving is structural ⇒ ~model-independent (H2b). `by_capability_ascending` is the reproducible (fixture)
+// series; `frontier_manual` is a Tier-2 DISCLOSED MANUAL point (browser-captured GPT-5.5, NOT reproducible),
+// flagged + never merged into the reproducible series.
+export interface H2CapabilityRow {
+  model: string;
+  capability_naive_f1: number;
+  quality_gain: number;
+  token_saving: number;
+}
+export interface H2FrontierManual {
+  model: string;
+  source: string;
+  reproducible: boolean;
+  capability_naive_f1: number;
+  quality_gain: number;
+  token_saving: number | null;
+  confirm_rule: string;
+  confirm_comparator_model: string | null;
+  confirm_comparator_gain: number | null;
+  confirm_rule_met: boolean;
+  caveat: string;
+}
+export interface H2CapabilityAxis {
+  capability_proxy: string;
+  by_capability_ascending: H2CapabilityRow[];
+  spearman_capability_gain: number | null;
+  quality_gain_monotone_decreasing: boolean;
+  token_saving_spread: number;
+  "token_saving_is_structural_flat(<0.05)": boolean;
+  note: string;
+  frontier_manual: H2FrontierManual | null;
 }
 
 // Coupling external validity on REAL paired data (§8j): a coupling-strength spectrum — near-duplicate vs genuine cross-aspect.

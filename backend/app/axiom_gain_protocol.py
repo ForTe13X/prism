@@ -34,6 +34,18 @@ PROTO_DIRTS = [0.0, 0.3, 0.6, 0.9]
 _BOOT = 500
 _SCALE_PAIR = ("google/gemma-4-12b-qat", "google/gemma-4-31b-qat")  # same family, 12b→31b
 
+# The genuine-frontier GPT-5.5 point (OBSERVER §15 P1) — a Tier-2 disclosed MANUAL measurement (browser-captured,
+# NOT reproducible). Recorded constants mirror docs/PREREG_axiom_gain_frontier.md §"Genuine frontier point".
+_FRONTIER_CAP = 0.95   # naive F1 ≈ 0.95 (highest of any model tested)
+_FRONTIER_GAIN = 0.0   # ΔF1 ≈ 0 from a 4-naive + 1-axiom slice (NOT a mean±CI)
+
+
+def _frontier_confirms(frontier_gain: float, rows: list) -> bool:
+    """Registered Confirm rule: frontier ΔF1 ≤ the most-capable current model's ΔF1. Pure + computed from the
+    LIVE rows (never a stored literal) so the verdict can't drift if the fixtures shift — and so BOTH branches
+    are unit-testable (the fixtures only ever exercise the True branch)."""
+    return bool(rows and frontier_gain <= rows[-1]["quality_gain"])
+
 
 def _mean(xs: list[float]) -> float:
     return sum(xs) / len(xs) if xs else 0.0
@@ -209,6 +221,27 @@ def run_protocol(source_id: str = "logistics_demo", *, models: list[str] | None 
                  "SPEARMAN (directional), not the brittle monotone bool. H2b: token saving is structural (context "
                  "size) ⇒ ~model-independent; the 61% headline survives any model, only the QUALITY benefit shrinks. "
                  "Pre-registered (PREREG_axiom_gain_frontier.md); the frontier RUN added qwen3.6-35b-a3b — see §11d."),
+        # The genuine-frontier point (OBSERVER §15 P1): GPT-5.5 at dirt 0.6 confirms H2a (gain ≈ 0 at the highest
+        # capability). It is a Tier-2 disclosed MANUAL measurement — browser-captured, NOT API, NOT reproducible —
+        # so it is a frozen recorded CONSTANT flagged reproducible:False and is NEVER merged into the reproducible
+        # `by_capability_ascending` series. The registered Confirm rule ("frontier ΔF1 ≤ the most-capable current
+        # model's ΔF1") is RECOMPUTED here from the live rows, never a stored literal — so the verdict can't drift
+        # if the fixtures shift. Mirrors docs/PREREG_axiom_gain_frontier.md §"Genuine frontier point".
+        "frontier_manual": ({
+            "model": "gpt-5.5",
+            "source": "browser-captured (ChatGPT web 极速, 2026-06-28)",
+            "reproducible": False,
+            "capability_naive_f1": _FRONTIER_CAP,
+            "quality_gain": _FRONTIER_GAIN,
+            "token_saving": None,                              # web UI exposes no token counts ⇒ H2b unmeasured for it
+            "confirm_rule": "registered: frontier ΔF1 ≤ the most-capable current model's ΔF1",
+            "confirm_comparator_model": h2_rows[-1]["model"] if h2_rows else None,
+            "confirm_comparator_gain": h2_rows[-1]["quality_gain"] if h2_rows else None,
+            "confirm_rule_met": _frontier_confirms(_FRONTIER_GAIN, h2_rows),   # computed live, never a stored literal
+            "caveat": ("GPT-5.5 前沿点为浏览器抓取(ChatGPT web 极速, 2026-06-28)、非 API ⇒ 一次性、不可对锁定模型"
+                       "复现(仅记录值,未冻结为 fixture);无 token 计数 ⇒ H2b 对它仅结构性推断、未实测;不在 "
+                       "protocol 矩阵/fixtures 内,仅见 PREREG/RESEARCH §11e。"),
+        } if h2_rows else None),
     }
 
     # §5 build-amortization break-even (structural gain build-free; learned dict adds ~0 F1 ⇒ N*=∞)

@@ -81,6 +81,38 @@ def test_h2_frontier_run_directional_not_monotone():
     assert h2["token_saving_is_structural_flat(<0.05)"] is True                   # H2b: token saving stays flat
 
 
+def test_h2_frontier_manual_is_flagged_and_never_merged():
+    # OBSERVER §15 P1 / money-moment visual: the genuine-frontier GPT-5.5 point is a Tier-2 disclosed MANUAL
+    # measurement — it must be a frozen recorded constant, flagged non-reproducible, NEVER merged into the
+    # reproducible series, with the registered Confirm verdict RECOMPUTED live (not a stored literal that could
+    # drift if fixtures shift). Deterministic on the frozen subset.
+    r = _run()
+    fm = r["h2_capability_vs_gain"]["frontier_manual"]
+    rows = r["h2_capability_vs_gain"]["by_capability_ascending"]
+    assert fm is not None
+    assert fm["reproducible"] is False                       # the disclosure flag that keeps /protocol honest
+    assert fm["capability_naive_f1"] == 0.95 and fm["quality_gain"] == 0.0
+    assert fm["token_saving"] is None                        # no token counts from the web UI ⇒ H2b unmeasured for it
+    assert "浏览器抓取" in fm["caveat"] and "未冻结为 fixture" in fm["caveat"]
+    # the Confirm verdict is computed from the LIVE most-capable row, not stored — pin the two together so it
+    # can never silently contradict the arithmetic
+    assert fm["confirm_comparator_model"] == rows[-1]["model"]
+    assert fm["confirm_comparator_gain"] == rows[-1]["quality_gain"]
+    assert fm["confirm_rule_met"] == (fm["quality_gain"] <= rows[-1]["quality_gain"])
+    # NEVER merged into the reproducible series (the array stays all-reproducible models)
+    assert "gpt-5.5" not in {row["model"] for row in rows}
+
+
+def test_frontier_confirm_rule_is_computed_both_branches():
+    # the registered Confirm rule is COMPUTED live, not a stored literal. The fixtures only ever hit the True
+    # branch (comparator gain +0.108 > 0), so the integration assertion above can't tell a hardcoded `True` from
+    # the live computation — pin the pure rule fn on BOTH branches so a stored literal would fail the False case.
+    from backend.app.axiom_gain_protocol import _FRONTIER_GAIN, _frontier_confirms
+    assert _frontier_confirms(_FRONTIER_GAIN, [{"quality_gain": 0.108}]) is True    # 0.0 ≤ 0.108
+    assert _frontier_confirms(_FRONTIER_GAIN, [{"quality_gain": -0.05}]) is False   # a stored True would FAIL here
+    assert _frontier_confirms(_FRONTIER_GAIN, []) is False                          # no rows ⇒ unconfirmed, not a crash
+
+
 def test_build_amortization_is_the_honest_negative():
     # §5: structural axioms are build-free; the learned dictionary adds ~0 held-out F1 ⇒ never amortizes
     r = _run()
@@ -121,4 +153,14 @@ def test_api_protocol():
     body = res.json()
     assert "matrix" in body and "headline" in body and "honest_verdict" in body
     assert "coverage" in body
+    # default H2 axis is the 3 PROTO_MODELS (the headline-driving set) — qwen3.6 NOT silently folded in
+    default_h2 = {r["model"] for r in body["h2_capability_vs_gain"]["by_capability_ascending"]}
+    assert "qwen/qwen3.6-35b-a3b" not in default_h2 and len(default_h2) == 3
+    # include_frontier_interior=true surfaces the committed off-line point so the H2 visual shows the honest
+    # wobble (Spearman > −1, strict monotone BROKEN) instead of the prettier 3-model −1.0 — never hidden (DON'T #4)
+    res2 = client.get("/api/axiomgain/logistics_demo/protocol?include_frontier_interior=true")
+    h2b = res2.json()["h2_capability_vs_gain"]
+    assert "qwen/qwen3.6-35b-a3b" in {r["model"] for r in h2b["by_capability_ascending"]}
+    assert h2b["quality_gain_monotone_decreasing"] is False           # the wobble is visible, not pruned
+    assert h2b["spearman_capability_gain"] is not None and -1.0 < h2b["spearman_capability_gain"] < 0
     assert client.get("/api/axiomgain/nope/protocol").status_code == 404   # missing source → 404 (mirrors ablation)
