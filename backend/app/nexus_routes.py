@@ -12,6 +12,7 @@ from .nexus_xdom_align import run_alignment, run_alignment_eval
 from .nexus_xdom_calibrate import run_calibration, run_effect_sweep
 from .nexus_xdom_eval import run_convergence
 from .nexus_xdom_gate import run_gate
+from .nexus_real_pair import run_real_coupling
 from .nexus_xdom_ndomain import precision_vs_n, run_ndomain_screen
 from .nexus_xdom_view import bridge_view, fdr_extinction_check
 
@@ -100,6 +101,16 @@ def xdom_ndomain_sweep() -> dict:
     """Precision vs N under the three regimes — the §13 table re-run: relative collapses ∝ 1/N²; per-pair
     FDR stays ~flat (the §8h recovery); pooled is the strict-but-sparse-underpowered option."""
     return precision_vs_n([2, 4, 8, 16], true_frac=0.05)
+
+
+@nexus_xdom_router.get("/real_coupling")
+def xdom_real_coupling() -> dict:
+    """Coupling EXTERNAL VALIDITY on REAL paired data (OBSERVER §11 tension #1, METRIC §8j): breast_cancer
+    mean-view ≡ worst-view of the SAME real tumor — a genuinely real cross-view coupling (not a designed
+    latent). The convergence SIGNAL transfers (semantic AUC ~0.93 ≈ synthetic 0.99), but UNIQUE 1-of-N
+    resolution is hard (top-1 ~0.30); raw match ~chance (non-leaky). Synthetic over-stated resolver
+    precision, not the AUC."""
+    return run_real_coupling()
 
 
 @nexus_xdom_router.get("/align")
