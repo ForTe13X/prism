@@ -171,5 +171,21 @@
 - **N² 爆炸被控**:BH 控 FDR ⇒ 假高不再 ∝ C(N,2) 失控;`scorecard.expected_false_high ≈ q×高桥数`。**上 N 域的前置条件(§13 那句「上 N 域前必须先把 CACE/绝对阈接进 live tiering」)已满足。**
 - **诚实限定**:Fisher 设三渠道独立(实测两两 corr 0.13–0.19,残余相关 ⇒ 略反保守,已披露);置换零分布取自**同 substrate 的跨独立包**(非真实世界零对);外部效度仍系 §8g(校准到真实仍可能塌)。**度量的发光现在诚实;substrate 的真实性是另一条线。**
 
+## 8i. OBSERVER §13 续:N 域族级筛(§8h 解锁的那步)——**per-pair FDR 已够,pooled 反而欠功率**
+`backend/app/nexus_xdom_ndomain.py` + `GET /api/nexus_xdom/{ndomain|ndomain_sweep}` + 测试。§8h 修了**一对**;§13 的担心在**规模**:跨 C(N,2) 对(绝大多数无 nexus,真对稀疏),precision 还撑得住吗?在**同一批桥 + 同一个共享置换零分布**上比三档点火:(a)相对 top-decile(旧)、(b)per-pair 绝对+FDR(§8h)、(c)**pooled 族级 BH-FDR**(跨所有对一次 BH)。
+
+**实测(true_frac=0.05,确定性):**
+| N | C(N,2) | 真对 | (a) 相对 precision | (b) per-pair FDR | (c) pooled FDR |
+|---|---|---|---|---|---|
+| 2 | 1 | 1 | 0.80 | **1.0** | 1.0 |
+| 4 | 6 | 1 | 0.118 | **1.0** | 1.0 |
+| 8 | 28 | 1 | **0.021** | **1.0** | None(0 点亮) |
+| 16 | 120 | 6 | 0.040 | **1.0** | 1.0 |
+
+- **§13 塌缩是真的**:相对 top-decile precision **∝ 1/N²**(每对都强行点 ~10%,假高 ∝ C(N,2);N=8:190 高里仅 4 真)——如实复现。
+- **但 §8h 的 per-pair FDR 已经救回来了**:每个零对**熄灭** ⇒ 假高**不**随 C(N,2) 涨 ⇒ precision **~1.0 平**(N=8:per-pair 只点 4、全真;recall 与相对同 ~0.4)。**我在 §8h 发的每对修复,对 N 域筛已经够。**
+- **pooled 族级 BH 更严但欠功率**:它把**全局** FDR 钉在 q,可当真对在 C(N,2) 大家族里**太稀疏**时(N=8 仅 1 真对的 ~10 真耦合淹在 ~4150 候选桥里),pooled BH **点不亮任何东西**(precision None、recall 0;非分辨率下限所致——三渠道 Fisher 最小 p≈6e-5 仍够不上 rank-1 阈 2.4e-5,是真功率不足)。真对密度一升(true_frac 0.10→3 真对)pooled 立刻恢复 precision 1.0——一个**功率 ↔ 保证** 的取舍,**非一概更优**。
+- **诚实裁决 + 后续**:N 域不靠 pooled,靠「每对绝对阈 + FDR」即收;若要**全局 FDR 硬保证**又不丢功率,需**层级 / 加权 FDR**(先筛哪对有信号、再对内 FDR)——记为后续,非现在做。所测仍是**受控合成**的多重比较侧;N-way 涌现结构(§10)需 split-from-shared-latent(DESIGN §11)的真共享 latent。
+
 ---
 *—— 研究设计锚。这是给在建会话的方法学参照,不是指令;建造的人说了算。*

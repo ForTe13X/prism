@@ -12,6 +12,7 @@ from .nexus_xdom_align import run_alignment, run_alignment_eval
 from .nexus_xdom_calibrate import run_calibration, run_effect_sweep
 from .nexus_xdom_eval import run_convergence
 from .nexus_xdom_gate import run_gate
+from .nexus_xdom_ndomain import precision_vs_n, run_ndomain_screen
 from .nexus_xdom_view import bridge_view, fdr_extinction_check
 
 nexus_router = APIRouter(prefix="/api/nexus", tags=["nexus"])
@@ -83,6 +84,22 @@ def xdom_fdr_check(seeds: int = 30) -> dict:
     vs a zero pair (this A × an unrelated B) over N seeds — the fix works iff zero-pair high ≈ 0 while real
     high > 0 (the old relative top-decile gave ~8.27 for BOTH)."""
     return fdr_extinction_check([f"xe-{i}" for i in range(max(1, min(seeds, 60)))])
+
+
+@nexus_xdom_router.get("/ndomain")
+def xdom_ndomain(n_domains: int = 8, true_frac: float = 0.05) -> dict:
+    """OBSERVER §13 follow-through — the N-domain family-wise screen over C(N,2) pairs. Compares three
+    tiering regimes (relative top-decile vs per-pair FDR vs pooled family-wise FDR): the §13 collapse is
+    real (relative ∝ 1/N²); §8h's per-pair FDR already recovers precision; pooled is a stricter global
+    guarantee that under-powers on sparse signal. Use ?n_domains= for the single screen."""
+    return run_ndomain_screen(max(2, min(n_domains, 24)), true_frac=max(0.0, min(true_frac, 1.0)))
+
+
+@nexus_xdom_router.get("/ndomain_sweep")
+def xdom_ndomain_sweep() -> dict:
+    """Precision vs N under the three regimes — the §13 table re-run: relative collapses ∝ 1/N²; per-pair
+    FDR stays ~flat (the §8h recovery); pooled is the strict-but-sparse-underpowered option."""
+    return precision_vs_n([2, 4, 8, 16], true_frac=0.05)
 
 
 @nexus_xdom_router.get("/align")
