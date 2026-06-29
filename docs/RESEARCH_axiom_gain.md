@@ -149,7 +149,7 @@ LLM 调用口(`backend/app/llm_client.py`)每次记 `{model, in_tok, out_tok, ca
 
 - **H2a 在前沿确认**。GPT-5.5 **naive F1 最高(0.950**——它自己就完成跨源解析:ho-0/1/3 = 1.0;ho-2 = 0.8 仅因一条真发货被脏度 NULL 掉、它**正确地拒绝幻觉**它**)且质量增益最小(≈ 0**——axiom 上下文只是把它已能产出的答案递给它)。预注册 Confirm 规则(前沿 ΔF1 ≤ gemma-31b 的 0.108)**满足**(≈0.00 ≤ 0.108)。**结构化语义底座的「质量」红利在前沿能力处消失**——正是 H2a,而且这次是真更强的点(不像 qwen3.6 那个内点)。
 - **H2b 此处未测(诚实缺口)**。web UI 无 token 计数 ⇒ GPT-5.5 的 token 省**没测**。它是**结构性的**(axiom 上下文恒约 40% 大小),故 ~61% 仍应成立——但对 GPT-5.5 而言它买到的是**token 省 + 质量几乎不变**,这是整个 H2 结果最有用的诚实表述。
-- **诚实警示(放大声)**:取自「ChatGPT GPT-5.5 极速 @ 2026-06-28」的**浏览器抓取**、**非 API**:一次性、**不能对固定模型复跑**(仅记录值,未冻为 fixture);**无 token 计数**;**小样本**(脏度 0.6、4 naive + 1 axiom);prompt 换行被压成空格、每格一个 mojibake **干扰项**被还原(干扰项不影响答案);**该行不进 protocol 矩阵/fixtures**(离线不可复现)——它作为**已披露的手测**留在文档里。本地 API 行仍是可复现记录。详见 [`docs/PREREG_axiom_gain_frontier.md`](PREREG_axiom_gain_frontier.md)。
+- **诚实警示(放大声)**:取自「ChatGPT GPT-5.5 极速 @ 2026-06-28」的**浏览器抓取**、**非 API**:一次性、**不能对固定模型复跑**(仅记录值,未冻为 fixture);**无 token 计数**;**小样本**(脏度 0.6、4 naive + 1 axiom);prompt 换行被压成空格、每格一个 mojibake **干扰项**被还原(干扰项不影响答案);**该行不进 protocol 矩阵/fixtures**(离线不可复现)——它作为**已披露的手测**留在文档里。本地 API 行仍是可复现记录。详见 [`docs/PREREG_axiom_gain_frontier.md`](PREREG_axiom_gain_frontier.md)。**完整抓取留存**(prompt→GPT-5.5 应答→truth→F1 逐格 + 会话)见 [`docs/provenance/gpt5_5_frontier_capture.md`](provenance/gpt5_5_frontier_capture.md)(其 F1 由 `test_gpt5_capture_provenance.py` 复算锁定)。
 
 ### 11f. **API 佐证点(deepseek-v4-pro,Ark,已冻结)——H2b 实测、能力持平(非前沿)**
 有真实 API 后(Volcengine Ark `deepseek-v4-pro-260425`),按注册网格(8 seed × 4 脏度)**真跑一次并冻结入 fixture**

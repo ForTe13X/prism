@@ -137,6 +137,10 @@ so a small honest sample).
 - **Win either way.** Confirm ⇒ a real cross-capability result (the structural 61% survives; the quality
   benefit concentrates where it should — on weaker models). Refute ⇒ a surprising, more-valuable finding
   (capable models *also* benefit). Both are reported.
+- **Capture preserved.** The full attempt (each cell's prompt → GPT-5.5 verbatim answer → ground-truth → F1,
+  plus session metadata) is archived at [`docs/provenance/gpt5_5_frontier_capture.md`](provenance/gpt5_5_frontier_capture.md)
+  (+ `.json`); its F1s are recomputed/locked by `backend/tests/test_gpt5_capture_provenance.py`, so the recorded
+  point is auditable even though the browser session itself is one-off and not re-runnable.
 
 ## API corroboration point — deepseek-v4-pro (Ark, frozen 2026-06-28) — H2b MEASURED, capability TIED
 
