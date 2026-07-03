@@ -15,6 +15,10 @@ Unless otherwise noted, research results in this README are scoped to this repos
 
 A spec describes entities, attributes, semantic types, views, relations, and temporal behavior. The same runtime renders different domains from different specs.
 
+A 20-second tour: timeline scrubbing → zero-code domain switch (the theme re-refracts with the spec) → nexus galaxy alignment replay → the axiom-gain trend.
+
+![20-second tour: timeline replay, zero-code domain switch, galaxy alignment replay, axiom-gain trend](docs/media/demo-highlights.gif)
+
 ![Prism cockpit generated from a spec](docs/media/readme_cockpit.png)
 
 Prism also includes a cross-domain nexus lab. Two datasets are drawn as two record galaxies; only links passing evidence and significance checks are highlighted.
