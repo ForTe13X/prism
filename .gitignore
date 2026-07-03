@@ -11,3 +11,6 @@ dist/
 .DS_Store
 *.log
 .env
+
+# standalone extractions / packaged deliverables (each is its own git repo, e.g. prism-datagen -> github.com/ForTe13X/prism-datagen)
+dist/
