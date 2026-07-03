@@ -15,9 +15,9 @@ Unless otherwise noted, research results in this README are scoped to this repos
 
 A spec describes entities, attributes, semantic types, views, relations, and temporal behavior. The same runtime renders different domains from different specs.
 
-A 20-second tour: timeline scrubbing → zero-code domain switch (the theme re-refracts with the spec) → nexus galaxy alignment replay → the axiom-gain trend.
+A 19-second tour: timeline scrubbing → zero-code domain switch (the theme re-refracts with the spec) → nexus galaxy alignment replay → the axiom-gain trend.
 
-![20-second tour: timeline replay, zero-code domain switch, galaxy alignment replay, axiom-gain trend](docs/media/demo-highlights.gif)
+![19-second tour: timeline replay, zero-code domain switch, galaxy alignment replay, axiom-gain trend](docs/media/demo-highlights.gif)
 
 ![Prism cockpit generated from a spec](docs/media/readme_cockpit.png)
 
@@ -77,12 +77,14 @@ The backend does not know domain words such as "pipeline" or "book". `data_synth
 ## Run Locally
 
 ```bash
+# backend, example port 8200
 cd prism
 python -m venv .venv
-.\.venv\Scripts\activate
+source .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install -r backend/requirements.txt
 python -m uvicorn backend.app.main:app --port 8200
 
+# frontend, in another terminal
 cd prism/frontend
 npm install
 npm run dev
