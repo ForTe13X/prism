@@ -5,7 +5,7 @@
     "source": "chatgpt.com (browser UI, NOT API)",
     "captured_via": "Chrome MCP browser automation — flattened prompts typed into the ProseMirror composer; JSON-code-block responses read back via screenshot",
     "captured_on": "2026-06-28",
-    "account": "logged-in user session (Peng Yang Pro)",
+    "account": "logged-in Pro session (fast mode)",
     "tier": "Tier-2 — browser-captured, one-off, NOT reproducible against a pinned model; recorded values only",
     "slice": "dirt 0.6 · 4 naive seeds (ho-0..3) + 1 axiom check (ho-0)",
     "prompt_transforms_at_submission": [

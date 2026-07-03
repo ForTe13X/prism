@@ -4,6 +4,31 @@
 > 零代码就换一套完整的领域驾驶舱。Prism 后端与前端都**领域无关**——领域知识只活在 spec 里。
 
 这是一个全新的、独立的原创项目(与任何既有项目无代码关系)。代号 **Prism**:一份 spec 经"棱镜"折射成一整套 UI。
+一个 **for-fun / 学习沙盒**,但对自己产出的每个数字**拒绝撒谎**。
+
+## 🙋 这是什么?(说人话)
+
+**上半场:一台"读图纸的机器"。** 普通软件把"界面长什么样"写死在代码里——换个行业就要重写。
+Prism 反过来:界面上的每个标签页、每张卡片、每个仪表,都是从一份**图纸(spec)**自动"折射"出来的。
+图纸上写"这是一个压力值、警戒线是 9",机器就自动摆出一只仪表盘;写"这是一个状态",就自动变成彩色徽章。
+**换一份图纸,同一台机器就变成另一个行业的驾驶舱**——从管网监控换到图书馆藏,一行代码不用改:
+
+![Prism 主驾驶舱:界面由 spec 折射而来](docs/media/readme_cockpit.png)
+
+**下半场:一场"星系相撞"的实验。** 想知道两套互不相识的系统(比如设备台账 × 借阅记录)之间,
+哪些记录**其实说的是同一件事**?Prism 把两个系统画成**两个星系**,每颗星是一条记录;
+只有通过了**统计显著性检验**(三条独立证据渠道 Fisher 合并 + FDR 校正)的"桥"才被点亮——
+纯属巧合的连线(下图 144 条候选里的 138 条)会**保持黑暗**。亮度跟着置信度走,不跟着好看走:
+
+![星系相撞:两个数据域,只有过检验的桥才发光](docs/media/readme_nexus_galaxy.png)
+
+**以及一条较真的研究线:** 在大模型前面垫一层**确定性的"语义地基"**(先把跨源的实体对齐、预联结好再喂给它),
+能省多少 token、质量掉不掉?答案(输入 token **省 ~61%**、质量不降)和它的**全部限定条件**,都直接活在界面里:
+
+![axiom-gain 剪刀叉:能力越强增益越小,token 省是结构性的](docs/media/readme_axiom_gain.png)
+
+> 姊妹仓库:[**prism-datagen**](https://github.com/ForTe13X/prism-datagen) —— 从本仓 DP1 抽出的独立"出题机"
+> (自带标准答案的脏数据生成器,零依赖、带 3 分半讲解视频)。
 
 ## 核心理念
 
@@ -39,6 +64,7 @@ views + relations        选控件(仪表/趋势/徽章/…)        (UI = f(spec
 | --- | --- | --- |
 | **稳(CI 牢)** | 结构地基对裸 RAG:**输入 token 省 ~61%**(跨 3 模型 × 4 脏度 × 8 seed、每格 bootstrap 95% CI **12/12 显著**);质量不降(min ΔF1 +0.07,8/12 格显著更高);成本 × 质量 Pareto 前沿**由 axiom 独占** | `GET /api/axiomgain/logistics_demo/protocol` · [RESEARCH §11c](docs/RESEARCH_axiom_gain.md) |
 | **稳(使能)** | 跨域共指:同一实体在两系统经变体改写、无共享键 ⇒ 裸 RAG 得分 **≈0**(认不出),确定性 resolver 预解析后 **→0.66**、token 省 ~85% —— **从 0 到能做** | `GET /api/split/ablation` · [DESIGN §11b](docs/DESIGN_data_package.md) |
+| **稳(带边界)** | H2「剪刀叉」:**质量增益随模型能力递减**(5 点 Spearman −0.90;真前沿 GPT-5.5 增益 ≈0 = 预注册 Confirm 命中),而 **token 省是结构性的**(~61% 跨模型持平;deepseek 真实 API `prompt_tokens` 实测 63%)。前沿点为浏览器抓取 Tier-2(不可复现,[对话已留存](docs/provenance/gpt5_5_frontier_capture.md));deepseek 为付费冻结、prompt-JSON(已按行打标) | `GET /api/axiomgain/logistics_demo/protocol?include_h2_extra=true` · [PREREG](docs/PREREG_axiom_gain_frontier.md) · [§11d–f](docs/RESEARCH_axiom_gain.md) |
 | **诚实负** | 学习式别名词典 **+0.000** held-out F1 ⇒ 摊销**永不回本(N\*=∞)**——增益全在「免 build 的结构」,**别为学词典单独投训练** | [RESEARCH §11b](docs/RESEARCH_axiom_gain.md) |
 | **决定性诚实负** | 把合成 substrate 的可观测边缘**校准到真实数据**(变异系数 ~14× 高于手设)后,nexus 三渠道收敛**塌回判不定**——之前的胜利部分靠「数据太干净」 | `GET /api/nexus_xdom/calibrate` · [METRIC §8g](docs/METRIC_nexus_reality.md) |
 | **已修诚实漏洞** | 星系「发光 = 已验证」原用相对 top-decile,**无关域对**也强行点亮 ~7;换成**绝对显著阈 + FDR(CACE)**后(同构造)**熄灭 7.17→0.03**、真桥精度 0.66→0.96。rewire 控制(同观测乱标签)新规则下不熄=AUC 失效(§8e),非 extinction——两控制测两失效 | `GET /api/nexus_xdom/fdr_check` · [METRIC §8h](docs/METRIC_nexus_reality.md) |
